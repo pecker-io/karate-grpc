@@ -2,7 +2,7 @@
 
 [![Build Status](https://api.travis-ci.org/thinkerou/karate-grpc.svg)](https://travis-ci.org/thinkerou/karate-grpc)
 
-gRPC Testing Made Simple by Karate.
+gRPC Testing Made Simple by [Karate](https://github.com/intuit/karate).
 
 ## testing helloworld
 
