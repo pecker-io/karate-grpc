@@ -1,4 +1,7 @@
 # karate-grpc
+
+[![Build Status](https://api.travis-ci.org/thinkerou/karate-grpc.svg)](https://travis-ci.org/thinkerou/karate-grpc)
+
 gRPC Testing Made Simple by Karate.
 
 ## testing helloworld
