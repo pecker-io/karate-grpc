@@ -7,4 +7,3 @@ Feature: grpc routeguide example
 
   Scenario: do it
     * def payload = read('routeguide.json')
-    * print payload
