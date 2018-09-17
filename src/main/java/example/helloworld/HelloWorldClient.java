@@ -23,6 +23,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.util.JsonFormat;
+
 /**
  * A simple client that requests a greeting from the {@link HelloWorldServer}.
  */
@@ -52,17 +55,28 @@ public class HelloWorldClient {
     }
 
     /** Say hello to server. */
-    public void greet(String name) {
+    public String greet(String name) {
         logger.info("Will try to greet " + name + " ...");
-        HelloRequest request = HelloRequest.newBuilder().setName(name).build();
-        HelloReply response;
+        HelloRequest.Builder requestBuilder = HelloRequest.newBuilder();
         try {
-            response = blockingStub.sayHello(request);
+            JsonFormat.parser().merge(name, requestBuilder);
+        } catch (InvalidProtocolBufferException e) {
+            logger.log(Level.WARNING, "JsonFormat parse failed: {}", e);
+        }
+        HelloReply response = null;
+        try {
+            response = blockingStub.sayHello(requestBuilder.build());
         } catch (StatusRuntimeException e) {
             logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
-            return;
         }
         logger.info("Greeting: " + response.getMessage());
+        String res = null;
+        try {
+            res = JsonFormat.printer().print(response);
+        } catch (InvalidProtocolBufferException e) {
+            logger.log(Level.WARNING, "JsonFormat print failed: {}", e);
+        }
+        return res;
     }
 
     /**
