@@ -35,6 +35,7 @@ public class HelloWorldClient {
     }
 
     public void shutdown() throws InterruptedException {
+        logger.log(Level.INFO, "shutdown grpc channel");
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
