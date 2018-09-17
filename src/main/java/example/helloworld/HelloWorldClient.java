@@ -49,11 +49,10 @@ public class HelloWorldClient {
     /**
      * Say hello to server.
      */
-    public String greet(String name) {
-        logger.info("Will try to greet " + name + " ...");
+    public String greet(String payload) {
         HelloRequest.Builder requestBuilder = HelloRequest.newBuilder();
         try {
-            JsonFormat.parser().merge(name, requestBuilder);
+            JsonFormat.parser().merge(payload, requestBuilder);
         } catch (InvalidProtocolBufferException e) {
             logger.log(Level.WARNING, "JsonFormat parse failed: {}", e);
         }
@@ -63,7 +62,6 @@ public class HelloWorldClient {
         } catch (StatusRuntimeException e) {
             logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
         }
-        logger.info("Greeting: " + response.getMessage());
         String res = null;
         try {
             res = JsonFormat.printer().print(response);
