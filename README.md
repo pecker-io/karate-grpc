@@ -98,3 +98,21 @@ Feature: grpc hello-world example
 ```
 
 That's all!
+
+## Thanks 
+
+Thanks [Peter Thomas](https://github.com/ptrthomas) for his work for [karate](https://github.com/intuit/karate) and his generous help.
+
+## Reference
+
+Maybe you want to know more information about Karate or other, please read the follow contents:
+
+- Karate project home: https://github.com/intuit/karate
+
+- ProtoBuf(via JSON) project home: https://github.com/protocolbuffers/protobuf/tree/master/java
+
+- grpc-java project home: https://github.com/grpc/grpc-java
+
+## License
+
+[karate-grpc](https://thinkerou.com/karate-grpc/) is licensed under MIT License.
