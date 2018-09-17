@@ -10,9 +10,12 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 /**
- * Common utilities for the RouteGuide demo.
+ * RouteGuideUtil is a common utilities for the RouteGuide example.
+ *
+ * @author thinkerou
  */
 public class RouteGuideUtil {
+
     private static final double COORD_FACTOR = 1e7;
 
     /**
@@ -61,4 +64,5 @@ public class RouteGuideUtil {
     public static boolean exists(Feature feature) {
         return feature != null && !feature.getName().isEmpty();
     }
+
 }

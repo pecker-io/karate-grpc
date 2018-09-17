@@ -20,9 +20,12 @@ import example.routeguide.RouteGuideGrpc.RouteGuideBlockingStub;
 import example.routeguide.RouteGuideGrpc.RouteGuideStub;
 
 /**
- * Sample client code that makes gRPC calls to the server.
+ * RouteGuideClient is a sample client code that makes gRPC calls to the server.
+ *
+ * @author thinkerou
  */
 public class RouteGuideClient {
+
     private static final Logger logger = Logger.getLogger(RouteGuideClient.class.getName());
 
     private final ManagedChannel channel;
@@ -32,12 +35,16 @@ public class RouteGuideClient {
     private Random random = new Random();
     private TestHelper testHelper;
 
-    /** Construct client for accessing RouteGuide server at {@code host:port}. */
+    /**
+     * Construct client for accessing RouteGuide server at host:port.
+     */
     public RouteGuideClient(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port).usePlaintext());
     }
 
-    /** Construct client for accessing RouteGuide server using the existing channel. */
+    /**
+     * Construct client for accessing RouteGuide server using the existing channel.
+     */
     public RouteGuideClient(ManagedChannelBuilder<?> channelBuilder) {
         channel = channelBuilder.build();
         blockingStub = RouteGuideGrpc.newBlockingStub(channel);
@@ -49,7 +56,8 @@ public class RouteGuideClient {
     }
 
     /**
-     * Blocking unary call example.  Calls getFeature and prints the response.
+     * Blocking unary call example.
+     * Calls getFeature and prints the response.
      */
     public void getFeature(int lat, int lon) {
         info("*** GetFeature: lat={0} lon={1}", lat, lon);
@@ -82,8 +90,8 @@ public class RouteGuideClient {
     }
 
     /**
-     * Blocking server-streaming example. Calls listFeatures with a rectangle of interest. Prints each
-     * response feature as it arrives.
+     * Blocking server-streaming example.
+     * Calls listFeatures with a rectangle of interest. Prints each response feature as it arrives.
      */
     public void listFeatures(int lowLat, int lowLon, int hiLat, int hiLon) {
         info("*** ListFeatures: lowLat={0} lowLon={1} hiLat={2} hiLon={3}", lowLat, lowLon, hiLat,
@@ -112,9 +120,9 @@ public class RouteGuideClient {
     }
 
     /**
-     * Async client-streaming example. Sends {@code numPoints} randomly chosen points from {@code
-     * features} with a variable delay in between. Prints the statistics when they are sent from the
-     * server.
+     * Async client-streaming example.
+     * Sends numPoints randomly chosen points from features with a variable delay in between.
+     * Prints the statistics when they are sent from the server.
      */
     public void recordRoute(List<Feature> features, int numPoints) throws InterruptedException {
         info("*** RecordRoute");
@@ -178,8 +186,8 @@ public class RouteGuideClient {
     }
 
     /**
-     * Bi-directional example, which can only be asynchronous. Send some chat messages, and print any
-     * chat messages that are sent from the server.
+     * Bi-directional example, which can only be asynchronous.
+     * Send some chat messages, and print any chat messages that are sent from the server.
      */
     public CountDownLatch routeChat() {
         info("*** RouteChat");
@@ -233,7 +241,9 @@ public class RouteGuideClient {
         return finishLatch;
     }
 
-    /** Issues several different requests and then exits. */
+    /**
+     * Issues several different requests and then exits.
+     */
     public static void main(String[] args) throws InterruptedException {
         List<Feature> features;
         try {

@@ -24,9 +24,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * A sample gRPC server that serve the RouteGuide (see route_guide.proto) service.
+ * RouteGuideServer is a sample gRPC server that serve the RouteGuide service.
+ *
+ * @author thinkerou
  */
 public class RouteGuideServer {
+
     private static final Logger logger = Logger.getLogger(RouteGuideServer.class.getName());
 
     private final int port;
@@ -36,19 +39,25 @@ public class RouteGuideServer {
         this(port, RouteGuideUtil.getDefaultFeaturesFile());
     }
 
-    /** Create a RouteGuide server listening on {@code port} using {@code featureFile} database. */
+    /**
+     * Create a RouteGuide server listening on port using featureFile database.
+     */
     public RouteGuideServer(int port, URL featureFile) throws IOException {
         this(ServerBuilder.forPort(port), port, RouteGuideUtil.parseFeatures(featureFile));
     }
 
-    /** Create a RouteGuide server using serverBuilder as a base and features as data. */
+    /**
+     * Create a RouteGuide server using serverBuilder as a base and features as data.
+     */
     public RouteGuideServer(ServerBuilder<?> serverBuilder, int port, Collection<Feature> features) {
         this.port = port;
         server = serverBuilder.addService(new RouteGuideService(features))
                 .build();
     }
 
-    /** Start serving requests. */
+    /**
+     * Start serving requests.
+     */
     public void start() throws IOException {
         server.start();
         logger.info("Server started, listening on " + port);
@@ -63,7 +72,9 @@ public class RouteGuideServer {
         });
     }
 
-    /** Stop serving requests and shutdown resources. */
+    /**
+     * Stop serving requests and shutdown resources.
+     */
     public void stop() {
         if (server != null) {
             server.shutdown();
@@ -90,8 +101,6 @@ public class RouteGuideServer {
 
     /**
      * Our implementation of RouteGuide service.
-     *
-     * <p>See route_guide.proto for details of the methods.
      */
     private static class RouteGuideService extends RouteGuideGrpc.RouteGuideImplBase {
         private final Collection<Feature> features;
@@ -274,4 +283,5 @@ public class RouteGuideServer {
             return (int) (r * c);
         }
     }
+
 }
