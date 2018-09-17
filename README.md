@@ -16,6 +16,18 @@ $ # In another terminal run the client karate test
 $ mvn test -Dtest=HelloWorldRunner
 ```
 
+## What to need for testing grpc server
+
+Testing one grpc server, we have the follow info:
+
+- grpc server `ip` and `port`
+
+- protobuf file corresponding grpc server, but usually it's a protobuf jar package not one single file.
+
+So, we should test it based on the two point.
+
+Using Karate we can perfect to solve it!
+
 ## How to write grpc client
 
 You only need two steps:
