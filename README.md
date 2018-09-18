@@ -101,13 +101,15 @@ That's all!
 
 ## Thanks 
 
-Thanks [Peter Thomas](https://github.com/ptrthomas) for his work for [karate](https://github.com/intuit/karate) and his generous help.
+Thanks [Peter Thomas](https://github.com/ptrthomas) for his work for [karate](https://github.com/intuit/karate) and his generous help, also thanks [Dino Wernli](https://github.com/dinowernli) for his contributions for [polyglot](https://github.com/grpc-ecosystem/polyglot).
 
 ## Reference
 
 Maybe you want to know more information about Karate or other, please read the follow contents:
 
-- Karate project home: [https://github.com/intuit/karate](https://github.com/intuit/karate)
+- karate project home: [https://github.com/intuit/karate](https://github.com/intuit/karate)
+
+- polyglot project home: [https://github.com/grpc-ecosystem/polyglot](https://github.com/grpc-ecosystem/polyglot)
 
 - ProtoBuf(via JSON) project home: [https://github.com/protocolbuffers/protobuf/tree/master/java](https://github.com/protocolbuffers/protobuf/tree/master/java)
 
