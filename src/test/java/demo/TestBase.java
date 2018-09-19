@@ -6,6 +6,8 @@ import org.junit.runner.RunWith;
 
 import com.intuit.karate.junit4.Karate;
 
+import testing.ServerStart;
+
 /**
  * TestBase
  *
@@ -14,9 +16,14 @@ import com.intuit.karate.junit4.Karate;
 @RunWith(Karate.class)
 public class TestBase {
 
-    @BeforeClass
-    public static void beforeClass() {
+    private static ServerStart server;
 
+    @BeforeClass
+    public static void beforeClass() throws Exception {
+        if (server == null) {
+            server = new ServerStart();
+        }
+        server.startServer();
     }
 
     @AfterClass

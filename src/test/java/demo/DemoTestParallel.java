@@ -30,7 +30,7 @@ public class DemoTestParallel {
     private static final int THREAD_COUNT = 5;
 
     @BeforeClass
-    public static void beforeClass() {
+    public static void beforeClass() throws Exception {
         TestBase.beforeClass();
     }
 
