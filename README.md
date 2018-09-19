@@ -2,7 +2,7 @@
 
 [![Build Status](https://api.travis-ci.org/thinkerou/karate-grpc.svg)](https://travis-ci.org/thinkerou/karate-grpc)
 
-gRPC Testing Made Simple by [Karate](https://github.com/intuit/karate).
+karate-grpc made gRPC testing simple by [karate](https://github.com/intuit/karate), and its dynamic client based on [polyglot](https://github.com/grpc-ecosystem/polyglot) built.
 
 ## Testing hello-world
 
