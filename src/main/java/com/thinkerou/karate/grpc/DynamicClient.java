@@ -3,6 +3,7 @@ package com.thinkerou.karate.grpc;
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 import static io.grpc.MethodDescriptor.newBuilder;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Descriptors;
@@ -49,11 +50,19 @@ public class DynamicClient {
             ImmutableList<DynamicMessage> requests,
             StreamObserver<DynamicMessage> responseObsever,
             CallOptions callOptions) {
+        Preconditions.checkArgument(!requests.isEmpty(), "Can't make call without any requests");
+
+        long numRequests = requests.size();
+
         MethodDescriptor.MethodType methodType = getMethodType();
         switch (methodType) {
             case UNARY:
+                Preconditions.checkArgument(numRequests == 1,
+                        "Need exactly 1 request for unary call but got: " + numRequests);
                 return callUnary(requests.get(0), responseObsever, callOptions);
             case SERVER_STREAMING:
+                Preconditions.checkArgument(numRequests == 1,
+                        "Need exactly 1 request for server streaming call but got: " + numRequests);
                 return callServerStreaming(requests.get(0), responseObsever, callOptions);
             case CLIENT_STREAMING:
                 return callClientStreaming(requests, responseObsever, callOptions);
