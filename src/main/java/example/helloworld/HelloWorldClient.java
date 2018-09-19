@@ -3,10 +3,14 @@ package example.helloworld;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
+
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gson.Gson;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 
@@ -50,9 +54,12 @@ public class HelloWorldClient {
      * Say hello to server.
      */
     public String greet(String payload) {
+        Gson gson = new Gson();
+        List<Map<String, Object>> list = gson.fromJson(payload, List.class);
+
         HelloRequest.Builder requestBuilder = HelloRequest.newBuilder();
         try {
-            JsonFormat.parser().merge(payload, requestBuilder);
+            JsonFormat.parser().merge(list.get(0).toString(), requestBuilder);
         } catch (InvalidProtocolBufferException e) {
             logger.log(Level.WARNING, "JsonFormat parse failed: {}", e);
         }
