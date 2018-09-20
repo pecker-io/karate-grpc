@@ -57,8 +57,8 @@ public class DynamicClient {
         MethodDescriptor.MethodType methodType = getMethodType();
         switch (methodType) {
             case UNARY:
-                Preconditions.checkArgument(numRequests == 1,
-                        "Need exactly 1 request for unary call but got: " + numRequests);
+                // Preconditions.checkArgument(numRequests == 1,
+                //         "Need exactly 1 request for unary call but got: " + numRequests);
                 return callUnary(requests.get(0), responseObsever, callOptions);
             case SERVER_STREAMING:
                 Preconditions.checkArgument(numRequests == 1,
