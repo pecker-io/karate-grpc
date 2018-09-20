@@ -2,6 +2,7 @@ package com.thinkerou.karate.protobuf;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableList;
@@ -9,6 +10,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.Descriptors;
+import com.google.protobuf.ProtocolStringList;
 import com.thinkerou.karate.domain.ProtoName;
 
 /**
@@ -30,7 +32,8 @@ public class ServiceResolver {
         Map<String, Descriptors.FileDescriptor> descriptorCache = new HashMap<>();
 
         ImmutableList.Builder<Descriptors.FileDescriptor> result = ImmutableList.builder();
-        for (DescriptorProtos.FileDescriptorProto descriptorProto : descriptorSet.getFileList()) {
+        List<DescriptorProtos.FileDescriptorProto> descriptorProtos = descriptorSet.getFileList();
+        for (DescriptorProtos.FileDescriptorProto descriptorProto : descriptorProtos) {
             try {
                 result.add(descriptorFromProto(descriptorProto, descriptorProtoIndex, descriptorCache));
             } catch (Descriptors.DescriptorValidationException e) {
@@ -111,9 +114,8 @@ public class ServiceResolver {
             DescriptorProtos.FileDescriptorSet fileDescriptorSet) {
         ImmutableMap.Builder<String, DescriptorProtos.FileDescriptorProto> resultBuilder = ImmutableMap.builder();
 
-        for (DescriptorProtos.FileDescriptorProto descriptorProto : fileDescriptorSet.getFileList()) {
-            resultBuilder.put(descriptorProto.getName(), descriptorProto);
-        }
+        List<DescriptorProtos.FileDescriptorProto> descriptorProtos = fileDescriptorSet.getFileList();
+        descriptorProtos.forEach(descriptorProto -> resultBuilder.put(descriptorProto.getName(), descriptorProto));
 
         return resultBuilder.build();
     }
@@ -135,13 +137,18 @@ public class ServiceResolver {
 
         // Then, fetch all the required dependencies recursively.
         ImmutableList.Builder<Descriptors.FileDescriptor> dependencies = ImmutableList.builder();
-        for (String dependencyName : descriptorProto.getDependencyList()) {
+        ProtocolStringList protocolStringList = descriptorProto.getDependencyList();
+        protocolStringList.forEach(dependencyName -> {
             if (!descriptorProtoIndex.containsKey(dependencyName)) {
                 throw new IllegalArgumentException("Can't find dependency: " + dependencyName);
             }
             DescriptorProtos.FileDescriptorProto dependencyProto = descriptorProtoIndex.get(dependencyName);
-            dependencies.add(descriptorFromProto(dependencyProto, descriptorProtoIndex, descriptorCache));
-        }
+            try {
+                dependencies.add(descriptorFromProto(dependencyProto, descriptorProtoIndex, descriptorCache));
+            } catch (Descriptors.DescriptorValidationException e) {
+                e.printStackTrace();
+            }
+        });
 
         // Finally, construct the actual descriptor.
         Descriptors.FileDescriptor[] empty = new Descriptors.FileDescriptor[0];

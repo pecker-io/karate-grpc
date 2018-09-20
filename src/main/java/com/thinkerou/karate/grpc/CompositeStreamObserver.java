@@ -26,35 +26,35 @@ public class CompositeStreamObserver<T> implements StreamObserver<T> {
 
     @Override
     public void onCompleted() {
-        for (StreamObserver<T> observer : observers) {
+        observers.forEach(tStreamObserver -> {
             try {
-                observer.onCompleted();
+                tStreamObserver.onCompleted();
             } catch (Throwable t) {
                 t.printStackTrace();
             }
-        }
+        });
     }
 
     @Override
     public void onError(Throwable t) {
-        for (StreamObserver<T> observer : observers) {
+        observers.forEach(tStreamObserver -> {
             try {
-                observer.onError(t);
+                tStreamObserver.onError(t);
             } catch (Throwable e) {
                 e.printStackTrace();
             }
-        }
+        });
     }
 
     @Override
     public void onNext(T value) {
-        for (StreamObserver<T> observer : observers) {
+        observers.forEach(tStreamObserver -> {
             try {
-                observer.onNext(value);
+                tStreamObserver.onNext(value);
             } catch (Throwable t) {
                 t.printStackTrace();
             }
-        }
+        });
     }
 
 }
