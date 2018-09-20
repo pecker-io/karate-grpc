@@ -1,4 +1,4 @@
-package example.routeguide;
+package com.thinkerou.demo.routeguide;
 
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;

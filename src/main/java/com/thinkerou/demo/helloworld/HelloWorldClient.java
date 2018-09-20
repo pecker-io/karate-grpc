@@ -1,4 +1,4 @@
-package example.helloworld;
+package com.thinkerou.demo.helloworld;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;

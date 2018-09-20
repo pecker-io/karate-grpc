@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import example.helloworld.HelloWorldServer;
+import com.thinkerou.demo.helloworld.HelloWorldServer;
 
 /**
  * ServerStart

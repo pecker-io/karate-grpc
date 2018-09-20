@@ -1,4 +1,4 @@
-package example.routeguide;
+package com.thinkerou.demo.routeguide;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.protobuf.Message;
@@ -16,9 +16,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import example.routeguide.RouteGuideGrpc.RouteGuideBlockingStub;
-import example.routeguide.RouteGuideGrpc.RouteGuideStub;
-
 /**
  * RouteGuideClient is a sample client code that makes gRPC calls to the server.
  *
@@ -29,8 +26,8 @@ public class RouteGuideClient {
     private static final Logger logger = Logger.getLogger(RouteGuideClient.class.getName());
 
     private final ManagedChannel channel;
-    private final RouteGuideBlockingStub blockingStub;
-    private final RouteGuideStub asyncStub;
+    private final RouteGuideGrpc.RouteGuideBlockingStub blockingStub;
+    private final RouteGuideGrpc.RouteGuideStub asyncStub;
 
     private Random random = new Random();
     private TestHelper testHelper;

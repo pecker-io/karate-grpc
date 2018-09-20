@@ -1,7 +1,7 @@
 Feature: grpc helloworld example
 
   Background:
-    * def Client = Java.type('example.helloworld.HelloWorldClient')
+    * def Client = Java.type('com.thinkerou.demo.helloworld.HelloWorldClient')
     * def config = { host: 'localhost', port: 50051, extra: 'other config information' }
     * def client = new Client(config.host, config.port)
 

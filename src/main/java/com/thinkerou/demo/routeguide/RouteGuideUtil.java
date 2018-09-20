@@ -1,4 +1,4 @@
-package example.routeguide;
+package com.thinkerou.demo.routeguide;
 
 import com.google.protobuf.util.JsonFormat;
 import java.io.IOException;

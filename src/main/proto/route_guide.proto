@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "example.routeguide";
+option java_package = "com.thinkerou.demo.routeguide";
 option java_outer_classname = "RouteGuideProto";
 
 package routeguide;

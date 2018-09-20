@@ -11,7 +11,7 @@ Prefer to use Maven:
 ```
 $ mvn verify
 $ # Run the server
-$ mvn exec:java -Dexec.mainClass=example.helloworld.HelloWorldServer
+$ mvn exec:java -Dexec.mainClass=com.thinkerou.demo.helloworld.HelloWorldServer
 $ # In another terminal run the client karate test
 $ mvn test -Dtest=HelloWorldRunner
 ```
@@ -85,7 +85,7 @@ Like this:
 Feature: grpc hello-world example
 
   Background:
-    * def Client = Java.type('example.helloworld.HelloWorldClient')
+    * def Client = Java.type('com.thinkerou.demo.helloworld.HelloWorldClient')
     * def config = { host: 'localhost', port: 50051, extra: 'other config information' }
     * def client = new Client(config.host, config.port)
 
