@@ -68,7 +68,8 @@ public class HelloWorldServer {
     public static void main(String[] args) throws IOException, InterruptedException {
         final HelloWorldServer server = new HelloWorldServer();
         server.start();
-        if (args[0] != "test") {
+        // For testing
+        if (args.length == 0 || args[0] != "test") {
             server.blockUntilShutdown();
         }
     }
