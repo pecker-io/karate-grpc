@@ -36,7 +36,7 @@ public class Helper {
         String payloads = "";
         String line;
         while ((line = bufferedReader.readLine()) != null) {
-            payloads += line;
+            payloads += line + "\n";
         }
 
         bufferedReader.close();
