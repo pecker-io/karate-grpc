@@ -1,5 +1,6 @@
 package com.thinkerou.karate.protobuf;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +40,16 @@ public class ServiceResolver {
         }
 
         return new ServiceResolver(result.build());
+    }
+
+    /**
+     * Lists all of the services found in the file descriptors.
+     */
+    public Iterable<Descriptors.ServiceDescriptor> listServices() {
+        ArrayList<Descriptors.ServiceDescriptor> serviceDescriptors = new ArrayList<>();
+        fileDescriptors.forEach(fileDescriptor -> serviceDescriptors.addAll(fileDescriptor.getServices()));
+
+        return serviceDescriptors;
     }
 
     /**

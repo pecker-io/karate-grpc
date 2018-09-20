@@ -90,7 +90,7 @@ public class GrpcClient {
         // Creates one temp file to save call grpc result.
         Path filePath = null;
         try {
-            filePath = Files.createTempFile("karate.grpc.", ".result.out");
+            filePath = Files.createTempFile("karate.grpc.call.", ".result.out");
         } catch (IOException e) {
             e.printStackTrace();
         }
