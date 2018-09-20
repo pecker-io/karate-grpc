@@ -5,9 +5,6 @@ import static com.google.protobuf.util.JsonFormat.TypeRegistry;
 import static com.thinkerou.karate.utils.Helper.readFile;
 import static com.thinkerou.karate.utils.Helper.validatePath;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,11 +13,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
+import com.thinkerou.karate.constants.DescriptorFile;
 import com.thinkerou.karate.domain.ProtoName;
 import com.thinkerou.karate.grpc.ChannelFactory;
 import com.thinkerou.karate.grpc.CompositeStreamObserver;
@@ -59,7 +56,7 @@ public class GrpcClient {
     public String invoke(String name, String payload) throws IOException {
         ProtoName protoName = FullName.parse(name);
 
-        String path = "/target/generated-resources/protobuf/descriptor-sets/karate-grpc.protobin";
+        String path = DescriptorFile.PROTO.getText();
         Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
         validatePath(Optional.ofNullable(descriptorPath));
 
