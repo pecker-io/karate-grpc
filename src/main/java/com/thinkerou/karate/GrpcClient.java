@@ -54,7 +54,7 @@ public class GrpcClient {
      * @param name indicates one called grpc service full name, like: package.service/method
      * @param payload indicates one protobuf corresponding json data
      */
-    public String invoke(String name, String payload) {
+    public String invoke(String name, String payload) throws IOException {
         ProtoName protoName = FullName.parse(name);
 
         String path = "/target/generated-resources/protobuf/descriptor-sets/karate-grpc.protobin";
@@ -108,8 +108,7 @@ public class GrpcClient {
             throw new RuntimeException("Caught exception while waiting for rpc", t);
         }
 
-        // Returns the result path.
-        return filePath.toString();
+        return readFile(filePath.toString());
     }
 
     private static CallOptions callOptions() {
@@ -154,7 +153,7 @@ public class GrpcClient {
         System.out.println(payloads);
 
         String result = client.invoke("helloworld.Greeter/SayHello", payloads);
-        System.out.println(readFile(result));
+        System.out.println(result);
     }
 
 }
