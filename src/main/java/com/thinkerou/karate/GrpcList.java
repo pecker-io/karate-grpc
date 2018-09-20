@@ -24,7 +24,7 @@ import com.thinkerou.karate.protobuf.ServiceResolver;
  */
 public class GrpcList {
 
-    public static String invoke(Optional<String> serviceFilter, Optional<String> methodFilter) {
+    public static String invoke(Optional<String> serviceFilter, Optional<String> methodFilter) throws IOException {
         String path = DescriptorFile.PROTO.getText();
         Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
         validatePath(Optional.ofNullable(descriptorPath));
@@ -36,29 +36,6 @@ public class GrpcList {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(fileDescriptorSet);
-
-        ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(fileDescriptorSet);
-
-        Iterable<Descriptors.ServiceDescriptor> serviceDescriptorIterable = serviceResolver.listServices();
-        serviceDescriptorIterable.forEach(descriptor -> {
-            if (!serviceFilter.isPresent()
-                    || descriptor.getFullName().toLowerCase().contains(serviceFilter.get().toLowerCase())) {
-                try {
-                    listMethods(descriptor, methodFilter);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        return "";
-    }
-
-    private static String listMethods(
-            Descriptors.ServiceDescriptor descriptor,
-            Optional<String> methodFilter) throws IOException {
-        List<Descriptors.MethodDescriptor> methodDescriptors = descriptor.getMethods();
 
         // Creates one temp file to save list grpc result.
         Path filePath = null;
@@ -72,6 +49,25 @@ public class GrpcList {
 
         Output output = Output.forFile(filePath);
         output.newLine();
+
+        ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(fileDescriptorSet);
+
+        Iterable<Descriptors.ServiceDescriptor> serviceDescriptorIterable = serviceResolver.listServices();
+        serviceDescriptorIterable.forEach(descriptor -> {
+            if (!serviceFilter.isPresent()
+                    || descriptor.getFullName().toLowerCase().contains(serviceFilter.get().toLowerCase())) {
+                listMethods(output, descriptor, methodFilter);
+            }
+        });
+
+        return readFile(filePath.toString());
+    }
+
+    private static void listMethods(
+            Output output,
+            Descriptors.ServiceDescriptor descriptor,
+            Optional<String> methodFilter) {
+        List<Descriptors.MethodDescriptor> methodDescriptors = descriptor.getMethods();
 
         final boolean[] printedService = {false};
         methodDescriptors.forEach(method -> {
@@ -90,13 +86,12 @@ public class GrpcList {
             }
         });
 
-        return readFile(filePath.toString());
+        return;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         String result = GrpcList.invoke(Optional.ofNullable("Greeter"), Optional.of("SayHello"));
         System.out.println(result);
-        System.out.println("hi");
     }
 
 }
