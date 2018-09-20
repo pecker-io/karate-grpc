@@ -2,6 +2,8 @@ package com.thinkerou.karate;
 
 import static com.google.protobuf.DescriptorProtos.FileDescriptorSet;
 import static com.google.protobuf.util.JsonFormat.TypeRegistry;
+import static com.thinkerou.karate.utils.Helper.readFile;
+import static com.thinkerou.karate.utils.Helper.validatePath;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -115,33 +117,6 @@ public class GrpcClient {
         CallOptions result = CallOptions.DEFAULT;
         // Adds other options parameter
         return result;
-    }
-
-    private static void validatePath(Optional<Path> maybePath) {
-        if (maybePath.isPresent()) {
-            Preconditions.checkArgument(Files.exists(maybePath.get()));
-        }
-    }
-
-    private static String readFile(String file) throws IOException {
-        FileReader fileReader = null;
-        try {
-            fileReader = new FileReader(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-        String payloads = "";
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            payloads += line;
-        }
-
-        bufferedReader.close();
-
-        return payloads;
     }
 
     // Test it.
