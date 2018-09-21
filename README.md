@@ -12,6 +12,8 @@ Prefer to use Maven:
 $ mvn verify
 $ # Run the server
 $ mvn exec:java -Dexec.mainClass=com.thinkerou.demo.helloworld.HelloWorldServer
+$ # Use the follow command to test grpc client can right send message to server
+$ mvn exec:java -Dexec.mainClass=com.thinkerou.demo.helloworld.HelloWorldClient -Dexec.cleanupDaemonThreads=false
 $ # In another terminal run the client karate test
 $ mvn test -Dtest=HelloWorldRunner
 ```
