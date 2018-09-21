@@ -12,6 +12,8 @@ import java.util.List;
 /**
  * RouteGuideUtil is a common utilities for the RouteGuide example.
  *
+ * Source from: https://github.com/grpc/grpc-java/tree/master/examples/src/main/java/io/grpc/examples
+ *
  * @author thinkerou
  */
 public class RouteGuideUtil {

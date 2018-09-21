@@ -9,6 +9,8 @@ import java.util.logging.Logger;
 /**
  * HelloWorldServer that manages startup/shutdown of a Greeter server.
  *
+ * Source from: https://github.com/grpc/grpc-java/tree/master/examples/src/main/java/io/grpc/examples
+ *
  * @author thinkerou
  */
 public class HelloWorldServer {

@@ -19,6 +19,8 @@ import java.util.logging.Logger;
 /**
  * RouteGuideClient is a sample client code that makes gRPC calls to the server.
  *
+ * Source from: https://github.com/grpc/grpc-java/tree/master/examples/src/main/java/io/grpc/examples
+ *
  * @author thinkerou
  */
 public class RouteGuideClient {

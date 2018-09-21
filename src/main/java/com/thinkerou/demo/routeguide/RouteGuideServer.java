@@ -26,6 +26,8 @@ import java.util.logging.Logger;
 /**
  * RouteGuideServer is a sample gRPC server that serve the RouteGuide service.
  *
+ * Source from: https://github.com/grpc/grpc-java/tree/master/examples/src/main/java/io/grpc/examples
+ *
  * @author thinkerou
  */
 public class RouteGuideServer {
