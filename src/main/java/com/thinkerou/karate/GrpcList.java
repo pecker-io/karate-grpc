@@ -24,7 +24,7 @@ import com.thinkerou.karate.protobuf.ServiceResolver;
  */
 public class GrpcList {
 
-    public static String invoke(Optional<String> serviceFilter, Optional<String> methodFilter) throws IOException {
+    public static String invoke(String serviceFilter, String methodFilter) throws IOException {
         String path = DescriptorFile.PROTO.getText();
         Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
         validatePath(Optional.ofNullable(descriptorPath));
@@ -54,8 +54,8 @@ public class GrpcList {
 
         Iterable<Descriptors.ServiceDescriptor> serviceDescriptorIterable = serviceResolver.listServices();
         serviceDescriptorIterable.forEach(descriptor -> {
-            if (!serviceFilter.isPresent()
-                    || descriptor.getFullName().toLowerCase().contains(serviceFilter.get().toLowerCase())) {
+            if (serviceFilter.isEmpty()
+                    || descriptor.getFullName().toLowerCase().contains(serviceFilter.toLowerCase())) {
                 listMethods(output, descriptor, methodFilter);
             }
         });
@@ -66,12 +66,12 @@ public class GrpcList {
     private static void listMethods(
             Output output,
             Descriptors.ServiceDescriptor descriptor,
-            Optional<String> methodFilter) {
+            String methodFilter) {
         List<Descriptors.MethodDescriptor> methodDescriptors = descriptor.getMethods();
 
         final boolean[] printedService = {false};
         methodDescriptors.forEach(method -> {
-            if (!methodFilter.isPresent() || method.getName().contains(methodFilter.get())) {
+            if (methodFilter.isEmpty() || method.getName().contains(methodFilter)) {
                 if (!printedService[0]) {
                     File pFile = new File(descriptor.getFile().getName());
                     output.writeLine(descriptor.getFullName() + " => " + pFile);
@@ -90,7 +90,7 @@ public class GrpcList {
     }
 
     public static void main(String[] args) throws IOException {
-        String result = GrpcList.invoke(Optional.ofNullable("Greeter"), Optional.of("SayHello"));
+        String result = GrpcList.invoke("Greeter", "SayHello");
         System.out.println(result);
     }
 
