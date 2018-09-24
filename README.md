@@ -11,9 +11,9 @@ Prefer to use Maven:
 ```
 $ mvn verify
 $ # Run the server
-$ mvn exec:java -Dexec.mainClass=com.thinkerou.demo.helloworld.HelloWorldServer
+$ mvn exec:java -Dexec.mainClass=HelloWorldServer
 $ # Use the follow command to test grpc client can right send message to server
-$ mvn exec:java -Dexec.mainClass=com.thinkerou.demo.helloworld.HelloWorldClient -Dexec.cleanupDaemonThreads=false
+$ mvn exec:java -Dexec.mainClass=HelloWorldClient -Dexec.cleanupDaemonThreads=false
 $ # In another terminal run the client karate test
 $ mvn test -Dtest=HelloWorldRunner
 ```
@@ -87,7 +87,7 @@ Like this:
 Feature: grpc hello-world example
 
   Background:
-    * def Client = Java.type('com.thinkerou.demo.helloworld.HelloWorldClient')
+    * def Client = Java.type('HelloWorldClient')
     * def config = { host: 'localhost', port: 50051, extra: 'other config information' }
     * def client = new Client(config.host, config.port)
 
