@@ -82,13 +82,26 @@
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
                     <writeDescriptorSet>true</writeDescriptorSet>
                     <descriptorSetFileName>karate-grpc.protobin</descriptorSetFileName>
-                    <protoSourceRoot>${project.build.directory}/dependency/mediacloud</protoSourceRoot>
                 </configuration>
                 <executions>
                     <execution>
                         <goals>
                             <goal>compile</goal>
                             <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
                         </goals>
                     </execution>
                 </executions>
