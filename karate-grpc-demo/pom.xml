@@ -82,6 +82,7 @@
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
                     <writeDescriptorSet>true</writeDescriptorSet>
                     <descriptorSetFileName>karate-grpc.protobin</descriptorSetFileName>
+                    <protoSourceRoot>${project.build.directory}/dependency</protoSourceRoot>
                 </configuration>
                 <executions>
                     <execution>

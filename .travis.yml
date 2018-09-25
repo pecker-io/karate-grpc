@@ -7,4 +7,4 @@ addons:
     packages:
       - oracle-java8-installer
 install: true
-script: mvn install -Dmaven.javadoc.skip=true -B -V -Dmaven.test.skip=true
+script: mvn install -Dmaven.javadoc.skip=true -B -V -Dmaven.test.skip=true && cd karate-grpc-demo && mvn test
