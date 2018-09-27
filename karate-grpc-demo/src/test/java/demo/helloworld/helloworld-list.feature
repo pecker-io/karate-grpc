@@ -1,9 +1,10 @@
 Feature: grpc helloworld example by grpc dynamic client
 
   Background:
-    * def List = Java.type('com.github.thinkerou.karate.GrpcList')
+    * def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
+    * def client = Client.create()
 
   Scenario: do it
-    * def response = List.invoke('Greeter', 'SayHello')
+    * def response = client.list('Greeter', 'SayHello')
     * print response
     * match response.message contains 'SayHello'

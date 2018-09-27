@@ -1,4 +1,4 @@
-package com.github.thinkerou.karate;
+package com.github.thinkerou.karate.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,7 +22,14 @@ import com.google.protobuf.Descriptors;
  */
 public class GrpcList {
 
-    public static String invoke(String serviceFilter, String methodFilter) throws IOException {
+    public static GrpcList create() {
+        return new GrpcList();
+    }
+
+    public GrpcList() {
+    }
+
+    public String invoke(String serviceFilter, String methodFilter) throws IOException {
         String path = DescriptorFile.PROTO.getText();
         Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
         Helper.validatePath(Optional.ofNullable(descriptorPath));
@@ -88,7 +95,8 @@ public class GrpcList {
     }
 
     public static void main(String[] args) throws IOException {
-        String result = GrpcList.invoke("Greeter", "SayHello");
+        GrpcList list = new GrpcList();
+        String result = list.invoke("Greeter", "SayHello");
         System.out.println(result);
     }
 

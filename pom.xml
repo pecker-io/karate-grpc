@@ -7,7 +7,7 @@
     <groupId>com.github.thinkerou</groupId>
     <artifactId>karate-grpc-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.3.1</version>
+    <version>0.4.0</version>
 
     <name>${project.artifactId}</name>
     <description>gRPC Testing Made Simple by Karate.</description>
