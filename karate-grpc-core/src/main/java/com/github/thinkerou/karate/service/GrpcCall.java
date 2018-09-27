@@ -69,7 +69,18 @@ public class GrpcCall {
 
         // Set up the dynamic client and make the call.
         ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(fileDescriptorSet);
-        Descriptors.MethodDescriptor methodDescriptor = serviceResolver.resolveServiceMethod(protoName);
+        Descriptors.MethodDescriptor methodDescriptor = null;
+        try {
+            methodDescriptor = serviceResolver.resolveServiceMethod(protoName); // (method: 77->88) (service: 77->85->107)
+        } catch (IllegalArgumentException e) {
+            // When can't find service or method with name
+            // use service or/and method search once for help user
+            GrpcList list = new GrpcList();
+            String result = list.invoke(protoName.getServiceName(), "");
+            System.out.println(result);
+            result = list.invoke("", protoName.getMethodName());
+            System.out.println(result);
+        }
 
         // Create a dynamic grpc client.
         DynamicClient dynamicClient = DynamicClient.create(methodDescriptor, channel);
