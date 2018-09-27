@@ -21,8 +21,8 @@ public class ServerStart {
 
     public void start(String[] args) throws IOException, InterruptedException {
         HelloWorldServer.main(args);
-        logger.info("Started server on port...");
-        monitor = new MonitorThread(50021);
+        logger.warn("Started server on port...");
+        monitor = new MonitorThread(50051);
         monitor.start();
         monitor.join();
     }
