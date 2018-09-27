@@ -34,6 +34,12 @@ Using Karate we can perfect to solve it!
 
 ## How to write grpc client
 
+<details>
+
+<summary>The part which initailly think about the topic continue to have saved for your information.
+
+Usually you no need to care it because `karate-grpc-core` have completed the function.</summay>
+
 You only need two steps:
 
 - Read json file and parse protobuf object to the request of grpc server
@@ -76,6 +82,8 @@ public class Client {
 }
 
 ```
+
+</details>
 
 ## How to write karate feature
 
