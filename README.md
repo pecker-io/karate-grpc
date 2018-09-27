@@ -36,9 +36,9 @@ Using Karate we can perfect to solve it!
 
 <details>
 
-<summary>The part which initailly think about the topic continue to have saved for your information.
+<summary>The part which initailly think about the topic continue to have saved for your information. Usually you no need to care it because `karate-grpc-core` have completed the function.</summary>
 
-Usually you no need to care it because `karate-grpc-core` have completed the function.</summary>
+**Note: the part is outdated draft which is for reference only.**
 
 You only need two steps:
 
