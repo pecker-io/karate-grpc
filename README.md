@@ -1,4 +1,4 @@
-# karate-grpc
+# karate-grpc `(Status: Frequently update and test)`
 
 [![Build Status](https://api.travis-ci.org/thinkerou/karate-grpc.svg)](https://travis-ci.org/thinkerou/karate-grpc)
 
