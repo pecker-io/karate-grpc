@@ -4,19 +4,21 @@
 
 karate-grpc made gRPC testing simple by [karate](https://github.com/intuit/karate), and its dynamic client built based on [polyglot](https://github.com/grpc-ecosystem/polyglot).
 
-## Testing hello-world
+## Testing helloworld without helloworld server
 
 Prefer to use Maven:
 
 ```
-$ mvn verify
-$ # Run the server
-$ mvn exec:java -Dexec.mainClass=HelloWorldServer
-$ # Use the follow command to test grpc client can right send message to server
-$ mvn exec:java -Dexec.mainClass=HelloWorldClient -Dexec.cleanupDaemonThreads=false
-$ # In another terminal run the client karate test
-$ mvn test -Dtest=HelloWorldRunner
+$ # compile the whole project
+$ mvn clean compile package -Dmaven.test.skip=true
+$ cd karate-grpc-demo
+$ # run all tests
+$ mvn test
+$ # or run single test
+$ mvn test -Dtest=HelloWorldNewRunner
 ```
+
+Because have started helloworld server on `TestBase.java`, we not need to start it alone.
 
 ## What to need for testing grpc server
 
