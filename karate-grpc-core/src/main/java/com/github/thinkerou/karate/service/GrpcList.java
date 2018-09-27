@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.domain.ProtoName;
@@ -23,6 +24,8 @@ import com.google.protobuf.Descriptors;
  * @author thinkerou
  */
 public class GrpcList {
+
+    private static final Logger logger = Logger.getLogger(GrpcList.class.getName());
 
     public static GrpcList create() {
         return new GrpcList();
@@ -49,7 +52,7 @@ public class GrpcList {
         try {
             fileDescriptorSet = DescriptorProtos.FileDescriptorSet.parseFrom(Files.readAllBytes(descriptorPath));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warning(e.getMessage());
         }
 
         // Creates one temp file to save list grpc result.
@@ -57,10 +60,10 @@ public class GrpcList {
         try {
             filePath = Files.createTempFile("karate.grpc.list.", ".result.out");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warning(e.getMessage());
         }
         Helper.validatePath(Optional.ofNullable(filePath));
-        System.out.println(filePath);
+        logger.info(filePath.toString());
 
         Output output = Output.forFile(filePath);
         output.newLine();
@@ -107,10 +110,10 @@ public class GrpcList {
     public static void main(String[] args) throws IOException {
         GrpcList list = new GrpcList();
         String result = list.invoke("Greeter", "SayHello");
-        System.out.println(result);
+        logger.info(result);
 
         result = list.invoke("helloworld.Greeter/SayHello");
-        System.out.println(result);
+        logger.info(result);
     }
 
 }

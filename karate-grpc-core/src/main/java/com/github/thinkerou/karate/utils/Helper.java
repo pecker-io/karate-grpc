@@ -7,8 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
-
-import com.google.common.base.Preconditions;
+import java.util.logging.Logger;
 
 /**
  * Helper
@@ -17,9 +16,13 @@ import com.google.common.base.Preconditions;
  */
 public class Helper {
 
+    private static final Logger logger = Logger.getLogger(Helper.class.getName());
+
     public static void validatePath(Optional<Path> maybePath) {
         if (maybePath.isPresent()) {
-            Preconditions.checkArgument(Files.exists(maybePath.get()));
+            if (!Files.exists(maybePath.get())) {
+                throw new IllegalArgumentException("Path not exist: " + maybePath.get().toString());
+            }
         }
     }
 
@@ -28,7 +31,7 @@ public class Helper {
         try {
             fileReader = new FileReader(file);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logger.warning(e.getMessage());
         }
 
         BufferedReader bufferedReader = new BufferedReader(fileReader);

@@ -28,6 +28,8 @@
             <artifactId>protobuf-java-util</artifactId>
             <version>${protobuf.version}</version>
         </dependency>
+
+        <!-- need it when run GrpcClient.main, why? can remove it?-->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>

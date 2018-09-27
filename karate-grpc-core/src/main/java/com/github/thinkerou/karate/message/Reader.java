@@ -2,6 +2,7 @@ package com.github.thinkerou.karate.message;
 
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.google.common.collect.ImmutableList;
 import com.google.protobuf.Descriptors;
@@ -17,6 +18,8 @@ import com.google.protobuf.util.JsonFormat;
  * @author thinkerou
  */
 public class Reader {
+
+    private static final Logger logger = Logger.getLogger(Reader.class.getName());
 
     private final JsonFormat.Parser jsonParser;
     private final Descriptors.Descriptor descriptor;
@@ -48,7 +51,7 @@ public class Reader {
                 try {
                     jsonParser.merge(stringBuilder.toString(), nextMessage);
                 } catch (InvalidProtocolBufferException e) {
-                    e.printStackTrace();
+                    logger.warning(e.getMessage());
                 }
 
                 resultBuilder.add(nextMessage.build());

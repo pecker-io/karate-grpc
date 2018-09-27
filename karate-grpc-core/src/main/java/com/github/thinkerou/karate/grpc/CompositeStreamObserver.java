@@ -1,5 +1,7 @@
 package com.github.thinkerou.karate.grpc;
 
+import java.util.logging.Logger;
+
 import com.google.common.collect.ImmutableList;
 
 import io.grpc.stub.StreamObserver;
@@ -12,6 +14,8 @@ import io.grpc.stub.StreamObserver;
  * @author thinkerou
  */
 public class CompositeStreamObserver<T> implements StreamObserver<T> {
+
+    private static final Logger logger = Logger.getLogger(CompositeStreamObserver.class.getName());
 
     private final ImmutableList<StreamObserver<T>> observers;
 
@@ -30,7 +34,7 @@ public class CompositeStreamObserver<T> implements StreamObserver<T> {
             try {
                 tStreamObserver.onCompleted();
             } catch (Throwable t) {
-                t.printStackTrace();
+                logger.warning(t.getMessage());
             }
         });
     }
@@ -41,7 +45,7 @@ public class CompositeStreamObserver<T> implements StreamObserver<T> {
             try {
                 tStreamObserver.onError(t);
             } catch (Throwable e) {
-                e.printStackTrace();
+                logger.warning(e.getMessage());
             }
         });
     }
@@ -52,7 +56,7 @@ public class CompositeStreamObserver<T> implements StreamObserver<T> {
             try {
                 tStreamObserver.onNext(value);
             } catch (Throwable t) {
-                t.printStackTrace();
+                logger.warning(t.getMessage());
             }
         });
     }

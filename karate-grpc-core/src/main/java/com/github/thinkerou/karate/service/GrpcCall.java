@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.domain.ProtoName;
@@ -38,6 +39,8 @@ import io.grpc.stub.StreamObserver;
  */
 public class GrpcCall {
 
+    private static final Logger logger = Logger.getLogger(GrpcCall.class.getName());
+
     private Channel channel;
 
     public static GrpcCall create(String host, int port) {
@@ -64,7 +67,7 @@ public class GrpcCall {
         try {
             fileDescriptorSet = FileDescriptorSet.parseFrom(Files.readAllBytes(descriptorPath));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warning(e.getMessage());
         }
 
         // Set up the dynamic client and make the call.
@@ -75,11 +78,13 @@ public class GrpcCall {
         } catch (IllegalArgumentException e) {
             // When can't find service or method with name
             // use service or/and method search once for help user
+            logger.warning("Call grpc failed, maybe you should see the follow grpc information.");
             GrpcList list = new GrpcList();
             String result = list.invoke(protoName.getServiceName(), "");
-            System.out.println(result);
+            logger.info(result);
             result = list.invoke("", protoName.getMethodName());
-            System.out.println(result);
+            logger.info(result);
+            throw new IllegalArgumentException(e.getMessage());
         }
 
         // Create a dynamic grpc client.
@@ -102,7 +107,7 @@ public class GrpcCall {
         try {
             filePath = Files.createTempFile("karate.grpc.call.", ".result.out");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.warning(e.getMessage());
         }
         Helper.validatePath(Optional.ofNullable(filePath));
 
@@ -132,10 +137,10 @@ public class GrpcCall {
 
         String file = System.getProperty("user.dir") + "/src/test/java/demo/helloworld/helloworld.json";
         String payloads = Helper.readFile(file);
-        System.out.println(payloads);
+        logger.info(payloads);
 
         String result = client.invoke("helloworld.Greeter/SayHello", payloads);
-        System.out.println(result);
+        logger.info(result);
     }
 
 }

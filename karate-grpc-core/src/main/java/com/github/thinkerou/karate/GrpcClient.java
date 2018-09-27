@@ -1,6 +1,7 @@
 package com.github.thinkerou.karate;
 
 import java.io.IOException;
+import java.util.logging.Logger;
 
 import com.github.thinkerou.karate.service.GrpcCall;
 import com.github.thinkerou.karate.service.GrpcList;
@@ -12,6 +13,8 @@ import com.github.thinkerou.karate.utils.Helper;
  * @author thinkerou
  */
 public class GrpcClient {
+
+    private static final Logger logger = Logger.getLogger(GrpcClient.class.getName());
 
     private static GrpcCall callIns;
     private static GrpcList listIns;
@@ -43,14 +46,14 @@ public class GrpcClient {
         // Need to copy karate-grpc-demo/target/generated-resources to karate-grpc-core/target
         GrpcClient client1 = GrpcClient.create();
         String result1 = client1.list("Greeter", "SayHello");
-        System.out.println(result1);
+        logger.info(result1);
         result1 = client1.list("helloworld.Greeter/SayHello");
-        System.out.println(result1);
+        logger.info(result1);
 
         String file = System.getProperty("user.dir") + "/../karate-grpc-demo/src/test/java/demo/helloworld/helloworld.json";
-        System.out.println(file);
+        logger.info(file);
         String payloads = Helper.readFile(file);
-        System.out.println(payloads);
+        logger.info(payloads);
 
         // Note: for testing
         // Need to start helloworld server first
@@ -58,8 +61,8 @@ public class GrpcClient {
         //   cd karate-grpc-demo
         //   mvn exec:java -Dexec.mainClass=com.github.thinkerou.demo.helloworld.HelloWorldServer
         GrpcClient client2 = GrpcClient.create("localhost", 50051);
-        String result2 = client2.call("helloworld.Greeter1/SayHello", payloads);
-        System.out.println(result2);
+        String result2 = client2.call("helloworld.Greeter/SayHello", payloads);
+        logger.info(result2);
 
         // Note: for testing
         // using the following command to test it:

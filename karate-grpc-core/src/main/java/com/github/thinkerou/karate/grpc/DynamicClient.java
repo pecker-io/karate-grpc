@@ -3,7 +3,8 @@ package com.github.thinkerou.karate.grpc;
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 import static io.grpc.MethodDescriptor.newBuilder;
 
-import com.google.common.base.Preconditions;
+import java.util.logging.Logger;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.protobuf.Descriptors;
@@ -25,6 +26,8 @@ import io.grpc.stub.StreamObserver;
  * @author thinkerou
  */
 public class DynamicClient {
+
+    private static final Logger logger = Logger.getLogger(DynamicClient.class.getName());
 
     private final Descriptors.MethodDescriptor protoMethodDescriptor;
     private final Channel channel;
@@ -50,19 +53,24 @@ public class DynamicClient {
             ImmutableList<DynamicMessage> requests,
             StreamObserver<DynamicMessage> responseObsever,
             CallOptions callOptions) {
-        Preconditions.checkArgument(!requests.isEmpty(), "Can't make call without any requests");
+        if (requests.isEmpty()) {
+            logger.warning("Can't make call without any requests");
+            return null;
+        }
 
         long numRequests = requests.size();
 
         MethodDescriptor.MethodType methodType = getMethodType();
         switch (methodType) {
             case UNARY:
-                // Preconditions.checkArgument(numRequests == 1,
-                //         "Need exactly 1 request for unary call but got: " + numRequests);
+                if (numRequests != 1) {
+                    logger.warning("Need exactly 1 request for unary call but got: " + numRequests);
+                }
                 return callUnary(requests.get(0), responseObsever, callOptions);
             case SERVER_STREAMING:
-                Preconditions.checkArgument(numRequests == 1,
-                        "Need exactly 1 request for server streaming call but got: " + numRequests);
+                if (numRequests != 1) {
+                    logger.warning("Need exactly 1 request for server streaming call but got: " + numRequests);
+                }
                 return callServerStreaming(requests.get(0), responseObsever, callOptions);
             case CLIENT_STREAMING:
                 return callClientStreaming(requests, responseObsever, callOptions);

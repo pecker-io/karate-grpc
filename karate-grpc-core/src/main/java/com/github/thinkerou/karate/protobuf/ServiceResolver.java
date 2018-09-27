@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -19,6 +20,8 @@ import com.github.thinkerou.karate.domain.ProtoName;
  * @author thinkerou
  */
 public class ServiceResolver {
+
+    private static final Logger logger = Logger.getLogger(ServiceResolver.class.getName());
 
     private final ImmutableList<Descriptors.FileDescriptor> fileDescriptors;
 
@@ -37,7 +40,7 @@ public class ServiceResolver {
             try {
                 result.add(descriptorFromProto(descriptorProto, descriptorProtoIndex, descriptorCache));
             } catch (Descriptors.DescriptorValidationException e) {
-                e.printStackTrace();
+                logger.warning(e.getMessage());
                 continue;
             }
         }
@@ -146,7 +149,7 @@ public class ServiceResolver {
             try {
                 dependencies.add(descriptorFromProto(dependencyProto, descriptorProtoIndex, descriptorCache));
             } catch (Descriptors.DescriptorValidationException e) {
-                e.printStackTrace();
+                logger.warning(e.getMessage());
             }
         });
 

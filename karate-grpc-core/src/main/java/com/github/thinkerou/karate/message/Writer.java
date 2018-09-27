@@ -1,6 +1,7 @@
 package com.github.thinkerou.karate.message;
 
 import java.io.ByteArrayOutputStream;
+import java.util.logging.Logger;
 
 import com.google.common.collect.ImmutableList;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -18,6 +19,8 @@ import io.grpc.stub.StreamObserver;
  * @author thinkerou
  */
 public class Writer<T extends Message> implements StreamObserver<T> {
+
+    private static final Logger logger = Logger.getLogger(Writer.class.getName());
 
     // Used to separate the individual plaintext json proto messages.
     private static final String MESSAGE_SEPARATOR = "\n\n";
@@ -69,7 +72,7 @@ public class Writer<T extends Message> implements StreamObserver<T> {
         try {
             output.write(jsonPrinter.print(message) + MESSAGE_SEPARATOR);
         } catch (InvalidProtocolBufferException e) {
-            e.printStackTrace();
+            logger.warning(e.getMessage());
         }
     }
 
