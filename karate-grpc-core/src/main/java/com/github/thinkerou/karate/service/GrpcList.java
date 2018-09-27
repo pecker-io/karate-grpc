@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 import com.github.thinkerou.karate.constants.DescriptorFile;
+import com.github.thinkerou.karate.domain.ProtoName;
 import com.github.thinkerou.karate.message.Output;
+import com.github.thinkerou.karate.protobuf.FullName;
 import com.github.thinkerou.karate.protobuf.ServiceResolver;
 import com.github.thinkerou.karate.utils.Helper;
 import com.google.protobuf.DescriptorProtos;
@@ -27,6 +29,14 @@ public class GrpcList {
     }
 
     public GrpcList() {
+    }
+
+    /**
+     * Support format: packageName.serviceName/methodName
+     */
+    public String invoke(String name) throws IOException {
+        ProtoName protoName = FullName.parse(name);
+        return invoke(protoName.getServiceName(), protoName.getMethodName());
     }
 
     public String invoke(String serviceFilter, String methodFilter) throws IOException {
@@ -97,6 +107,9 @@ public class GrpcList {
     public static void main(String[] args) throws IOException {
         GrpcList list = new GrpcList();
         String result = list.invoke("Greeter", "SayHello");
+        System.out.println(result);
+
+        result = list.invoke("helloworld.Greeter/SayHello");
         System.out.println(result);
     }
 

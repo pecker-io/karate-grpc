@@ -34,11 +34,17 @@ public class GrpcClient {
         return listIns.invoke(serviceFilter, methodFilter);
     }
 
+    public String list(String name) throws IOException {
+        return listIns.invoke(name);
+    }
+
     public static void main(String[] args) throws IOException {
         // Note: for testing
         // Need to copy karate-grpc-demo/target/generated-resources to karate-grpc-core/target
         GrpcClient client1 = GrpcClient.create();
         String result1 = client1.list("Greeter", "SayHello");
+        System.out.println(result1);
+        result1 = client1.list("helloworld.Greeter/SayHello");
         System.out.println(result1);
 
         String file = System.getProperty("user.dir") + "/../karate-grpc-demo/src/test/java/demo/helloworld/helloworld.json";
@@ -52,7 +58,7 @@ public class GrpcClient {
         //   cd karate-grpc-demo
         //   mvn exec:java -Dexec.mainClass=com.github.thinkerou.demo.helloworld.HelloWorldServer
         GrpcClient client2 = GrpcClient.create("localhost", 50051);
-        String result2 = client2.call("helloworld.Greeter/SayHello", payloads);
+        String result2 = client2.call("helloworld.Greeter1/SayHello", payloads);
         System.out.println(result2);
 
         // Note: for testing
