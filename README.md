@@ -34,11 +34,11 @@ Using Karate we can perfect to solve it!
 
 ## How to write grpc client
 
-<details>
+**Note:**
 
-<summary>The part which initailly think about the topic continue to have saved for your information. Usually you no need to care it because `karate-grpc-core` have completed the function.</summary>
+> The part content is outdated draft which initially think about the topic which continues to have saved is for reference only.
 
-**Note: the part is outdated draft which is for reference only.**
+> Usually you no need to care it and skip it, because `karate-grpc-core` have completed the function.
 
 You only need two steps:
 
@@ -82,8 +82,6 @@ public class Client {
 }
 
 ```
-
-</details>
 
 ## How to write karate feature
 
