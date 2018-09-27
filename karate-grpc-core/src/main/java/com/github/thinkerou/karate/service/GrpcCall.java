@@ -71,7 +71,7 @@ public class GrpcCall {
         ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(fileDescriptorSet);
         Descriptors.MethodDescriptor methodDescriptor = null;
         try {
-            methodDescriptor = serviceResolver.resolveServiceMethod(protoName); // (method: 77->88) (service: 77->85->107)
+            methodDescriptor = serviceResolver.resolveServiceMethod(protoName);
         } catch (IllegalArgumentException e) {
             // When can't find service or method with name
             // use service or/and method search once for help user
