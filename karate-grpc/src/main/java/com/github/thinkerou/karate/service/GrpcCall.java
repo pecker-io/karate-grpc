@@ -135,7 +135,7 @@ public class GrpcCall {
     public static void main(String[] args) throws Exception {
         GrpcCall client = GrpcCall.create("localhost", 50051);
 
-        String file = System.getProperty("user.dir") + "/src/test/java/demo/helloworld/helloworld.json";
+        String file = System.getProperty("user.dir") + "/../karate-demo/src/test/java/demo/helloworld/helloworld.json";
         String payloads = Helper.readFile(file);
         logger.info(payloads);
 

@@ -50,7 +50,7 @@ public class GrpcClient {
         result1 = client1.list("helloworld.Greeter/SayHello");
         logger.info(result1);
 
-        String file = System.getProperty("user.dir") + "/../karate-grpc-demo/src/test/java/demo/helloworld/helloworld.json";
+        String file = System.getProperty("user.dir") + "/../karate-demo/src/test/java/demo/helloworld/helloworld.json";
         logger.info(file);
         String payloads = Helper.readFile(file);
         logger.info(payloads);
@@ -58,7 +58,7 @@ public class GrpcClient {
         // Note: for testing
         // Need to start helloworld server first
         // using the following command:
-        //   cd karate-grpc-demo
+        //   cd karate-demo
         //   mvn exec:java -Dexec.mainClass=com.github.thinkerou.demo.helloworld.HelloWorldServer
         GrpcClient client2 = GrpcClient.create("localhost", 50051);
         String result2 = client2.call("helloworld.Greeter/SayHello", payloads);
@@ -66,7 +66,7 @@ public class GrpcClient {
 
         // Note: for testing
         // using the following command to test it:
-        // cd karate-grpc-core
+        // cd karate-grpc
         // mvn exec:java -Dexec.mainClass=com.github.thinkerou.karate.GrpcClient  -Dexec.cleanupDaemonThreads=false
     }
 
