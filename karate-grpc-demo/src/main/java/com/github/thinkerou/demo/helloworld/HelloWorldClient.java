@@ -80,6 +80,31 @@ public class HelloWorldClient {
         return res;
     }
 
+    public String againGreet(String payload) {
+        Gson gson = new Gson();
+        List<Map<String, Object>> list = gson.fromJson(payload, List.class);
+
+        AgainHelloRequest.Builder requestBuilder = AgainHelloRequest.newBuilder();
+        try {
+            JsonFormat.parser().merge(list.get(0).toString(), requestBuilder);
+        } catch (InvalidProtocolBufferException e) {
+            logger.log(Level.WARNING, "JsonFormat parse failed: {}", e);
+        }
+        AgainHelloReply response = null;
+        try {
+            response = blockingStub.againSayHello(requestBuilder.build());
+        } catch (StatusRuntimeException e) {
+            logger.log(Level.WARNING, "RPC failed: {0}", e.getStatus());
+        }
+        String res = null;
+        try {
+            res = JsonFormat.printer().print(response);
+        } catch (InvalidProtocolBufferException e) {
+            logger.log(Level.WARNING, "JsonFormat print failed: {}", e);
+        }
+        return res;
+    }
+
     /**
      * Greet server.
      * If provided, the first element of args is the name to use in the greeting.
@@ -94,6 +119,7 @@ public class HelloWorldClient {
                 user = args[0];
             }
             client.greet(user);
+            client.againGreet("hi");
         } finally {
             client.shutdown();
         }

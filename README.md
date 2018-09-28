@@ -4,7 +4,9 @@
 
 karate-grpc made gRPC testing simple by [karate](https://github.com/intuit/karate), and its dynamic client built based on [polyglot](https://github.com/grpc-ecosystem/polyglot).
 
-## Testing helloworld without helloworld server
+karate-grpc can get all the benefits of [karate](https://github.com/intuit/karate#features), it makes it really easy to build protobuf complex request payloads via json, traverse data within the responses and chain data from responses into the next request.
+
+## Testing hello world
 
 Prefer to use Maven:
 
@@ -18,7 +20,7 @@ $ # or run single test
 $ mvn test -Dtest=HelloWorldNewRunner
 ```
 
-Because have started helloworld server on `TestBase.java`, we not need to start it alone.
+Because have started hello world server on `TestBase.java`, we not need to start it alone.
 
 ## What to need for testing grpc server
 
@@ -92,7 +94,7 @@ And use `JSON.parse` javascript function parse the response of grpc server retur
 Like this:
 
 ```
-Feature: grpc hello-world example
+Feature: grpc hello world example
 
   Background:
     * def Client = Java.type('HelloWorldClient')

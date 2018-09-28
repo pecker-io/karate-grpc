@@ -62,6 +62,14 @@ public class HelloWorldServer {
             responseObserver.onNext(reply);
             responseObserver.onCompleted();
         }
+        @Override
+        public void againSayHello(AgainHelloRequest req, StreamObserver<AgainHelloReply> responseObserver) {
+            AgainHelloReply reply = AgainHelloReply.newBuilder()
+                    .setDetails("Details " + req.getMessage() + " in " + req.getAddress())
+                    .build();
+            responseObserver.onNext(reply);
+            responseObserver.onCompleted();
+        }
     }
 
     /**
