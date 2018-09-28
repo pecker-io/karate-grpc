@@ -25,6 +25,20 @@ $ mvn test -Dtest=HelloWorldNewRunner
 
 Because have started hello world server on `TestBase.java`, we not need to start it alone.
 
+## Getting Started
+
+> karate-grpc only support Maven currently.
+
+You need to add the following `<dependencies>`:
+
+```maven
+<dependency>
+    <groupId>com.github.thinkerou</groupId>
+    <artifactId>karate-grpc-core</artifactId>
+    <version>0.4.2</version>
+</dependency>
+```
+
 ## What to need for testing grpc server
 
 Testing one grpc server, we have the follow info:
