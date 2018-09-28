@@ -5,22 +5,22 @@
     <parent>
         <artifactId>karate-grpc-parent</artifactId>
         <groupId>com.github.thinkerou</groupId>
-        <version>0.4.2</version>
+        <version>0.4.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>karate-grpc-demo</artifactId>
+    <artifactId>karate-demo</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>
         <dependency>
             <groupId>com.github.thinkerou</groupId>
-            <artifactId>karate-grpc-core</artifactId>
+            <artifactId>karate-grpc</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.thinkerou</groupId>
-            <artifactId>karate-grpc-proto</artifactId>
+            <artifactId>karate-proto</artifactId>
             <version>${project.version}</version>
         </dependency>
 
