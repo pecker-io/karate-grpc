@@ -1,33 +1,45 @@
 package com.github.thinkerou.karate.message;
 
+import java.io.FileNotFoundException;
 import java.io.PrintStream;
 import java.nio.file.Path;
 
 /**
  * Output
  *
- * A one-stop-shop for output of the binary.
- * Supports writing to logs, to streams, to files, etc.
- *
  * @author thinkerou
  */
-public interface Output extends AutoCloseable {
+public class Output implements AutoCloseable {
 
-    // Writes a single string of output.
-    void write(String content);
+    private final PrintStream printStream;
 
-    // Writes a line of content.
-    void writeLine(String content);
-
-    // Writes a blank line.
-    void newLine();
-
-    static Output forFile(Path filePath) {
-        return new OutputImpl(OutputImpl.PrintStreamWriter.forFile(filePath));
+    Output(PrintStream printStream) {
+        this.printStream = printStream;
     }
 
-    static Output forStream(PrintStream printStream) {
-        return new OutputImpl(OutputImpl.PrintStreamWriter.forStream(printStream));
+    public void write(String content) {
+        printStream.print(content);
+    }
+
+    public void writeLine(String content) {
+        printStream.println(content);
+    }
+
+    public void newLine() {
+        printStream.println();
+    }
+
+    public static Output forFile(Path path) {
+        try {
+            return new Output(new PrintStream(path.toString()));
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException("Can't create writer for file: " + path, e);
+        }
+    }
+
+    @Override
+    public void close() {
+        printStream.close();
     }
 
 }
