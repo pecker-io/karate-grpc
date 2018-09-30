@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.domain.ProtoName;
 import com.github.thinkerou.karate.grpc.ChannelFactory;
-import com.github.thinkerou.karate.grpc.CompositeObserver;
+import com.github.thinkerou.karate.grpc.ComponentObserver;
 import com.github.thinkerou.karate.grpc.DynamicClient;
 import com.github.thinkerou.karate.message.Output;
 import com.github.thinkerou.karate.message.Reader;
@@ -113,7 +113,7 @@ public class GrpcCall {
 
         Output output = Output.forFile(filePath);
 
-        StreamObserver<DynamicMessage> streamObserver = CompositeObserver.of(Writer.create(output, registry));
+        StreamObserver<DynamicMessage> streamObserver = ComponentObserver.of(Writer.create(output, registry));
 
         // Calls grpc!
         try {

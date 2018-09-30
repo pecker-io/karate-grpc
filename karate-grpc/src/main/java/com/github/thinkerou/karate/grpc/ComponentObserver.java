@@ -7,24 +7,24 @@ import com.google.common.collect.ImmutableList;
 import io.grpc.stub.StreamObserver;
 
 /**
- * CompositeObserver
+ * ComponentObserver
  *
  * A StreamObserver which groups multiple observers and executes them all.
  *
  * @author thinkerou
  */
-public class CompositeObserver<T> implements StreamObserver<T> {
+public class ComponentObserver<T> implements StreamObserver<T> {
 
-    private static final Logger logger = Logger.getLogger(CompositeObserver.class.getName());
+    private static final Logger logger = Logger.getLogger(ComponentObserver.class.getName());
 
     private final ImmutableList<StreamObserver<T>> observers;
 
     @SafeVarargs
-    public static <T> CompositeObserver<T> of(StreamObserver<T>... observers) {
-        return new CompositeObserver<>(ImmutableList.copyOf(observers));
+    public static <T> ComponentObserver<T> of(StreamObserver<T>... observers) {
+        return new ComponentObserver<>(ImmutableList.copyOf(observers));
     }
 
-    private CompositeObserver(ImmutableList<StreamObserver<T>> observers) {
+    private ComponentObserver(ImmutableList<StreamObserver<T>> observers) {
         this.observers = observers;
     }
 

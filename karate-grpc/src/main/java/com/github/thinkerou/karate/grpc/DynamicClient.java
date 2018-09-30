@@ -89,7 +89,7 @@ public class DynamicClient {
         DoneObserver<DynamicMessage> doneObserver = new DoneObserver<>();
         StreamObserver<DynamicMessage> requestObserver = ClientCalls.asyncBidiStreamingCall(
                 createCall(callOptions),
-                CompositeObserver.of(responseObserver, doneObserver));
+                ComponentObserver.of(responseObserver, doneObserver));
         requests.forEach(requestObserver::onNext);
         requestObserver.onCompleted();
         return doneObserver.getCompletionFuture();
@@ -102,7 +102,7 @@ public class DynamicClient {
         DoneObserver<DynamicMessage> doneObserver = new DoneObserver<>();
         StreamObserver<DynamicMessage> requestObserver = ClientCalls.asyncClientStreamingCall(
                 createCall(callOptions),
-                CompositeObserver.of(responseObserver, doneObserver));
+                ComponentObserver.of(responseObserver, doneObserver));
         requests.forEach(requestObserver::onNext);
         requestObserver.onCompleted();
         return doneObserver.getCompletionFuture();
@@ -116,7 +116,7 @@ public class DynamicClient {
         ClientCalls.asyncServerStreamingCall(
                 createCall(callOptions),
                 request,
-                CompositeObserver.of(responseObserver, doneObserver));
+                ComponentObserver.of(responseObserver, doneObserver));
         return doneObserver.getCompletionFuture();
     }
 
@@ -128,7 +128,7 @@ public class DynamicClient {
         ClientCalls.asyncUnaryCall(
                 createCall(callOptions),
                 request,
-                CompositeObserver.of(responseObserver, doneObserver));
+                ComponentObserver.of(responseObserver, doneObserver));
         return doneObserver.getCompletionFuture();
     }
 
