@@ -131,16 +131,4 @@ public class GrpcCall {
         return result;
     }
 
-    // Test it.
-    public static void main(String[] args) throws Exception {
-        GrpcCall client = GrpcCall.create("localhost", 50051);
-
-        String file = System.getProperty("user.dir") + "/../karate-demo/src/test/java/demo/helloworld/helloworld.json";
-        String payloads = Helper.readFile(file);
-        logger.info(payloads);
-
-        String result = client.invoke("helloworld.Greeter/SayHello", payloads);
-        logger.info(result);
-    }
-
 }

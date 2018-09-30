@@ -107,13 +107,4 @@ public class GrpcList {
         return;
     }
 
-    public static void main(String[] args) throws IOException {
-        GrpcList list = new GrpcList();
-        String result = list.invoke("Greeter", "SayHello");
-        logger.info(result);
-
-        result = list.invoke("helloworld.Greeter/SayHello");
-        logger.info(result);
-    }
-
 }
