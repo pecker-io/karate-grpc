@@ -5,11 +5,11 @@ import com.github.thinkerou.karate.domain.ProtoName;
 import io.grpc.MethodDescriptor;
 
 /**
- * FullName
+ * ProtoFullName
  *
  * @author thinkerou
  */
-public class FullName {
+public class ProtoFullName {
 
     /**
      * format: <package>.<service>/<method>

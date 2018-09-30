@@ -15,11 +15,11 @@ import java.util.logging.Logger;
 import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.domain.ProtoName;
 import com.github.thinkerou.karate.grpc.ChannelFactory;
-import com.github.thinkerou.karate.grpc.CompositeStreamObserver;
+import com.github.thinkerou.karate.grpc.CompositeObserver;
 import com.github.thinkerou.karate.grpc.DynamicClient;
 import com.github.thinkerou.karate.message.Output;
 import com.github.thinkerou.karate.message.Reader;
-import com.github.thinkerou.karate.protobuf.FullName;
+import com.github.thinkerou.karate.protobuf.ProtoFullName;
 import com.github.thinkerou.karate.protobuf.ServiceResolver;
 import com.github.thinkerou.karate.utils.Helper;
 import com.google.common.collect.ImmutableList;
@@ -56,7 +56,7 @@ public class GrpcCall {
      * @param payload indicates one protobuf corresponding json data
      */
     public String invoke(String name, String payload) throws IOException {
-        ProtoName protoName = FullName.parse(name);
+        ProtoName protoName = ProtoFullName.parse(name);
 
         String path = DescriptorFile.PROTO.getText();
         Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
@@ -105,7 +105,7 @@ public class GrpcCall {
         // Creates one temp file to save call grpc result.
         Path filePath = null;
         try {
-            filePath = Files.createTempFile("karate.grpc.call.", ".result.out");
+            filePath = Files.createTempFile("karate.grpc.", ".call.result");
         } catch (IOException e) {
             logger.warning(e.getMessage());
         }
@@ -113,7 +113,7 @@ public class GrpcCall {
 
         Output output = Output.forFile(filePath);
 
-        StreamObserver<DynamicMessage> streamObserver = CompositeStreamObserver.of(Writer.create(output, registry));
+        StreamObserver<DynamicMessage> streamObserver = CompositeObserver.of(Writer.create(output, registry));
 
         // Calls grpc!
         try {

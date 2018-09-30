@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.domain.ProtoName;
 import com.github.thinkerou.karate.message.Output;
-import com.github.thinkerou.karate.protobuf.FullName;
+import com.github.thinkerou.karate.protobuf.ProtoFullName;
 import com.github.thinkerou.karate.protobuf.ServiceResolver;
 import com.github.thinkerou.karate.utils.Helper;
 import com.google.protobuf.DescriptorProtos;
@@ -38,7 +38,7 @@ public class GrpcList {
      * Support format: packageName.serviceName/methodName
      */
     public String invoke(String name) throws IOException {
-        ProtoName protoName = FullName.parse(name);
+        ProtoName protoName = ProtoFullName.parse(name);
         return invoke(protoName.getServiceName(), protoName.getMethodName());
     }
 
@@ -58,7 +58,7 @@ public class GrpcList {
         // Creates one temp file to save list grpc result.
         Path filePath = null;
         try {
-            filePath = Files.createTempFile("karate.grpc.list.", ".result.out");
+            filePath = Files.createTempFile("karate.grpc.", ".list.result");
         } catch (IOException e) {
             logger.warning(e.getMessage());
         }
@@ -103,8 +103,6 @@ public class GrpcList {
                 output.newLine();
             }
         });
-
-        return;
     }
 
 }
