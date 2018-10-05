@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  *
  * @author thinkerou
  */
-public class HelloWorldStreamClient {
+/*public class HelloWorldStreamClient {
     private static final Logger logger =
             Logger.getLogger(HelloWorldStreamClient.class.getName());
 
@@ -214,4 +214,4 @@ public class HelloWorldStreamClient {
                 "Lincoln"
         );
     }
-}
+}*/

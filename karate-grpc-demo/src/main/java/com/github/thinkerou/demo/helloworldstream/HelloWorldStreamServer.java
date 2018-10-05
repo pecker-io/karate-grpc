@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author thinkerou
  */
-public class HelloWorldStreamServer {
+/*public class HelloWorldStreamServer {
     private static final Logger logger =
             Logger.getLogger(HelloWorldStreamServer.class.getName());
 
@@ -133,5 +133,5 @@ public class HelloWorldStreamServer {
             server.awaitTermination();
         }
     }
-}
+}*/
 

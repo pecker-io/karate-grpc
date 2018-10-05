@@ -7,7 +7,7 @@
     <groupId>com.github.thinkerou</groupId>
     <artifactId>karate-grpc-parent</artifactId>
     <packaging>pom</packaging>
-    <version>0.4.6</version>
+    <version>0.4.7</version>
 
     <name>${project.artifactId}</name>
     <description>gRPC Testing Made Simple by Karate.</description>
@@ -50,26 +50,32 @@
     </properties>
 
     <modules>
-        <module>karate-grpc</module>
-        <module>karate-demo</module>
-        <module>karate-proto</module>
+        <module>karate-grpc-core</module>
+        <module>karate-grpc-demo</module>
+        <module>karate-grpc-proto</module>
+        <module>karate-grpc-web</module>
     </modules>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>com.thinkerou</groupId>
-                <artifactId>karate-grpc</artifactId>
+                <artifactId>karate-grpc-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.thinkerou</groupId>
-                <artifactId>karate-demo</artifactId>
+                <artifactId>karate-grpc-demo</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.thinkerou</groupId>
-                <artifactId>karate-proto</artifactId>
+                <artifactId>karate-grpc-proto</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.thinkerou</groupId>
+                <artifactId>karate-grpc-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>

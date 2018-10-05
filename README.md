@@ -34,8 +34,8 @@ You need to add the following `<dependencies>`:
 ```maven
 <dependency>
     <groupId>com.github.thinkerou</groupId>
-    <artifactId>karate-grpc</artifactId>
-    <version>0.4.3</version>
+    <artifactId>karate-grpc-core</artifactId>
+    <version>0.4.7</version>
 </dependency>
 ```
 
