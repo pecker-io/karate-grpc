@@ -1,4 +1,4 @@
-package com.github.thinkerou.karategrpcweb;
+package com.github.thinkerou.grpc.web;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class KarateGrpcWebApplicationTests {
+public class GrpcWebApplicationTests {
 
 	@Test
 	public void contextLoads() {
