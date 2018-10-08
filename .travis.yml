@@ -8,4 +8,4 @@ addons:
       - oracle-java8-installer
 install: true
 script:
-  - mvn install -Dmaven.javadoc.skip=true -B -V
+  - mvn clean compile package install -Dmaven.javadoc.skip=true -B -V
