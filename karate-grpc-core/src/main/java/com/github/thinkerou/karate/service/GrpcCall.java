@@ -94,8 +94,7 @@ public class GrpcCall {
         TypeRegistry registry = TypeRegistry.newBuilder().add(serviceResolver.listMessageTypes()).build();
 
         // Convert payload string to list.
-        Gson gson = new Gson();
-        List<Map<String, Object>> payloadList = gson.fromJson(payload, List.class);
+        List<Map<String, Object>> payloadList = new Gson().fromJson(payload, List.class);
 
         // Need to support stream so it's a list.
         final ImmutableList<DynamicMessage> requestMessages = Reader.create(
