@@ -19,9 +19,9 @@ import java.util.logging.Logger;
  *
  * @author thinkerou
  */
-/*public class HelloWorldStreamClient {
-    private static final Logger logger =
-            Logger.getLogger(HelloWorldStreamClient.class.getName());
+public class HelloWorldStreamClient {
+
+    private static final Logger logger = Logger.getLogger(HelloWorldStreamClient.class.getName());
 
     public static void main(String[] args) throws InterruptedException {
         final CountDownLatch done = new CountDownLatch(1);
@@ -102,7 +102,7 @@ import java.util.logging.Logger;
                 };
 
         // Note: clientResponseObserver is handling both request and response stream processing.
-        stub.sayHelloStreaming(clientResponseObserver);
+        stub.sayHelloBiStreaming(clientResponseObserver);
 
         done.await();
 
@@ -214,4 +214,5 @@ import java.util.logging.Logger;
                 "Lincoln"
         );
     }
-}*/
+
+}
