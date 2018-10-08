@@ -16,10 +16,10 @@ public class GrpcListDemo {
 
     public static void main(String[] args) throws IOException {
         GrpcList list = new GrpcList();
-        String result = list.invoke("Greeter", "SayHello");
+        String result = list.invoke("Greeter", "SayHello", true);
         logger.info(result);
 
-        result = list.invoke("helloworld.Greeter/SayHello");
+        result = list.invoke("helloworld.Greeter/SayHello", true);
         logger.info(result);
 
         // Note: for testing

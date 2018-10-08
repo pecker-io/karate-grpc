@@ -5,6 +5,6 @@ Feature: grpc helloworld example by grpc dynamic client
     * def client = Client.create()
 
   Scenario: do it
-    * def response = client.list('Greeter', 'SayHello')
+    * def response = client.list('Greeter', 'SayHello', true)
     * print response
     * match response.message contains 'SayHello'

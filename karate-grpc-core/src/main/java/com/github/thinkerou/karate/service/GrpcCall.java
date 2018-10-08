@@ -80,9 +80,9 @@ public class GrpcCall {
             // use service or/and method search once for help user
             logger.warning("Call grpc failed, maybe you should see the follow grpc information.");
             GrpcList list = new GrpcList();
-            String result = list.invoke(protoName.getServiceName(), "");
+            String result = list.invoke(protoName.getServiceName(), "", false);
             logger.info(result);
-            result = list.invoke("", protoName.getMethodName());
+            result = list.invoke("", protoName.getMethodName(), false);
             logger.info(result);
             throw new IllegalArgumentException(e.getMessage());
         }

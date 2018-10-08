@@ -17,9 +17,9 @@ public class GrpcClientDemo {
 
     public static void main(String[] args) throws IOException {
         GrpcClient client1 = GrpcClient.create();
-        String result1 = client1.list("Greeter", "SayHello");
+        String result1 = client1.list("Greeter", "SayHello", true);
         logger.info(result1);
-        result1 = client1.list("helloworld.Greeter/SayHello");
+        result1 = client1.list("helloworld.Greeter/SayHello", true);
         logger.info(result1);
 
         String file = System.getProperty("user.dir") + "/src/test/java/demo/helloworld/helloworld.json";
