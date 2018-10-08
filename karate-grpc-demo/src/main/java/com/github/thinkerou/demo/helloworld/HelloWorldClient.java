@@ -61,7 +61,7 @@ public class HelloWorldClient {
 
         HelloRequest.Builder requestBuilder = HelloRequest.newBuilder();
         try {
-            JsonFormat.parser().merge(list.get(0).toString(), requestBuilder);
+            JsonFormat.parser().merge(gson.toJson(list.get(0)), requestBuilder);
         } catch (InvalidProtocolBufferException e) {
             logger.log(Level.WARNING, "JsonFormat parse failed: {}", e);
         }
@@ -86,7 +86,7 @@ public class HelloWorldClient {
 
         AgainHelloRequest.Builder requestBuilder = AgainHelloRequest.newBuilder();
         try {
-            JsonFormat.parser().merge(list.get(0).toString(), requestBuilder);
+            JsonFormat.parser().merge(gson.toJson(list.get(0)), requestBuilder);
         } catch (InvalidProtocolBufferException e) {
             logger.log(Level.WARNING, "JsonFormat parse failed: {}", e);
         }

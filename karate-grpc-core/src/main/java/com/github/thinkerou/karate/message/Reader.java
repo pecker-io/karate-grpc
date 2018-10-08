@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -44,12 +45,9 @@ public class Reader {
 
         try {
             payloadList.forEach(value -> {
-                StringBuilder stringBuilder = new StringBuilder();
-                stringBuilder.append(value.toString());
-
                 DynamicMessage.Builder nextMessage = DynamicMessage.newBuilder(descriptor);
                 try {
-                    jsonParser.merge(stringBuilder.toString(), nextMessage);
+                    jsonParser.merge(new Gson().toJson(value), nextMessage);
                 } catch (InvalidProtocolBufferException e) {
                     logger.warning(e.getMessage());
                 }
