@@ -1,6 +1,7 @@
 package com.github.thinkerou.karate.message;
 
 import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.logging.Logger;
 
 import com.google.common.collect.ImmutableList;
@@ -46,7 +47,7 @@ public class Writer<T extends Message> implements StreamObserver<T> {
     public static <M extends Message> String writeJsonStream(
             ImmutableList<M> messages, JsonFormat.TypeRegistry registry) {
         ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
-        Writer<M> writer = Writer.create(null, registry);
+        Writer<M> writer = Writer.create(Output.forStream(new PrintStream(resultStream)), registry);
         writer.writeAll(messages);
 
         return resultStream.toString();

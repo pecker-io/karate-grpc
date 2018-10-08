@@ -37,6 +37,10 @@ public class Output implements AutoCloseable {
         }
     }
 
+    public static Output forStream(PrintStream printStream) {
+        return new Output(printStream);
+    }
+
     @Override
     public void close() {
         printStream.close();
