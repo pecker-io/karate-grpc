@@ -9,4 +9,4 @@ Feature: grpc helloworld example by grpc dynamic client
     * def response = client.call('helloworld.Greeter/SayHelloClientStreaming', payload)
     * def response = JSON.parse(response)
     * print response
-    * match response.message == 'Hello thinkerou'
+    * match response.message == 'Hello thinkerou and thinkerou2 and thinkerou3'

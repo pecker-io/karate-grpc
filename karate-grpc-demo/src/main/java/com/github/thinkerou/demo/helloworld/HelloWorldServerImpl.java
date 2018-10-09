@@ -55,19 +55,15 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
     @Override
     public StreamObserver<HelloRequest> sayHelloClientStreaming(final StreamObserver<HelloReply> replyStreamObserver) {
         return new StreamObserver<HelloRequest>() {
+            String out = "";
+
             @Override
             public void onNext(HelloRequest helloRequest) {
-                HelloReply helloReply = HelloReply.newBuilder()
-                        .setMessage("Hello " + helloRequest.getName())
-                        .build();
-
-                try {
-                    Thread.sleep(STREAM_SLEEP_MILLIS);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                if (out == "") {
+                    out = helloRequest.getName();
+                } else {
+                    out += " and " + helloRequest.getName();
                 }
-                replyStreamObserver.onNext(helloReply);
-                replyStreamObserver.onCompleted();
             }
 
             @Override
@@ -77,7 +73,11 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
 
             @Override
             public void onCompleted() {
-                // Do nothing
+                HelloReply helloReply = HelloReply.newBuilder()
+                        .setMessage("Hello " + out)
+                        .build();
+                replyStreamObserver.onNext(helloReply);
+                replyStreamObserver.onCompleted();
             }
         };
     }
