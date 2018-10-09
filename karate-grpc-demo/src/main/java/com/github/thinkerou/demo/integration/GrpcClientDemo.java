@@ -31,7 +31,7 @@ public class GrpcClientDemo {
         // Need to start helloworld server first
         // using the following command:
         //   cd karate-demo
-        //   mvn exec:java -Dexec.mainClass=com.github.thinkerou.demo.helloworld.HelloWorldServer
+        //   mvn exec:java -Dexec.mainClass=com.github.thinkerou.demo.helloworld.HelloWorldServerMain
         GrpcClient client2 = GrpcClient.create("localhost", 50051);
         String result2 = client2.call("helloworld.Greeter/SayHello", payloads);
         logger.info(result2);

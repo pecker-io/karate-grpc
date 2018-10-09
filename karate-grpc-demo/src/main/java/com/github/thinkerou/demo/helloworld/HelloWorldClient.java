@@ -15,7 +15,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.util.JsonFormat;
 
 /**
- * HelloWorld is a simple client that requests a greeting from the HelloWorldServer.
+ * HelloWorld is a simple client that requests a greeting from the HelloWorldServerMain.
  *
  * Source from: https://github.com/grpc/grpc-java/tree/master/examples/src/main/java/io/grpc/examples
  *

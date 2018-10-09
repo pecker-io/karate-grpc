@@ -1,28 +1,39 @@
-package com.github.thinkerou.demo.helloworldstream;
+package com.github.thinkerou.demo.helloworld;
 
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
 import io.grpc.Status;
-import io.grpc.stub.ServerCallStreamObserver;
 import io.grpc.stub.StreamObserver;
 
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Logger;
 
 /**
- * HelloWorldStreamServer
+ * HelloWorldServerImpl
  *
  * Source from: https://github.com/grpc/grpc-java/tree/master/examples/src/main/java/io/grpc/examples
  *
  * @author thinkerou
  */
-public class HelloWorldStreamServer extends StreamingGreeterGrpc.StreamingGreeterImplBase {
+public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
 
-    private static final Logger logger = Logger.getLogger(HelloWorldStreamServer.class.getName());
+    private static final Logger logger = Logger.getLogger(HelloWorldServerImpl.class.getName());
 
     private static final int STREAM_MESSAGE_NUMBER = 10;
     private static final long STREAM_SLEEP_MILLIS = 100;
+
+    @Override
+    public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
+        HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
+    }
+
+    @Override
+    public void againSayHello(AgainHelloRequest req, StreamObserver<AgainHelloReply> responseObserver) {
+        AgainHelloReply reply = AgainHelloReply.newBuilder()
+                .setDetails("Details " + req.getMessage() + " in " + req.getAddress())
+                .build();
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
+    }
 
     @Override
     public void sayHelloServerStreaming(HelloRequest request, StreamObserver<HelloReply> replyStreamObserver) {
@@ -110,22 +121,6 @@ public class HelloWorldStreamServer extends StreamingGreeterGrpc.StreamingGreete
                 responseObserver.onCompleted();
             }
         };
-
-    }
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        final Server server = ServerBuilder
-                .forPort(50053)
-                .addService(new HelloWorldStreamServer())
-                .build()
-                .start();
-
-        logger.info("Listening on " + server.getPort());
-
-
-        if (args.length == 0 || args[0] != "test") {
-            server.awaitTermination();
-        }
     }
 
 }

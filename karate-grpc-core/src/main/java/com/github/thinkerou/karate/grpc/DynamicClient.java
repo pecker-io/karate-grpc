@@ -73,6 +73,8 @@ public class DynamicClient {
                 }
                 return callServerStreaming(requests.get(0), responseObsever, callOptions);
             case CLIENT_STREAMING:
+                logger.warning("Client stream call");
+                logger.warning(requests.toString());
                 return callClientStreaming(requests, responseObsever, callOptions);
             case BIDI_STREAMING:
                 return callBidiStreaming(requests, responseObsever, callOptions);

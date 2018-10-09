@@ -8,7 +8,7 @@ import cucumber.api.CucumberOptions;
  * @author thinkerou
  */
 @CucumberOptions(tags = {"~@ignore"})
-public class DemoTest extends TestBase{
+public class DemoTest extends TestBase {
 
     /**
      * This class will automatically pick up all *.feature files in src/test/java/demo

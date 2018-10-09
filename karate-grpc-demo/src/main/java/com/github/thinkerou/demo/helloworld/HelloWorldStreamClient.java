@@ -1,4 +1,4 @@
-package com.github.thinkerou.demo.helloworldstream;
+package com.github.thinkerou.demo.helloworld;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -28,10 +28,10 @@ public class HelloWorldStreamClient {
 
         // Create a channel and a stub
         ManagedChannel channel = ManagedChannelBuilder
-                .forAddress("localhost", 50053)
+                .forAddress("localhost", 50051)
                 .usePlaintext()
                 .build();
-        StreamingGreeterGrpc.StreamingGreeterStub stub = StreamingGreeterGrpc.newStub(channel);
+        GreeterGrpc.GreeterStub stub = GreeterGrpc.newStub(channel);
 
         // When using manual flow-control and back-pressure on the client, the ClientResponseObserver handles both
         // request and response streams.
