@@ -25,9 +25,17 @@ $ mvn test -Dtest=HelloWorldNewRunner
 
 Because have started hello world server on `TestBase.java`, we not need to start it alone.
 
+## Real World Examples
+
+A set of real-life examples which includes `single rpc`, `client stream rpc`, `server stream rpc` and `bidi stream rpc` can be found here: [karate-grpc-demo](karate-grpc-demo)
+
 ## Getting Started
 
+karate-grpc requires Java 8 and then Maven to be installed, these also are karate and polyglot required.
+
 > karate-grpc only support Maven currently.
+
+### Maven
 
 You need to add the following `<dependencies>`:
 
@@ -39,17 +47,53 @@ You need to add the following `<dependencies>`:
 </dependency>
 ```
 
-## What to need for testing grpc server
+### Gradle
+
+> TODO: need to test!!!
+
+Alternatively for Gradle you need to add the following entry:
+
+```gradle
+testCompile 'com.github.thinkerou:karate-grpc-core:0.4.11'
+```
+
+### What to need for testing grpc server
 
 Testing one grpc server, we have the follow info:
 
-- grpc server `ip` and `port`
+- grpc server `ip` and `port`.
 
-- protobuf file corresponding grpc server, but usually it's a protobuf jar package not one single file.
+- protobuf file corresponding grpc server, but usually it's a protobuf jar package not one single file or more files.
 
-So, we should test it based on the two point.
+So, we could test it based on the two point.
 
-Using Karate we can perfect to solve it!
+**Using karate-grpc we can perfect to solve it!**
+
+## How to write karate feature
+
+We need to use [Java interop](https://github.com/intuit/karate#java-interop) of Karate in order to call us define grpc client.
+
+And use `JSON.parse` javascript function parse the response of grpc server return value.
+
+Like this:
+
+```
+Feature: grpc hello world example
+
+  Background:
+    * def Client = Java.type('HelloWorldClient')
+    * def config = { host: 'localhost', port: 50051, extra: 'other config information' }
+    * def client = new Client(config.host, config.port)
+
+  Scenario: do it
+    * def payload = read('helloworld.json')
+    * def response = client.greet(payload)
+    * eval client.shutdown()
+    * def response = JSON.parse(response)
+    * match response.message == 'Hello thinkerou'
+```
+
+That's all!
 
 ## How to write grpc client
 
@@ -101,32 +145,6 @@ public class Client {
 }
 
 ```
-
-## How to write karate feature
-
-We need to use [Java interop](https://github.com/intuit/karate#java-interop) of Karate in order to call us define grpc client.
-
-And use `JSON.parse` javascript function parse the response of grpc server return value.
-
-Like this:
-
-```
-Feature: grpc hello world example
-
-  Background:
-    * def Client = Java.type('HelloWorldClient')
-    * def config = { host: 'localhost', port: 50051, extra: 'other config information' }
-    * def client = new Client(config.host, config.port)
-
-  Scenario: do it
-    * def payload = read('helloworld.json')
-    * def response = client.greet(payload)
-    * eval client.shutdown()
-    * def response = JSON.parse(response)
-    * match response.message == 'Hello thinkerou'
-```
-
-That's all!
 
 ## Thanks 
 
