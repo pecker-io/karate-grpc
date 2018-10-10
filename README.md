@@ -7,7 +7,7 @@ karate-grpc made gRPC testing simple by [karate](https://github.com/intuit/karat
 karate-grpc can get all the benefits of [karate](https://github.com/intuit/karate#features), it makes it really easy to build protobuf complex request payloads via json, traverse data within the responses and chain data from responses into the next request.
 
 ## Hello World
-<a href="https://github.com/thinkerou/karate-grpc/blob/master/karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature"><img src="karate-grpc-demo/src/test/resources/karate-grpc-hello-world.png" /></a>
+<a href="https://github.com/thinkerou/karate-grpc/blob/master/karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature"><img src="assets/karate-grpc-hello-world.png" /></a>
 
 ## Testing hello world
 
