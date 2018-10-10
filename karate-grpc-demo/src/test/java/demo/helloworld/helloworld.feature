@@ -6,7 +6,6 @@ Feature: grpc helloworld example
 
   Scenario: do it
     * def payload = read('helloworld.json')
-    * print payload
     * def response = client.greet(payload)
     * def response = JSON.parse(response)
     * match response.message == 'Hello thinkerou'

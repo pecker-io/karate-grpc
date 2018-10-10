@@ -8,5 +8,4 @@ Feature: grpc helloworld example by grpc dynamic client
     * def payload = read('bistream.json')
     * def response = client.call('helloworld.Greeter/SayHelloBiStreaming', payload)
     * def response = JSON.parse(response)
-    * print response
     * match response[*].message == ['Hello thinkerou', 'Hello thinkerou2', 'Hello thinkerou3']

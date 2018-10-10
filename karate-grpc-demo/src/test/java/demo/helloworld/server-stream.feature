@@ -8,5 +8,4 @@ Feature: grpc helloworld example by grpc dynamic client
     * def payload = read('serverstream.json')
     * def response = client.call('helloworld.Greeter/SayHelloServerStreaming', payload)
     * def response = JSON.parse(response)
-    * print response
     * match response[*].message == ['Hello thinkerou part 0', 'Hello thinkerou part 1', 'Hello thinkerou part 2']
