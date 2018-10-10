@@ -23,7 +23,7 @@ public class HelloWorldServerMain {
         int port = 50051;
 
         server = ServerBuilder.forPort(port)
-                .addService(new HelloWorldServerImpl())
+                .addService(new HelloWorldServerImpl(null)) // todo
                 .build()
                 .start();
         logger.info("Server started listening on " + port);
