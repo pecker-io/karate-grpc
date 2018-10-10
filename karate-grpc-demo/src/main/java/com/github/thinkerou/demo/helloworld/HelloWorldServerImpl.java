@@ -16,8 +16,8 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
 
     private static final Logger logger = Logger.getLogger(HelloWorldServerImpl.class.getName());
 
-    private static final int STREAM_MESSAGE_NUMBER = 10;
-    private static final long STREAM_SLEEP_MILLIS = 100;
+    private static final int STREAM_MESSAGE_NUMBER = 3;
+    private static final long STREAM_SLEEP_MILLIS = 10;
 
     @Override
     public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
