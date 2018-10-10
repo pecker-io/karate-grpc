@@ -206,7 +206,7 @@ Because `karate-grpc` supports stream grpc, we use `list` JSON.
 
 Input JSON file like:
 
-```$xslt
+```
 [
   {
     "name": "thinkerou"
@@ -219,7 +219,7 @@ Input JSON file like:
 
 Output JSON string also like:
 
-```$xslt
+```
 [
   {
     "message": "Hello thinkerou"
