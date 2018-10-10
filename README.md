@@ -35,7 +35,7 @@ You need to add the following `<dependencies>`:
 <dependency>
     <groupId>com.github.thinkerou</groupId>
     <artifactId>karate-grpc-core</artifactId>
-    <version>0.4.8</version>
+    <version>0.4.10</version>
 </dependency>
 ```
 
