@@ -57,17 +57,32 @@ Alternatively for Gradle you need to add the following entry:
 testCompile 'com.github.thinkerou:karate-grpc-core:0.4.11'
 ```
 
-### What to need for testing grpc server
+## What to need for testing grpc server
 
 Testing one grpc server, we have the follow info:
 
 - grpc server `ip` and `port`.
 
-- protobuf file corresponding grpc server, but usually it's a protobuf jar package not one single file or more files.
+- protobuf file corresponding grpc server, but usually it's protobuf `jar package` not one single file or more files.
 
 So, we could test it based on the two point.
 
 **⚠️ Using karate-grpc we can perfect to solve it!**
+
+## What to need in pom file
+
+For testing your grpc server, as above, need protobuf jar dependency and protobuf build plugins - [`protobuf-maven-plugin`](https://www.xolstice.org/protobuf-maven-plugin/).
+
+**MUST** appoint `descriptorSetFileName` and `protoSourceRoot` params:
+
+```
+<descriptorSetFileName>karate-grpc.protobin</descriptorSetFileName>
+<protoSourceRoot>${project.build.directory}/dependency/demo</protoSourceRoot>
+```
+
+Especially, `descriptorSetFileName` **MUST** equal `karate-grpc.protobin`, please see [here](karate-grpc-core/src/main/java/com/github/thinkerou/karate/constants/DescriptorFile.java) about more details.
+
+And other pom settings are the same as `karate`.
 
 ## How to write karate feature
 
@@ -99,9 +114,8 @@ That's all!
 
 **Note:**
 
-> The part content is outdated draft which initially think about the topic which continues to have saved is for reference only.
-
-> Usually you no need to care it and skip it, because `karate-grpc-core` have completed the function.
+> - The part content is outdated draft which initially think about the topic which continues to have saved is for reference only.
+> - Usually you no need to care it and skip it, because `karate-grpc-core` have completed the function.
 
 You only need two steps:
 
