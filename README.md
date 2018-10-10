@@ -282,6 +282,12 @@ public class Client {
 
 ```
 
+## TODO
+
+- [ ] Support file upload
+
+- [ ] Build karate-grpc-web
+
 ## Thanks 
 
 Thanks [Peter Thomas](https://github.com/ptrthomas) for his work for [karate](https://github.com/intuit/karate) and his generous help, also thanks [Dino Wernli](https://github.com/dinowernli) for his contributions for [polyglot](https://github.com/grpc-ecosystem/polyglot).
