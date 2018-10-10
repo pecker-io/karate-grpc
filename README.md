@@ -7,7 +7,8 @@ karate-grpc made gRPC testing simple by [karate](https://github.com/intuit/karat
 karate-grpc can get all the benefits of [karate](https://github.com/intuit/karate#features), it makes it really easy to build protobuf complex request payloads via json, traverse data within the responses and chain data from responses into the next request.
 
 ## Hello World
-<a href="https://github.com/thinkerou/karate-grpc/blob/master/karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature"><img src="assets/karate-grpc-hello-world.png" /></a>
+
+[![karate-grpc-hello-world](assets/karate-grpc-hello-world.png)](assets/karate-grpc-hello-world.png)
 
 ## Testing hello world
 
@@ -24,6 +25,10 @@ $ mvn test -Dtest=HelloWorldNewRunner
 ```
 
 Because have started hello world server on `TestBase.java`, we not need to start it alone.
+
+Base on karate generates beautiful test report:
+
+[![karate-grpc-hello-world-report](assets/karate-grpc-hello-world-report.png)](assets/karate-grpc-hello-world-report.png)
 
 ## Real World Examples
 
@@ -43,7 +48,7 @@ You need to add the following `<dependencies>`:
 <dependency>
     <groupId>com.github.thinkerou</groupId>
     <artifactId>karate-grpc-core</artifactId>
-    <version>0.4.11</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -54,7 +59,7 @@ You need to add the following `<dependencies>`:
 Alternatively for Gradle you need to add the following entry:
 
 ```gradle
-testCompile 'com.github.thinkerou:karate-grpc-core:0.4.11'
+testCompile 'com.github.thinkerou:karate-grpc-core:1.0.0'
 ```
 
 ## What to need for testing grpc server
@@ -282,7 +287,7 @@ public class Client {
 
 ```
 
-## TODO
+## TODO Features
 
 - [ ] Support file upload
 
