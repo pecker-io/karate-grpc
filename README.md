@@ -1,4 +1,4 @@
-# karate-grpc `(Status: Frequently update and test)`
+# karate-grpc
 
 [![Build Status](https://api.travis-ci.org/thinkerou/karate-grpc.svg)](https://travis-ci.org/thinkerou/karate-grpc)
 
@@ -35,7 +35,7 @@ You need to add the following `<dependencies>`:
 <dependency>
     <groupId>com.github.thinkerou</groupId>
     <artifactId>karate-grpc-core</artifactId>
-    <version>0.4.10</version>
+    <version>0.4.11</version>
 </dependency>
 ```
 
