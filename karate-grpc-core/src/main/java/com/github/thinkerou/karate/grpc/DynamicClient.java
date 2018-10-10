@@ -12,8 +12,8 @@ import com.google.protobuf.DynamicMessage;
 import com.github.thinkerou.karate.protobuf.DynamicMessageMarshaller;
 
 import io.grpc.CallOptions;
-import io.grpc.Channel;
 import io.grpc.ClientCall;
+import io.grpc.ManagedChannel;
 import io.grpc.MethodDescriptor;
 import io.grpc.stub.ClientCalls;
 import io.grpc.stub.StreamObserver;
@@ -30,16 +30,16 @@ public class DynamicClient {
     private static final Logger logger = Logger.getLogger(DynamicClient.class.getName());
 
     private final Descriptors.MethodDescriptor protoMethodDescriptor;
-    private final Channel channel;
+    private final ManagedChannel channel;
 
     /**
      * Creates a client for the supplied method, talking to the supplied endpoint.
      */
-    public static DynamicClient create(Descriptors.MethodDescriptor protoMethod, Channel channel) {
+    public static DynamicClient create(Descriptors.MethodDescriptor protoMethod, ManagedChannel channel) {
         return new DynamicClient(protoMethod, channel);
     }
 
-    DynamicClient(Descriptors.MethodDescriptor protoMethodDescriptor, Channel channel) {
+    DynamicClient(Descriptors.MethodDescriptor protoMethodDescriptor, ManagedChannel channel) {
         this.protoMethodDescriptor = protoMethodDescriptor;
         this.channel = channel;
     }
@@ -74,7 +74,6 @@ public class DynamicClient {
                 return callServerStreaming(requests.get(0), responseObsever, callOptions);
             case CLIENT_STREAMING:
                 logger.warning("Client stream call");
-                logger.warning(requests.toString());
                 return callClientStreaming(requests, responseObsever, callOptions);
             case BIDI_STREAMING:
                 return callBidiStreaming(requests, responseObsever, callOptions);

@@ -29,7 +29,7 @@ import com.google.protobuf.DynamicMessage;
 import com.github.thinkerou.karate.message.Writer;
 
 import io.grpc.CallOptions;
-import io.grpc.Channel;
+import io.grpc.ManagedChannel;
 import io.grpc.stub.StreamObserver;
 
 /**
@@ -41,7 +41,7 @@ public class GrpcCall {
 
     private static final Logger logger = Logger.getLogger(GrpcCall.class.getName());
 
-    private Channel channel;
+    private ManagedChannel channel;
 
     public static GrpcCall create(String host, int port) {
         return new GrpcCall(host, port);

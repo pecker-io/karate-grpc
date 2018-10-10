@@ -1,8 +1,7 @@
 package com.github.thinkerou.karate.grpc;
 
-import io.grpc.Channel;
-import io.grpc.netty.NegotiationType;
-import io.grpc.netty.NettyChannelBuilder;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 
 /**
  * ChannelFactory
@@ -11,8 +10,8 @@ import io.grpc.netty.NettyChannelBuilder;
  */
 public class ChannelFactory {
 
-    public static Channel create(String host, int port) {
-        return NettyChannelBuilder.forAddress(host, port).negotiationType(NegotiationType.PLAINTEXT).build();
+    public static ManagedChannel create(String host, int port) {
+        return ManagedChannelBuilder.forAddress(host, port).usePlaintext().build();
     }
 
 }
