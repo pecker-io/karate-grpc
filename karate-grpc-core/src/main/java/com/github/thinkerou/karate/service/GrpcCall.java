@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,7 +18,6 @@ import com.github.thinkerou.karate.domain.ProtoName;
 import com.github.thinkerou.karate.grpc.ChannelFactory;
 import com.github.thinkerou.karate.grpc.ComponentObserver;
 import com.github.thinkerou.karate.grpc.DynamicClient;
-import com.github.thinkerou.karate.message.Output;
 import com.github.thinkerou.karate.message.Reader;
 import com.github.thinkerou.karate.protobuf.ProtoFullName;
 import com.github.thinkerou.karate.protobuf.ServiceResolver;
@@ -110,8 +110,7 @@ public class GrpcCall {
         }
         Helper.validatePath(Optional.ofNullable(filePath));
 
-        Output output = Output.forFile(filePath);
-
+        List<Object> output = new ArrayList<>();
         StreamObserver<DynamicMessage> streamObserver = ComponentObserver.of(Writer.create(output, registry));
 
         // Calls grpc!
@@ -121,7 +120,7 @@ public class GrpcCall {
             throw new RuntimeException("Caught exception while waiting for rpc", t);
         }
 
-        return Helper.readFile(filePath.toString());
+        return output.toString();
     }
 
     private static CallOptions callOptions() {

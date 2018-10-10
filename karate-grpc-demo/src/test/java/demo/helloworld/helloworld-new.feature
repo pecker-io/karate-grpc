@@ -9,9 +9,10 @@ Feature: grpc helloworld example by grpc dynamic client
     * def response = client.call('helloworld.Greeter/SayHello', payload)
     * def response = JSON.parse(response)
     * print response
-    * match response.message == 'Hello thinkerou'
+    * match response[0].message == 'Hello thinkerou'
+    * def message = response[0].message
 
     * def payload = read('again-helloworld.json')
     * def response = client.call('helloworld.Greeter/AgainSayHello', payload)
     * def response = JSON.parse(response)
-    * match response.details == 'Details Hello thinkerou in BeiJing'
+    * match response[0].details == 'Details Hello thinkerou in BeiJing'

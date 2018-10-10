@@ -1,10 +1,8 @@
 package com.github.thinkerou.karate.message;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.util.List;
 import java.util.logging.Logger;
 
-import com.google.common.collect.ImmutableList;
 import com.google.protobuf.InvalidProtocolBufferException;
 import com.google.protobuf.Message;
 import com.google.protobuf.util.JsonFormat;
@@ -23,37 +21,17 @@ public class Writer<T extends Message> implements StreamObserver<T> {
 
     private static final Logger logger = Logger.getLogger(Writer.class.getName());
 
-    // Used to separate the individual plaintext json proto messages.
-    private static final String MESSAGE_SEPARATOR = "\n\n";
-
     private final JsonFormat.Printer jsonPrinter;
-    private final Output output;
+    private final List<Object> output;
 
     /**
      * Creates a new Writer which writes the messages it sees to the supplied Output.
      */
-    public static <T extends Message> Writer<T> create(Output output, JsonFormat.TypeRegistry registry) {
+    public static <T extends Message> Writer<T> create(List<Object> output, JsonFormat.TypeRegistry registry) {
         return new Writer<>(JsonFormat.printer().usingTypeRegistry(registry), output);
     }
 
-    /**
-     * Returns the string representation of the stream of supplied messages. Each individual message
-     * is represented as valid json, but not that the whole result is, itself, *not* valid json.
-     */
-    public static <M extends Message> String writeJsonStream(ImmutableList<M> messages) {
-        return writeJsonStream(messages, JsonFormat.TypeRegistry.getEmptyTypeRegistry());
-    }
-
-    public static <M extends Message> String writeJsonStream(
-            ImmutableList<M> messages, JsonFormat.TypeRegistry registry) {
-        ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
-        Writer<M> writer = Writer.create(Output.forStream(new PrintStream(resultStream)), registry);
-        writer.writeAll(messages);
-
-        return resultStream.toString();
-    }
-
-    Writer(JsonFormat.Printer jsonPrinter, Output output) {
+    Writer(JsonFormat.Printer jsonPrinter, List<Object> output) {
         this.jsonPrinter = jsonPrinter;
         this.output = output;
     }
@@ -71,18 +49,10 @@ public class Writer<T extends Message> implements StreamObserver<T> {
     @Override
     public void onNext(T message) {
         try {
-            output.write(jsonPrinter.print(message) + MESSAGE_SEPARATOR);
+            output.add(jsonPrinter.print(message));
         } catch (InvalidProtocolBufferException e) {
             logger.warning(e.getMessage());
         }
-    }
-
-    /**
-     * Writes all the supplied messages and closes the stream.
-     */
-    public void writeAll(ImmutableList<? extends T> messages) {
-        messages.forEach(this::onNext);
-        onCompleted();
     }
 
 }

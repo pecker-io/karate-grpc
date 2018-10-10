@@ -7,4 +7,4 @@ Feature: grpc helloworld example by grpc dynamic client
   Scenario: do it
     * def response = client.list('Greeter', 'SayHello', true)
     * print response
-    * match response.message contains 'SayHello'
+    * match response[0].message contains 'SayHello'

@@ -17,10 +17,6 @@ public class Output implements AutoCloseable {
         this.printStream = printStream;
     }
 
-    public void write(String content) {
-        printStream.print(content);
-    }
-
     public void writeLine(String content) {
         printStream.println(content);
     }
@@ -35,10 +31,6 @@ public class Output implements AutoCloseable {
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException("Can't create writer for file: " + path, e);
         }
-    }
-
-    public static Output forStream(PrintStream printStream) {
-        return new Output(printStream);
     }
 
     @Override
