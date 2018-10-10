@@ -31,7 +31,7 @@ A set of real-life examples which includes `single rpc`, `client stream rpc`, `s
 
 ## Getting Started
 
-karate-grpc requires Java 8 and then Maven to be installed, these also are karate and polyglot required.
+karate-grpc requires Java 8 and then Maven to be installed, these also are required by [karate](https://github.com/intuit/karate) and [polyglot](https://github.com/grpc-ecosystem/polyglot).
 
 > karate-grpc only support Maven currently.
 
@@ -67,7 +67,7 @@ Testing one grpc server, we have the follow info:
 
 So, we could test it based on the two point.
 
-**Using karate-grpc we can perfect to solve it!**
+**⚠️ Using karate-grpc we can perfect to solve it!**
 
 ## How to write karate feature
 
