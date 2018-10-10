@@ -90,25 +90,147 @@ We need to use [Java interop](https://github.com/intuit/karate#java-interop) of 
 
 And use `JSON.parse` javascript function parse the response of grpc server return value.
 
-Like this:
+So, use `karate-grpc` need the following steps:
+
+1. Calls into karate-grpc GrpcClient via Java Interop.
 
 ```
-Feature: grpc hello world example
+* def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
+```
+
+2. Builds one public Grpc client using your grpc ip and port.
+
+```
+* def client = Client.create('localhost', 50051)
+```
+
+If you want to list protobuf by service name or/and message name, you should use:
+
+```
+* def client = Client.create()
+```
+
+Because not need grpc server ip/port when listing protobuf.
+
+3. Reads JSON data corresponding your protobuf definition.
+
+4. Calls your Grpc server using `call` of karate-grpc.
+
+```
+* def response = client.call('helloworld.Greeter/SayHello', payload)
+```
+
+`call` have two params: protobuf full name(`format:<package-name>.<service-name>/<rpc-name>`) and JSON data.
+
+If you input protobuf full name error, `call` will fail and output protobuf message by `list`, like this:
+
+When input `helloworld.Greeter/SayHello1`, it will fail and print log:
+
+```
+Oct 10, 2018 5:06:46 PM com.github.thinkerou.karate.service.GrpcCall invoke
+警告: Call grpc failed, maybe you should see the follow grpc information.
+Oct 10, 2018 5:06:46 PM com.github.thinkerou.karate.service.GrpcList invoke
+信息: /var/folders/zp/p4s985f95z75jkk5p88h_khm0000gn/T/karate.grpc.3614949790091757570.list.result
+Oct 10, 2018 5:06:46 PM com.github.thinkerou.karate.service.GrpcCall invoke
+信息:
+helloworld.Greeter => helloworld.proto
+ helloworld.Greeter/SayHello
+
+ helloworld.Greeter/AgainSayHello
+
+ helloworld.Greeter/SayHelloBiStreaming
+
+ helloworld.Greeter/SayHelloClientStreaming
+
+ helloworld.Greeter/SayHelloServerStreaming
+
+```
+
+5. Converts response string to JSON.
+
+```
+* def response = JSON.parse(response)
+```
+
+Because `call` of karate-grpc returns JSON string, we need to convert it and then can use `match` assertion.
+
+6. Asserts payload.
+
+7. (Optional) Saves response for second Grpc.
+
+If have second Grpc use the response of first Grpc, we should save it, like:
+
+```
+* def message = response[0].message
+```
+
+And use it on JSON file:
+
+```
+[
+  {
+    "message": "#(message)",
+    "address": "BeiJing"
+  }
+]
+```
+
+8. (Optional) Second Grpc call using response data before.
+
+One whole example likes [this](karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature):
+
+```
+Feature: grpc helloworld example by grpc dynamic client
 
   Background:
-    * def Client = Java.type('HelloWorldClient')
-    * def config = { host: 'localhost', port: 50051, extra: 'other config information' }
-    * def client = new Client(config.host, config.port)
+    * def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
+    * def client = Client.create('localhost', 50051)
 
   Scenario: do it
     * def payload = read('helloworld.json')
-    * def response = client.greet(payload)
-    * eval client.shutdown()
+    * def response = client.call('helloworld.Greeter/SayHello', payload)
     * def response = JSON.parse(response)
-    * match response.message == 'Hello thinkerou'
+    * print response
+    * match response[0].message == 'Hello thinkerou'
+    * def message = response[0].message
+
+    * def payload = read('again-helloworld.json')
+    * def response = client.call('helloworld.Greeter/AgainSayHello', payload)
+    * def response = JSON.parse(response)
+    * match response[0].details == 'Details Hello thinkerou in BeiJing'
 ```
 
-That's all!
+### How to write JSON file
+
+Because `karate-grpc` supports stream grpc, we use `list` JSON.
+
+Input JSON file like:
+
+```$xslt
+[
+  {
+    "name": "thinkerou"
+  },
+  {
+    "name": "田欧"
+  }
+]
+```
+
+Output JSON string also like:
+
+```$xslt
+[
+  {
+    "message": "Hello thinkerou"
+  },
+  {
+    "message": "Hello 田欧"
+  }
+]
+```
+
+**That's all!!!**
 
 ## How to write grpc client
 
