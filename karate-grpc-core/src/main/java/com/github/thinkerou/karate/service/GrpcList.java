@@ -5,10 +5,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.domain.ProtoName;
@@ -16,7 +17,6 @@ import com.github.thinkerou.karate.message.Output;
 import com.github.thinkerou.karate.protobuf.ProtoFullName;
 import com.github.thinkerou.karate.protobuf.ServiceResolver;
 import com.github.thinkerou.karate.utils.Helper;
-import com.google.common.base.Joiner;
 import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.Descriptors;
 
@@ -111,7 +111,7 @@ public class GrpcList {
 
                 // If requested, add the message definition
                 if (withMessage) {
-                    output.writeLine(renderDescriptor(method.getInputType(), "  "));
+                    output.writeLine(renderDescriptor(method.getInputType()).toString());
                     output.newLine();
                 }
             }
@@ -125,37 +125,36 @@ public class GrpcList {
     /**
      * Create a human readable string to help the user build a message to send to an end-point.
      */
-    private static String renderDescriptor(Descriptors.Descriptor descriptor, String indent) {
+    private static Map<String, Object> renderDescriptor(Descriptors.Descriptor descriptor) {
+        Map<String, Object> result = new HashMap<>();
+
         if (descriptor.getFields().size() == 0) {
-            return indent + "<empty>";
+            result.put("EMPTY", "EMPTY");
+            return result;
         }
 
-        List<String> fieldsAsStrings = descriptor.getFields().stream()
-                .map(field -> renderDescriptor(field, indent + "  "))
-                .collect(Collectors.toList());
+        for (Descriptors.FieldDescriptor field : descriptor.getFields()) {
+            String isOpt = field.isOptional() ? "OPTIONAL" : "REQUIRED";
+            String isRep = field.isRepeated() ? "REPEATED" : "SINGLE";
+            String fieldPrefix = field.getJsonName() + "." + isOpt + "." + isRep;
+            result.put(fieldPrefix, renderFieldDescriptor(field));
+        }
 
-        return Joiner.on(System.lineSeparator()).join(fieldsAsStrings);
+        return result;
     }
 
     /**
      * Create a readable string from the field to help the user build a message.
      */
-    private static String renderDescriptor(Descriptors.FieldDescriptor descriptor, String indent) {
-        String isOpt = descriptor.isOptional() ? "<optional>" : "<required>";
-        String isRep = descriptor.isRepeated() ? "<repeated>" : "<single>";
-        String fieldPrefix = indent + descriptor.getJsonName() + "[" + isOpt + " " + isRep + "]";
-
-        if (descriptor.getJavaType() == Descriptors.FieldDescriptor.JavaType.MESSAGE) {
-            return fieldPrefix + " {" + System.lineSeparator()
-                    + renderDescriptor(descriptor.getMessageType(), indent + "  ")
-                    + System.lineSeparator() + indent + "}";
+    private static Object renderFieldDescriptor(Descriptors.FieldDescriptor descriptor) {
+        switch (descriptor.getJavaType()) {
+            case MESSAGE:
+                return renderDescriptor(descriptor.getMessageType());
+            case ENUM:
+                return descriptor.getEnumType().getValues();
+            default:
+                return descriptor.getJavaType();
         }
-
-        if (descriptor.getJavaType() == Descriptors.FieldDescriptor.JavaType.ENUM) {
-            return fieldPrefix + ": " + descriptor.getEnumType().getValues();
-        }
-
-        return fieldPrefix + ": " + descriptor.getJavaType();
     }
 
 }
