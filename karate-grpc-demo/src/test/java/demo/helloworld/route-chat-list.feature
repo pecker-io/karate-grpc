@@ -5,6 +5,6 @@ Feature: grpc helloworld example by grpc dynamic client
     * def client = Client.create()
 
   Scenario: do it
-    * def response = client.list('Greeter', 'SayHello', true)
+    * def response = client.list('Greeter', 'RouteChat', true)
     * def response = JSON.parse(response)
     * print response

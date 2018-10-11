@@ -132,22 +132,28 @@ If you input protobuf full name error, `call` will fail and output protobuf mess
 When input `helloworld.Greeter/SayHello1`, it will fail and print log:
 
 ```
-Oct 10, 2018 5:06:46 PM com.github.thinkerou.karate.service.GrpcCall invoke
+Oct 11, 2018 6:53:24 PM com.github.thinkerou.karate.service.GrpcCall invoke
 警告: Call grpc failed, maybe you should see the follow grpc information.
-Oct 10, 2018 5:06:46 PM com.github.thinkerou.karate.service.GrpcList invoke
-信息: /var/folders/zp/p4s985f95z75jkk5p88h_khm0000gn/T/karate.grpc.3614949790091757570.list.result
-Oct 10, 2018 5:06:46 PM com.github.thinkerou.karate.service.GrpcCall invoke
-信息:
-helloworld.Greeter => helloworld.proto
- helloworld.Greeter/SayHello
+Oct 11, 2018 6:53:24 PM com.github.thinkerou.karate.service.GrpcCall invoke
+信息: [
+  {
+    "helloworld.Greeter/SayHelloBiStreaming":"",
+    "helloworld.Greeter/RecordRoute":"",
+    "helloworld.Greeter/RouteChat":"",
+    "helloworld.Greeter/SayHelloServerStreaming":"",
+    "helloworld.Greeter/ListFeatures":"",
+    "helloworld.Greeter/SayHello":"",
+    "helloworld.Greeter/AgainSayHello":"",
+    "helloworld.Greeter/SayHelloClientStreaming":"",
+    "helloworld.Greeter/GetFeature":""
+  }
+]
 
- helloworld.Greeter/AgainSayHello
-
- helloworld.Greeter/SayHelloBiStreaming
-
- helloworld.Greeter/SayHelloClientStreaming
-
- helloworld.Greeter/SayHelloServerStreaming
+Oct 11, 2018 6:53:24 PM com.github.thinkerou.karate.service.GrpcCall invoke
+信息: [
+  {
+  }
+]
 
 ```
 

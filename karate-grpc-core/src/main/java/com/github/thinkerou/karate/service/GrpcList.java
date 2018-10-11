@@ -1,10 +1,10 @@
 package com.github.thinkerou.karate.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,10 +13,10 @@ import java.util.logging.Logger;
 
 import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.domain.ProtoName;
-import com.github.thinkerou.karate.message.Output;
 import com.github.thinkerou.karate.protobuf.ProtoFullName;
 import com.github.thinkerou.karate.protobuf.ServiceResolver;
 import com.github.thinkerou.karate.utils.Helper;
+import com.google.gson.Gson;
 import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.Descriptors;
 
@@ -41,7 +41,7 @@ public class GrpcList {
     /**
      * Support format: packageName.serviceName/methodName
      */
-    public String invoke(String name, Boolean withMessage) throws IOException {
+    public String invoke(String name, Boolean withMessage) {
         ProtoName protoName = ProtoFullName.parse(name);
         return invoke(protoName.getServiceName(), protoName.getMethodName(), withMessage);
     }
@@ -49,7 +49,7 @@ public class GrpcList {
     /**
      * List the grpc services filtered by service name (contains) or method name (contains).
      */
-    public String invoke(String serviceFilter, String methodFilter, Boolean withMessage) throws IOException {
+    public String invoke(String serviceFilter, String methodFilter, Boolean withMessage) {
         String path = DescriptorFile.PROTO.getText();
         Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
         Helper.validatePath(Optional.ofNullable(descriptorPath));
@@ -62,62 +62,46 @@ public class GrpcList {
             logger.warning(e.getMessage());
         }
 
-        // Creates one temp file to save list grpc result.
-        Path filePath = null;
-        try {
-            filePath = Files.createTempFile("karate.grpc.", ".list.result");
-        } catch (IOException e) {
-            logger.warning(e.getMessage());
-        }
-        Helper.validatePath(Optional.ofNullable(filePath));
-        logger.info(filePath.toString());
-
-        Output output = Output.forFile(filePath);
-        output.newLine();
-
         ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(fileDescriptorSet);
 
         Iterable<Descriptors.ServiceDescriptor> serviceDescriptorIterable = serviceResolver.listServices();
+
+        List<Map<String, Object>> output = new ArrayList<>();
         serviceDescriptorIterable.forEach(descriptor -> {
             if (serviceFilter.isEmpty()
                     || descriptor.getFullName().toLowerCase().contains(serviceFilter.toLowerCase())) {
-                listMethods(output, descriptor, methodFilter, withMessage);
+                Map<String, Object> result = new HashMap<>();
+                listMethods(result, descriptor, methodFilter, withMessage);
+
+                output.add(result);
             }
         });
 
-        return Helper.readFile(filePath.toString());
+        return new Gson().toJson(output);
     }
 
     /**
      * List the methods on the service (the mothodFilter will be applied if non empty.
      */
     private static void listMethods(
-            Output output,
+            Map<String, Object> output,
             Descriptors.ServiceDescriptor descriptor,
             String methodFilter,
             Boolean withMessage) {
         List<Descriptors.MethodDescriptor> methodDescriptors = descriptor.getMethods();
 
-        final boolean[] printedService = {false};
         methodDescriptors.forEach(method -> {
             if (methodFilter.isEmpty() || method.getName().contains(methodFilter)) {
-                if (!printedService[0]) {
-                    File pFile = new File(descriptor.getFile().getName());
-                    output.writeLine(descriptor.getFullName() + " => " + pFile);
-                    printedService[0] = true;
-                }
-
-                output.writeLine(" " + descriptor.getFullName() + "/" + method.getName());
+                String key = descriptor.getFullName() + "/" + method.getName();
 
                 // If requested, add the message definition
                 if (withMessage) {
-                    output.writeLine(renderDescriptor(method.getInputType()).toString());
-                    output.newLine();
+                    Map<String, Object> o = new HashMap<>();
+                    o.put(method.getInputType().getName(), renderDescriptor(method.getInputType()));
+                    output.put(key, o);
+                } else {
+                    output.put(key, "");
                 }
-            }
-
-            if (printedService[0]) {
-                output.newLine();
             }
         });
     }
@@ -129,7 +113,7 @@ public class GrpcList {
         Map<String, Object> result = new HashMap<>();
 
         if (descriptor.getFields().size() == 0) {
-            result.put("EMPTY", "EMPTY");
+            result.put("EMPTY", "");
             return result;
         }
 
