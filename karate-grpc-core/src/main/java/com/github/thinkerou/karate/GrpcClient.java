@@ -29,11 +29,11 @@ public class GrpcClient {
         return callIns.invoke(name, payload);
     }
 
-    public String list(String serviceFilter, String methodFilter, Boolean withMessage) throws IOException {
+    public String list(String serviceFilter, String methodFilter, Boolean withMessage) {
         return listIns.invoke(serviceFilter, methodFilter, withMessage);
     }
 
-    public String list(String name, Boolean withMessage) throws IOException {
+    public String list(String name, Boolean withMessage) {
         return listIns.invoke(name, withMessage);
     }
 
