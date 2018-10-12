@@ -55,7 +55,7 @@ public class GrpcCall {
      * @param name indicates one called grpc service full name, like: package.service/method
      * @param payload indicates one protobuf corresponding json data
      */
-    public String invoke(String name, String payload) throws IOException {
+    public String invoke(String name, String payload) {
         ProtoName protoName = ProtoFullName.parse(name);
 
         String path = DescriptorFile.PROTO.getText();
@@ -72,18 +72,24 @@ public class GrpcCall {
 
         // Set up the dynamic client and make the call.
         ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(fileDescriptorSet);
-        Descriptors.MethodDescriptor methodDescriptor = null;
+        Descriptors.MethodDescriptor methodDescriptor;
         try {
             methodDescriptor = serviceResolver.resolveServiceMethod(protoName);
         } catch (IllegalArgumentException e) {
             // When can't find service or method with name
             // use service or/and method search once for help user
-            logger.warning("Call grpc failed, maybe you should see the follow grpc information.");
             GrpcList list = new GrpcList();
-            String result = list.invoke(protoName.getServiceName(), "", false);
-            logger.info(result);
-            result = list.invoke("", protoName.getMethodName(), false);
-            logger.info(result);
+            String result1 = list.invoke(protoName.getServiceName(), "", false);
+            String result2 = list.invoke("", protoName.getMethodName(), false);
+            if (!result1.equals("[]") || !result2.equals("[{}]")) {
+                logger.warning("Call grpc failed, maybe you should see the follow grpc information.");
+                if (!result1.equals("[]")) {
+                    logger.info(result1);
+                }
+                if (!result2.equals("[{}]")) {
+                    logger.info(result2);
+                }
+            }
             throw new IllegalArgumentException(e.getMessage());
         }
 

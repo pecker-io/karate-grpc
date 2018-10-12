@@ -48,6 +48,8 @@ public class GrpcList {
 
     /**
      * List the grpc services filtered by service name (contains) or method name (contains).
+     *
+     * Mainly goal: return value are used web page.
      */
     public String invoke(String serviceFilter, String methodFilter, Boolean withMessage) {
         String path = DescriptorFile.PROTO.getText();
