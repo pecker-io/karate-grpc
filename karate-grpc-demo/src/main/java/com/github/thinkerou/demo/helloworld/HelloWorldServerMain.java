@@ -3,7 +3,15 @@ package com.github.thinkerou.demo.helloworld;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.Charset;
+import java.util.List;
 import java.util.logging.Logger;
+
+import com.github.thinkerou.karate.utils.Helper;
+import com.google.protobuf.util.JsonFormat;
 
 /**
  * HelloWorldServerMain that manages startup/shutdown of a Greeter server.
@@ -22,8 +30,11 @@ public class HelloWorldServerMain {
         // The port on which the server should run.
         int port = 50051;
 
+        String file = System.getProperty("user.dir") + "/src/test/java/demo/helloworld/route-guide.json";
+        String payloads = Helper.readFile(file);
+
         server = ServerBuilder.forPort(port)
-                .addService(new HelloWorldServerImpl(null)) // todo
+                .addService(new HelloWorldServerImpl(parseFeatures(payloads)))
                 .build()
                 .start();
         logger.info("Server started listening on " + port);
@@ -52,6 +63,15 @@ public class HelloWorldServerMain {
         if (server != null) {
             server.awaitTermination();
         }
+    }
+
+    /**
+     * Parses the JSON input file containing the list of features.
+     */
+    public static List<Feature> parseFeatures(String content) throws IOException {
+        FeatureDatabase.Builder database = FeatureDatabase.newBuilder();
+        JsonFormat.parser().merge(content, database);
+        return database.getFeatureList();
     }
 
     /**

@@ -37,7 +37,7 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
     private static final double COORD_FACTOR = 1e7;
 
     private final Collection<Feature> features;
-    private final ConcurrentMap<Point, List<RouteNote>> routeNotes = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Point, List<RouteNote>> routeNotes = new ConcurrentHashMap<Point, List<RouteNote>>();
 
     HelloWorldServerImpl(Collection<Feature> features) {
         this.features = features;
@@ -141,7 +141,6 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
             @Override
             public void onCompleted() {
                 // Signal the end of work when the client ends the request stream.
-                logger.info("COMPLETED");
                 responseObserver.onCompleted();
             }
         };
@@ -247,7 +246,7 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
         return new StreamObserver<RouteNote>() {
             @Override
             public void onNext(RouteNote routeNote) {
-                List<RouteNote> notes = getOrCreateNotes(routeNote.getLocation());
+                List<RouteNote> notes = getOrCreateNotes(routeNote);
 
                 for (RouteNote preNote : notes.toArray(new RouteNote[0])) {
                     responseObserver.onNext(preNote);
@@ -271,11 +270,13 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
     /**
      * Gets the notes list for the given location. If missing, create it.
      */
-    private List<RouteNote> getOrCreateNotes(Point location) {
+    private List<RouteNote> getOrCreateNotes(RouteNote routeNote) {
         List<RouteNote> notes = Collections.synchronizedList(new ArrayList<>());
-        List<RouteNote> preNOtes = routeNotes.putIfAbsent(location, notes);
+        notes.add(routeNote);
 
-        return preNOtes != null ? preNOtes : notes;
+        List<RouteNote> preNotes = routeNotes.putIfAbsent(routeNote.getLocation(), notes);
+
+        return preNotes != null ? preNotes : notes;
     }
 
     /**

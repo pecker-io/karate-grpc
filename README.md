@@ -217,7 +217,7 @@ Input JSON file like:
     "name": "thinkerou"
   },
   {
-    "name": "田欧"
+    "name": "thinkerou2"
   }
 ]
 ```
@@ -230,7 +230,7 @@ Output JSON string also like:
     "message": "Hello thinkerou"
   },
   {
-    "message": "Hello 田欧"
+    "message": "Hello thinkerou2"
   }
 ]
 ```
