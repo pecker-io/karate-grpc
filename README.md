@@ -149,12 +149,6 @@ Oct 11, 2018 6:53:24 PM com.github.thinkerou.karate.service.GrpcCall invoke
   }
 ]
 
-Oct 11, 2018 6:53:24 PM com.github.thinkerou.karate.service.GrpcCall invoke
-信息: [
-  {
-  }
-]
-
 ```
 
 5. Converts response string to JSON.
