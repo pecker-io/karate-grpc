@@ -43,7 +43,15 @@ public class GrpcList {
      */
     public String invoke(String name, Boolean withMessage) {
         ProtoName protoName = ProtoFullName.parse(name);
-        return invoke(protoName.getServiceName(), protoName.getMethodName(), withMessage);
+        return new Gson().toJson(execute(protoName.getServiceName(), protoName.getMethodName(), withMessage));
+    }
+
+    public String invoke(String serviceFilter, String methodFilter, Boolean withMessage) {
+        return new Gson().toJson(execute(serviceFilter, methodFilter, withMessage));
+    }
+
+    public List<Map<String, Object>> invokeForRedis() {
+        return execute("", "", true);
     }
 
     /**
@@ -51,7 +59,7 @@ public class GrpcList {
      *
      * Mainly goal: return value are used web page.
      */
-    public String invoke(String serviceFilter, String methodFilter, Boolean withMessage) {
+    private List<Map<String, Object>> execute(String serviceFilter, String methodFilter, Boolean withMessage) {
         String path = DescriptorFile.PROTO.getText();
         Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
         Helper.validatePath(Optional.ofNullable(descriptorPath));
@@ -75,11 +83,13 @@ public class GrpcList {
                 Map<String, Object> result = new HashMap<>();
                 listMethods(result, descriptor, methodFilter, withMessage);
 
-                output.add(result);
+                if (!result.isEmpty()) {
+                    output.add(result);
+                }
             }
         });
 
-        return new Gson().toJson(output);
+        return output;
     }
 
     /**
@@ -96,14 +106,14 @@ public class GrpcList {
             if (methodFilter.isEmpty() || method.getName().contains(methodFilter)) {
                 String key = descriptor.getFullName() + "/" + method.getName();
 
+                Map<String, Object> o = new HashMap<>();
+                o.put("file", descriptor.getFile().getName());
+
                 // If requested, add the message definition
                 if (withMessage) {
-                    Map<String, Object> o = new HashMap<>();
                     o.put(method.getInputType().getName(), renderDescriptor(method.getInputType()));
-                    output.put(key, o);
-                } else {
-                    output.put(key, "");
                 }
+                output.put(key, o);
             }
         });
     }
