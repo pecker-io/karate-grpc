@@ -1,7 +1,5 @@
 package com.github.thinkerou.karate;
 
-import java.io.IOException;
-
 import com.github.thinkerou.karate.service.GrpcCall;
 import com.github.thinkerou.karate.service.GrpcList;
 
@@ -25,7 +23,7 @@ public class GrpcClient {
         return new GrpcClient();
     }
 
-    public String call(String name, String payload) throws IOException {
+    public String call(String name, String payload) {
         return callIns.invoke(name, payload);
     }
 
