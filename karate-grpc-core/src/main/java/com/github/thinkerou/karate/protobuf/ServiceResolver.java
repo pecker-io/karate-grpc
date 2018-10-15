@@ -133,9 +133,9 @@ public class ServiceResolver {
             ImmutableMap<String, DescriptorProtos.FileDescriptorProto> descriptorProtoIndex,
             Map<String, Descriptors.FileDescriptor> descriptorCache) throws Descriptors.DescriptorValidationException {
         // First, check the cache.
-        String descritorName = descriptorProto.getName();
-        if (descriptorCache.containsKey(descritorName)) {
-            return descriptorCache.get(descritorName);
+        String descriptorName = descriptorProto.getName();
+        if (descriptorCache.containsKey(descriptorName)) {
+            return descriptorCache.get(descriptorName);
         }
 
         // Then, fetch all the required dependencies recursively.
