@@ -1,13 +1,22 @@
 package com.github.thinkerou.karate;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.service.GrpcList;
+import com.github.thinkerou.karate.utils.Helper;
 import com.google.gson.Gson;
+import com.google.protobuf.DescriptorProtos;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.util.SafeEncoder;
 
 /**
  * RedisClient
@@ -51,6 +60,29 @@ public class RedisClient {
             }
         }
         return true;
+    }
+
+    public Boolean insertBinaryData() {
+        String path = DescriptorFile.PROTO.getText();
+        Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
+        Helper.validatePath(Optional.ofNullable(descriptorPath));
+
+        byte[] data;
+        try {
+            data = Files.readAllBytes(descriptorPath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        Map<String, String> hash = new HashMap<>();
+        hash.put("file-descriptor-set", SafeEncoder.encode(data));
+
+        String status = jedis.hmset("karate-grpc-protobuf", hash);
+        if (status.equals("OK")) {
+            return true;
+        }
+        return false;
     }
 
 }
