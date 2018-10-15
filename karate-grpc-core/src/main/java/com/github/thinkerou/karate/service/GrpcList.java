@@ -42,16 +42,20 @@ public class GrpcList {
      * Support format: packageName.serviceName/methodName
      */
     public String invoke(String name, Boolean withMessage) {
-        ProtoName protoName = ProtoFullName.parse(name);
-        return new Gson().toJson(execute(protoName.getServiceName(), protoName.getMethodName(), withMessage));
+        return new Gson().toJson(execute(name, withMessage));
     }
 
     public String invoke(String serviceFilter, String methodFilter, Boolean withMessage) {
-        return new Gson().toJson(execute(serviceFilter, methodFilter, withMessage));
+        return new Gson().toJson(execute(serviceFilter, methodFilter, withMessage, false));
     }
 
     public List<Map<String, Object>> invokeForRedis() {
-        return execute("", "", true);
+        return execute("", "", true, true);
+    }
+
+    private List<Map<String, Object>> execute(String name, Boolean withMessage) {
+        ProtoName protoName = ProtoFullName.parse(name);
+        return execute(protoName.getServiceName(), protoName.getMethodName(), withMessage, false);
     }
 
     /**
@@ -59,7 +63,11 @@ public class GrpcList {
      *
      * Mainly goal: return value are used web page.
      */
-    private List<Map<String, Object>> execute(String serviceFilter, String methodFilter, Boolean withMessage) {
+    private List<Map<String, Object>> execute(
+            String serviceFilter,
+            String methodFilter,
+            Boolean withMessage,
+            Boolean saveOutput) {
         String path = DescriptorFile.PROTO.getText();
         Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
         Helper.validatePath(Optional.ofNullable(descriptorPath));
@@ -81,7 +89,7 @@ public class GrpcList {
             if (serviceFilter.isEmpty()
                     || descriptor.getFullName().toLowerCase().contains(serviceFilter.toLowerCase())) {
                 Map<String, Object> result = new HashMap<>();
-                listMethods(result, descriptor, methodFilter, withMessage);
+                listMethods(result, descriptor, methodFilter, withMessage, saveOutput);
 
                 if (!result.isEmpty()) {
                     output.add(result);
@@ -99,21 +107,29 @@ public class GrpcList {
             Map<String, Object> output,
             Descriptors.ServiceDescriptor descriptor,
             String methodFilter,
-            Boolean withMessage) {
+            Boolean withMessage,
+            Boolean saveOutputInfo) {
         List<Descriptors.MethodDescriptor> methodDescriptors = descriptor.getMethods();
 
         methodDescriptors.forEach(method -> {
             if (methodFilter.isEmpty() || method.getName().contains(methodFilter)) {
                 String key = descriptor.getFullName() + "/" + method.getName();
 
-                Map<String, Object> o = new HashMap<>();
-                o.put("file", descriptor.getFile().getName());
+                Map<String, Object> res = new HashMap<>();
+                res.put("file", descriptor.getFile().getName());
 
                 // If requested, add the message definition
                 if (withMessage) {
+                    Map<String, Object> o = new HashMap<>();
                     o.put(method.getInputType().getName(), renderDescriptor(method.getInputType()));
+                    res.put("input", o);
+                    if (saveOutputInfo) {
+                        Map<String, Object> oo = new HashMap<>();
+                        oo.put(method.getOutputType().getName(), renderDescriptor(method.getOutputType()));
+                        res.put("output", oo);
+                    }
                 }
-                output.put(key, o);
+                output.put(key, res);
             }
         });
     }
