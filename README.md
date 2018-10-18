@@ -237,6 +237,16 @@ Output JSON string also like:
 
 **That's all!!!**
 
+## Why need Redis?
+
+> When your project have many protobuf jar package dependency, every compile will spend more time.
+
+So, use Redis to save descriptor sets which every generate.
+
+**TODO:**
+
+- Save `ProtoFullName|InputType|InputMessage|OutputType|OutputMessage|ProtoFileName|RPCAddress` not file content.
+
 ## How to write grpc client
 
 **Note:**
