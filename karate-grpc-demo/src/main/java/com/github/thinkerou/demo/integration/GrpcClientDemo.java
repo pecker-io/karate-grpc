@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import com.github.thinkerou.karate.GrpcClient;
-import com.github.thinkerou.karate.utils.Helper;
+import com.github.thinkerou.karate.utils.FileHelper;
 
 /**
  * GrpcClientDemo
@@ -24,7 +24,7 @@ public class GrpcClientDemo {
 
         String file = System.getProperty("user.dir") + "/src/test/java/demo/helloworld/helloworld.json";
         logger.info(file);
-        String payloads = Helper.readFile(file);
+        String payloads = FileHelper.readFile(file);
         logger.info(payloads);
 
         // Note: for testing

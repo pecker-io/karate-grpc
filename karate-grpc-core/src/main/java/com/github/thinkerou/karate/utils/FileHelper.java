@@ -10,13 +10,13 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 /**
- * Helper
+ * FileHelper
  *
  * @author thinkerou
  */
-public class Helper {
+public class FileHelper {
 
-    private static final Logger logger = Logger.getLogger(Helper.class.getName());
+    private static final Logger logger = Logger.getLogger(FileHelper.class.getName());
 
     public static void validatePath(Optional<Path> maybePath) {
         if (maybePath.isPresent()) {

@@ -21,7 +21,8 @@ import com.github.thinkerou.karate.grpc.DynamicClient;
 import com.github.thinkerou.karate.message.Reader;
 import com.github.thinkerou.karate.protobuf.ProtoFullName;
 import com.github.thinkerou.karate.protobuf.ServiceResolver;
-import com.github.thinkerou.karate.utils.Helper;
+import com.github.thinkerou.karate.utils.FileHelper;
+import com.github.thinkerou.karate.utils.RedisHelper;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
 import com.google.protobuf.Descriptors;
@@ -51,23 +52,40 @@ public class GrpcCall {
         channel = ChannelFactory.create(host, port);
     }
 
+    public String invoke(String name, String payload) {
+        return excute(name, payload, null);
+    }
+
+    public String invokeByRedis(String name, String payload, RedisHelper redisHelper) {
+        return excute(name, payload, redisHelper);
+    }
+
     /**
      * @param name indicates one called grpc service full name, like: package.service/method
      * @param payload indicates one protobuf corresponding json data
      */
-    public String invoke(String name, String payload) {
+    private String excute(String name, String payload, RedisHelper redisHelper) {
         ProtoName protoName = ProtoFullName.parse(name);
-
-        String path = DescriptorFile.PROTO.getText();
-        Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
-        Helper.validatePath(Optional.ofNullable(descriptorPath));
+        byte[] data;
+        if (redisHelper != null) {
+            data = redisHelper.getDescriptorSetsFromRedis();
+        } else {
+            String path = DescriptorFile.PROTO.getText();
+            Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
+            FileHelper.validatePath(Optional.ofNullable(descriptorPath));
+            try {
+                data = Files.readAllBytes(descriptorPath);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Read descriptor path failed: " + descriptorPath.toString());
+            }
+        }
 
         // Fetch the appropriate file descriptors for the service.
-        FileDescriptorSet fileDescriptorSet = null;
+        FileDescriptorSet fileDescriptorSet;
         try {
-            fileDescriptorSet = FileDescriptorSet.parseFrom(Files.readAllBytes(descriptorPath));
+            fileDescriptorSet = FileDescriptorSet.parseFrom(data);
         } catch (IOException e) {
-            logger.warning(e.getMessage());
+            throw new IllegalArgumentException("File descriptor set parse fail: " + e.getMessage());
         }
 
         // Set up the dynamic client and make the call.
@@ -114,7 +132,7 @@ public class GrpcCall {
         } catch (IOException e) {
             logger.warning(e.getMessage());
         }
-        Helper.validatePath(Optional.ofNullable(filePath));
+        FileHelper.validatePath(Optional.ofNullable(filePath));
 
         List<Object> output = new ArrayList<>();
         StreamObserver<DynamicMessage> streamObserver = ComponentObserver.of(Writer.create(output, registry));

@@ -3,14 +3,10 @@ package com.github.thinkerou.demo.helloworld;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.nio.charset.Charset;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.github.thinkerou.karate.utils.Helper;
+import com.github.thinkerou.karate.utils.FileHelper;
 import com.google.protobuf.util.JsonFormat;
 
 /**
@@ -31,7 +27,7 @@ public class HelloWorldServerMain {
         int port = 50051;
 
         String file = System.getProperty("user.dir") + "/src/test/java/demo/helloworld/route-guide.json";
-        String payloads = Helper.readFile(file);
+        String payloads = FileHelper.readFile(file);
 
         server = ServerBuilder.forPort(port)
                 .addService(new HelloWorldServerImpl(parseFeatures(payloads)))

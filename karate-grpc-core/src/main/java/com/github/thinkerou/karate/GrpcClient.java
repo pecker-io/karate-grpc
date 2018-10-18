@@ -2,6 +2,7 @@ package com.github.thinkerou.karate;
 
 import com.github.thinkerou.karate.service.GrpcCall;
 import com.github.thinkerou.karate.service.GrpcList;
+import com.github.thinkerou.karate.utils.RedisHelper;
 
 /**
  * GrpcClient
@@ -10,28 +11,51 @@ import com.github.thinkerou.karate.service.GrpcList;
  */
 public class GrpcClient {
 
-    private static GrpcCall callIns;
-    private static GrpcList listIns;
+    private GrpcCall callIns;
+    private GrpcList listIns;
+    private RedisHelper redisHelper;
 
     public static GrpcClient create() {
-        listIns = GrpcList.create();
         return new GrpcClient();
     }
 
     public static GrpcClient create(String host, int port) {
-        callIns = GrpcCall.create(host, port);
-        return new GrpcClient();
+        return new GrpcClient(host, port);
+    }
+
+    GrpcClient(String host, int port) {
+        this.callIns = GrpcCall.create(host, port);
+    }
+
+    GrpcClient() {
+        this.listIns = GrpcList.create();
+    }
+
+    public GrpcClient redis(String host, int port) {
+        if (redisHelper == null) {
+            redisHelper = RedisHelper.create(host, port);
+        }
+        return this;
     }
 
     public String call(String name, String payload) {
+        if (redisHelper != null) {
+            return callIns.invokeByRedis(name, payload, redisHelper);
+        }
         return callIns.invoke(name, payload);
     }
 
     public String list(String serviceFilter, String methodFilter, Boolean withMessage) {
+        if (redisHelper != null) {
+            return listIns.invokeByRedis(serviceFilter, methodFilter, withMessage, redisHelper);
+        }
         return listIns.invoke(serviceFilter, methodFilter, withMessage);
     }
 
     public String list(String name, Boolean withMessage) {
+        if (redisHelper != null) {
+            return listIns.invokeByRedis(name, withMessage, redisHelper);
+        }
         return listIns.invoke(name, withMessage);
     }
 

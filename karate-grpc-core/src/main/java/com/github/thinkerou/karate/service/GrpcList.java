@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Logger;
 
 import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.domain.ProtoName;
 import com.github.thinkerou.karate.protobuf.ProtoFullName;
 import com.github.thinkerou.karate.protobuf.ServiceResolver;
-import com.github.thinkerou.karate.utils.Helper;
+import com.github.thinkerou.karate.utils.FileHelper;
+import com.github.thinkerou.karate.utils.RedisHelper;
 import com.google.gson.Gson;
 import com.google.protobuf.DescriptorProtos;
 import com.google.protobuf.Descriptors;
@@ -29,8 +29,6 @@ import com.google.protobuf.Descriptors;
  */
 public class GrpcList {
 
-    private static final Logger logger = Logger.getLogger(GrpcList.class.getName());
-
     public static GrpcList create() {
         return new GrpcList();
     }
@@ -42,20 +40,23 @@ public class GrpcList {
      * Support format: packageName.serviceName/methodName
      */
     public String invoke(String name, Boolean withMessage) {
-        return new Gson().toJson(execute(name, withMessage));
+        return new Gson().toJson(execute(name, withMessage, null));
     }
 
-    public String invoke(String serviceFilter, String methodFilter, Boolean withMessage) {
-        return new Gson().toJson(execute(serviceFilter, methodFilter, withMessage, false));
+    public String invoke(String service, String method, Boolean withMessage) {
+        return new Gson().toJson(execute(service, method, withMessage, false, null));
     }
 
-    public List<Map<String, Object>> invokeForRedis() {
-        return execute("", "", true, true);
+    public String invokeByRedis(String name, Boolean withMessage, RedisHelper redisHelper) {
+        return new Gson().toJson(execute(name, withMessage, redisHelper));
     }
 
-    private List<Map<String, Object>> execute(String name, Boolean withMessage) {
+    public String invokeByRedis(String service, String method, Boolean withMessage, RedisHelper redisHelper) {
+        return new Gson().toJson(execute(service, method, withMessage, false, redisHelper));
+    }
+    private List<Map<String, Object>> execute(String name, Boolean withMessage, RedisHelper redisHelper) {
         ProtoName protoName = ProtoFullName.parse(name);
-        return execute(protoName.getServiceName(), protoName.getMethodName(), withMessage, false);
+        return execute(protoName.getServiceName(), protoName.getMethodName(), withMessage, false, redisHelper);
     }
 
     /**
@@ -67,17 +68,28 @@ public class GrpcList {
             String serviceFilter,
             String methodFilter,
             Boolean withMessage,
-            Boolean saveOutput) {
-        String path = DescriptorFile.PROTO.getText();
-        Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
-        Helper.validatePath(Optional.ofNullable(descriptorPath));
+            Boolean saveOutput,
+            RedisHelper redisHelper) {
+        byte[] data;
+        if (redisHelper != null) {
+            data = redisHelper.getDescriptorSetsFromRedis();
+        } else {
+            String path = DescriptorFile.PROTO.getText();
+            Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
+            FileHelper.validatePath(Optional.ofNullable(descriptorPath));
+            try {
+                data = Files.readAllBytes(descriptorPath);
+            } catch (IOException e) {
+                throw new IllegalArgumentException("Read descriptor fail: " + descriptorPath.toString());
+            }
+        }
 
         // Fetch the appropriate file descriptors for the service.
-        DescriptorProtos.FileDescriptorSet fileDescriptorSet = null;
+        DescriptorProtos.FileDescriptorSet fileDescriptorSet;
         try {
-            fileDescriptorSet = DescriptorProtos.FileDescriptorSet.parseFrom(Files.readAllBytes(descriptorPath));
+            fileDescriptorSet = DescriptorProtos.FileDescriptorSet.parseFrom(data);
         } catch (IOException e) {
-            logger.warning(e.getMessage());
+            throw new IllegalArgumentException("Descriptor file parse fail: " + e.getMessage());
         }
 
         ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(fileDescriptorSet);

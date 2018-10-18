@@ -3,7 +3,7 @@ package com.github.thinkerou.demo.integration;
 import java.util.logging.Logger;
 
 import com.github.thinkerou.karate.service.GrpcCall;
-import com.github.thinkerou.karate.utils.Helper;
+import com.github.thinkerou.karate.utils.FileHelper;
 
 /**
  * GrpcCallDemo
@@ -18,7 +18,7 @@ public class GrpcCallDemo {
         GrpcCall client = GrpcCall.create("localhost", 50051);
 
         String file = System.getProperty("user.dir") + "/src/test/java/demo/helloworld/helloworld.json";
-        String payloads = Helper.readFile(file);
+        String payloads = FileHelper.readFile(file);
         logger.info(payloads);
 
         String result = client.invoke("helloworld.Greeter/SayHello", payloads);
