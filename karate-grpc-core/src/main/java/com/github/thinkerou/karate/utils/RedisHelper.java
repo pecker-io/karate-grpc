@@ -27,7 +27,7 @@ public class RedisHelper {
         jedis = new Jedis(host, port, REDIS_TIMEOUT);
     }
 
-    public Boolean putDescriptorSetsToRedis(Path descriptorPath) {
+    public Boolean putDescriptorSets(Path descriptorPath) {
         byte[] data;
         try {
             data = Files.readAllBytes(descriptorPath);
@@ -44,8 +44,11 @@ public class RedisHelper {
         return true;
     }
 
-    public byte[] getDescriptorSetsFromRedis() {
+    public byte[] getDescriptorSets() {
         return jedis.hget(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
     }
 
+    public Long deleteDescriptorSets() {
+        return jedis.hdel(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
+    }
 }

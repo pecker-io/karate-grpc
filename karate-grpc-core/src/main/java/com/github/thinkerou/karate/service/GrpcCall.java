@@ -68,7 +68,7 @@ public class GrpcCall {
         ProtoName protoName = ProtoFullName.parse(name);
         byte[] data;
         if (redisHelper != null) {
-            data = redisHelper.getDescriptorSetsFromRedis();
+            data = redisHelper.getDescriptorSets();
         } else {
             String path = DescriptorFile.PROTO.getText();
             Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
