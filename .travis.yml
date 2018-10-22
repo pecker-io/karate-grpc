@@ -2,6 +2,8 @@ language: java
 jdk:
   - oraclejdk8
 sudo: false
+services:
+  - redis-server
 addons:
   apt:
     packages:
