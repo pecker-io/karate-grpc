@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>karate-grpc-parent</artifactId>
+        <groupId>com.github.thinkerou</groupId>
+        <version>0.6.1</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>karate-grpc-helper</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.thinkerou</groupId>
+            <artifactId>karate-grpc-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- proto dependency package -->
+        <dependency>
+            <groupId>com.github.thinkerou</groupId>
+            <artifactId>karate-grpc-proto</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.5.0.Final</version>
+            </extension>
+        </extensions>
+        <plugins>
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.5.1</version>
+                <configuration>
+                    <protocArtifact>com.google.protobuf:protoc:${protoc.version}:exe:${os.detected.classifier}</protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
+                    <writeDescriptorSet>true</writeDescriptorSet>
+                    <descriptorSetFileName>karate-grpc.protobin</descriptorSetFileName>
+                    <descriptorSetOutputDirectory>${project.basedir}/helper/protobuf/descriptor-sets</descriptorSetOutputDirectory>
+                    <protoSourceRoot>${project.basedir}/helper/dependencies</protoSourceRoot>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <!-- IMPORTANT: indicate your proto package -->
+                                <artifactItem>
+                                    <groupId>com.github.thinkerou</groupId>
+                                    <artifactId>karate-grpc-proto</artifactId>
+                                    <version>${project.version}</version>
+                                </artifactItem>
+                            </artifactItems>
+                            <outputDirectory>${project.basedir}/helper/dependencies</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

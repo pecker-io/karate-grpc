@@ -54,6 +54,7 @@
         <module>karate-grpc-demo</module>
         <module>karate-grpc-proto</module>
         <module>karate-grpc-web</module>
+        <module>karate-grpc-helper</module>
     </modules>
 
     <dependencyManagement>

@@ -10,4 +10,9 @@ addons:
       - oracle-java8-installer
 install: true
 script:
-  - mvn clean compile package install -Dmaven.javadoc.skip=true -B -V
+  - rm -rf karate-grpc-helper/helper
+  - mvn clean compile package install -Dmaven.javadoc.skip=true -Dmaven.test.skip=true -B -V
+  - cd karate-grpc-helper
+  - mvn exec:java -Dexec.mainClass=com.github.thinkerou.karate.helper.Main
+  - cd ..
+  - mvn test
