@@ -56,7 +56,7 @@ You need to add the following `<dependencies>`:
 <dependency>
     <groupId>com.github.thinkerou</groupId>
     <artifactId>karate-grpc-core</artifactId>
-    <version>0.6.1</version>
+    <version>1.0.0</version>
 </dependency>
 ```
 
@@ -67,7 +67,7 @@ You need to add the following `<dependencies>`:
 Alternatively for Gradle you need to add the following entry:
 
 ```gradle
-testCompile 'com.github.thinkerou:karate-grpc-core:0.6.1'
+testCompile 'com.github.thinkerou:karate-grpc-core:1.0.0'
 ```
 
 ## What to need for testing grpc server
