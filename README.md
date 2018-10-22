@@ -70,6 +70,8 @@ Alternatively for Gradle you need to add the following entry:
 testCompile 'com.github.thinkerou:karate-grpc-core:1.0.0'
 ```
 
+And simulates `karate-grpc-helper` and `karate-grpc-demo` build your redis helper project and test project.
+
 ## What to need for testing grpc server
 
 Testing one grpc server, we have the follow info:
