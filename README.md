@@ -56,7 +56,7 @@ You need to add the following `<dependencies>`:
 <dependency>
     <groupId>com.github.thinkerou</groupId>
     <artifactId>karate-grpc-core</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 
@@ -67,7 +67,7 @@ You need to add the following `<dependencies>`:
 Alternatively for Gradle you need to add the following entry:
 
 ```gradle
-testCompile 'com.github.thinkerou:karate-grpc-core:1.0.0'
+testCompile 'com.github.thinkerou:karate-grpc-core:1.0.1'
 ```
 
 And simulates `karate-grpc-helper` and `karate-grpc-demo` build your redis helper project and test project.
