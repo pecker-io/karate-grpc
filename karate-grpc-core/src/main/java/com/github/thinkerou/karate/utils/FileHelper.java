@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author thinkerou
  */
-public class FileHelper {
+public final class FileHelper {
 
     private static final Logger logger = Logger.getLogger(FileHelper.class.getName());
 

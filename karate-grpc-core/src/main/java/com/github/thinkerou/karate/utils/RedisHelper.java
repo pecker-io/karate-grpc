@@ -13,7 +13,7 @@ import redis.clients.jedis.Jedis;
  *
  * @author thinkerou
  */
-public class RedisHelper {
+public final class RedisHelper {
 
     private static final int REDIS_TIMEOUT = 3000;
 

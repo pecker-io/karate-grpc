@@ -1,9 +1,12 @@
 package com.github.thinkerou.karate.helper;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.utils.RedisHelper;
 
 /**
@@ -13,12 +16,16 @@ import com.github.thinkerou.karate.utils.RedisHelper;
  */
 public class Main {
 
-    private static String DESCRIPTOR_FILE = "/helper/protobuf/descriptor-sets/karate-grpc.protobin";
-
     public static void main(String[] args) {
-        Path descriptorPath = Paths.get(System.getProperty("user.dir") + DESCRIPTOR_FILE);
+        String path = System.getProperty("user.home") + DescriptorFile.PROTO_PATH.getText();
+        new File(path).mkdirs();
+        Path descriptorPath = Paths.get(path + DescriptorFile.PROTO_FILE.getText());
         if (!Files.exists(descriptorPath)) {
-            throw new IllegalArgumentException("Path not exists: " + descriptorPath.toString());
+            try {
+                new File(descriptorPath.toString()).createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         String host = "localhost";

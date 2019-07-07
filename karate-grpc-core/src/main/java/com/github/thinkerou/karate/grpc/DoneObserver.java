@@ -7,11 +7,12 @@ import io.grpc.stub.StreamObserver;
 
 /**
  * DoneObserver
+ *
  * A StreamObserver holding a future which completes when the rpc terminates.
  *
  * @author thinkerou
  */
-public class DoneObserver<T> implements StreamObserver<T> {
+public final class DoneObserver<T> implements StreamObserver<T> {
 
     private final SettableFuture<Void> doneFuture;
 

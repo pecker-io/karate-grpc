@@ -25,7 +25,7 @@ import io.grpc.stub.StreamObserver;
  *
  * @author thinkerou
  */
-public class DynamicClient {
+public final class DynamicClient {
 
     private static final Logger logger = Logger.getLogger(DynamicClient.class.getName());
 

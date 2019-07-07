@@ -17,7 +17,7 @@ import io.grpc.stub.StreamObserver;
  *
  * @author thinkerou
  */
-public class Writer<T extends Message> implements StreamObserver<T> {
+public final class Writer<T extends Message> implements StreamObserver<T> {
 
     private static final Logger logger = Logger.getLogger(Writer.class.getName());
 

@@ -19,7 +19,7 @@ import com.github.thinkerou.karate.domain.ProtoName;
  *
  * @author thinkerou
  */
-public class ServiceResolver {
+public final class ServiceResolver {
 
     private static final Logger logger = Logger.getLogger(ServiceResolver.class.getName());
 

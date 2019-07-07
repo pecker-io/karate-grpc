@@ -9,7 +9,7 @@ import com.github.thinkerou.karate.utils.RedisHelper;
  *
  * @author thinkerou
  */
-public class GrpcClient {
+public final class GrpcClient {
 
     private GrpcCall callIns;
     private GrpcList listIns;

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>karate-grpc-parent</artifactId>
         <groupId>com.github.thinkerou</groupId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -45,7 +45,7 @@
                     <pluginArtifact>io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}</pluginArtifact>
                     <writeDescriptorSet>true</writeDescriptorSet>
                     <descriptorSetFileName>karate-grpc.protobin</descriptorSetFileName>
-                    <descriptorSetOutputDirectory>${project.basedir}/helper/protobuf/descriptor-sets</descriptorSetOutputDirectory>
+                    <descriptorSetOutputDirectory>${user.home}/.karate-grpc/protobuf-descriptor-sets</descriptorSetOutputDirectory>
                     <protoSourceRoot>${project.basedir}/helper/dependencies</protoSourceRoot>
                 </configuration>
                 <executions>

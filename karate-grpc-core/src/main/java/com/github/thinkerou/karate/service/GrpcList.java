@@ -27,7 +27,7 @@ import com.google.protobuf.Descriptors;
  *
  * @author thinkerou
  */
-public class GrpcList {
+public final class GrpcList {
 
     public static GrpcList create() {
         return new GrpcList();
@@ -74,8 +74,8 @@ public class GrpcList {
         if (redisHelper != null) {
             data = redisHelper.getDescriptorSets();
         } else {
-            String path = DescriptorFile.PROTO.getText();
-            Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
+            String path = System.getProperty("user.home") + DescriptorFile.PROTO_PATH.getText();
+            Path descriptorPath = Paths.get(path + DescriptorFile.PROTO_FILE.getText());
             FileHelper.validatePath(Optional.ofNullable(descriptorPath));
             try {
                 data = Files.readAllBytes(descriptorPath);

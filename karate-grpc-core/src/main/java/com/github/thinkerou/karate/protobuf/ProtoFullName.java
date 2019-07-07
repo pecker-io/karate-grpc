@@ -9,7 +9,7 @@ import io.grpc.MethodDescriptor;
  *
  * @author thinkerou
  */
-public class ProtoFullName {
+public final class ProtoFullName {
 
     /**
      * format: <package>.<service>/<method>

@@ -10,10 +10,9 @@ public enum DescriptorFile {
     /**
      * The value is correlated with descriptorSetFileName/descriptorSetOutputDirectory in pom file.
      * Please see https://www.xolstice.org/protobuf-maven-plugin/compile-mojo.html about more details.
-     *
-     * Other better way?
      */
-    PROTO("/target/generated-resources/protobuf/descriptor-sets/karate-grpc.protobin"),
+    PROTO_PATH("/.karate-grpc/protobuf-descriptor-sets/"),
+    PROTO_FILE("karate-grpc.protobin"),
     ;
 
     private final String text;

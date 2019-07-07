@@ -18,7 +18,7 @@ import com.google.protobuf.util.JsonFormat;
  *
  * @author thinkerou
  */
-public class Reader {
+public final class Reader {
 
     private static final Logger logger = Logger.getLogger(Reader.class.getName());
 

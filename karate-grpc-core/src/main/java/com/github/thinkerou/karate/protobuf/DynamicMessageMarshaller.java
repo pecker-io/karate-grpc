@@ -14,7 +14,7 @@ import io.grpc.MethodDescriptor;
  *
  * @author thinkerou
  */
-public class DynamicMessageMarshaller implements MethodDescriptor.Marshaller<DynamicMessage> {
+public final class DynamicMessageMarshaller implements MethodDescriptor.Marshaller<DynamicMessage> {
 
     private final Descriptors.Descriptor messageDescriptor;
 

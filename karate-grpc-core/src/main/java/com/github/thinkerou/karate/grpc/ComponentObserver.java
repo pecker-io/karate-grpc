@@ -13,7 +13,7 @@ import io.grpc.stub.StreamObserver;
  *
  * @author thinkerou
  */
-public class ComponentObserver<T> implements StreamObserver<T> {
+public final class ComponentObserver<T> implements StreamObserver<T> {
 
     private static final Logger logger = Logger.getLogger(ComponentObserver.class.getName());
 

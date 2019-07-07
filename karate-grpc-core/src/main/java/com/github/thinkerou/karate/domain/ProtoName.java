@@ -5,7 +5,7 @@ package com.github.thinkerou.karate.domain;
  *
  * @author thinkerou
  */
-public class ProtoName {
+public final class ProtoName {
 
     private String packageName;
     private String serviceName;

@@ -8,7 +8,7 @@ import io.grpc.ManagedChannelBuilder;
  *
  * @author thinkerou
  */
-public class ChannelFactory {
+public final class ChannelFactory {
 
     public static ManagedChannel create(String host, int port) {
         return ManagedChannelBuilder.forAddress(host, port).usePlaintext().build();

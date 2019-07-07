@@ -38,7 +38,7 @@ import io.grpc.stub.StreamObserver;
  *
  * @author thinkerou
  */
-public class GrpcCall {
+public final class GrpcCall {
 
     private static final Logger logger = Logger.getLogger(GrpcCall.class.getName());
 
@@ -70,8 +70,8 @@ public class GrpcCall {
         if (redisHelper != null) {
             data = redisHelper.getDescriptorSets();
         } else {
-            String path = DescriptorFile.PROTO.getText();
-            Path descriptorPath = Paths.get(System.getProperty("user.dir") + path);
+            String path = System.getProperty("user.home") + DescriptorFile.PROTO_PATH.getText();
+            Path descriptorPath = Paths.get(path + DescriptorFile.PROTO_FILE.getText());
             FileHelper.validatePath(Optional.ofNullable(descriptorPath));
             try {
                 data = Files.readAllBytes(descriptorPath);
