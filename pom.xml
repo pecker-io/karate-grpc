@@ -53,7 +53,6 @@
         <module>karate-grpc-core</module>
         <module>karate-grpc-demo</module>
         <module>karate-grpc-proto</module>
-        <module>karate-grpc-web</module>
         <module>karate-grpc-helper</module>
     </modules>
 
@@ -72,11 +71,6 @@
             <dependency>
                 <groupId>com.thinkerou</groupId>
                 <artifactId>karate-grpc-proto</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.thinkerou</groupId>
-                <artifactId>karate-grpc-web</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
