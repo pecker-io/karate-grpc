@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.github.thinkerou</groupId>
             <artifactId>karate-grpc-proto</artifactId>
-            <version>${project.version}</version>
+            <version>1.0.3</version>
         </dependency>
 
         <dependency>
