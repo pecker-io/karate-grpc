@@ -337,7 +337,6 @@ public class Client {
 
 - [ ] Support file upload
 
-- [ ] Build karate-grpc-web
 
 ## Thanks 
 
