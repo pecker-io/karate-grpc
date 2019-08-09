@@ -333,10 +333,6 @@ public class Client {
 
 ```
 
-## TODO Features
-
-- [ ] Support file upload
-
 
 ## Thanks 
 
