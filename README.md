@@ -282,6 +282,7 @@ Only use the line `* def client = client.redis('localhost', 6379)` it's OK!
 **TODO:**
 
 - Save `ProtoFullName|InputType|InputMessage|OutputType|OutputMessage|ProtoFileName|RPCAddress` not file content.
+- Support java reflection mode.
 
 ## How to write grpc client
 
