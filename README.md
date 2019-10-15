@@ -78,7 +78,7 @@ Testing one grpc server, we have the follow info:
 
 - grpc server `ip` and `port`.
 
-- protobuf file corresponding grpc server, but usually it's protobuf `jar package` not one single file or more files.
+- (optional) protobuf file corresponding grpc server, but usually it's protobuf `jar package` not one single file or more files.
 
 So, we could test it based on the two point.
 
