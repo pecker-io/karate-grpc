@@ -32,7 +32,7 @@ public final class Writer<T extends Message> implements StreamObserver<T> {
     }
 
     Writer(JsonFormat.Printer jsonPrinter, List<Object> output) {
-        this.jsonPrinter = jsonPrinter;
+        this.jsonPrinter = jsonPrinter.preservingProtoFieldNames().includingDefaultValueFields();
         this.output = output;
     }
 
