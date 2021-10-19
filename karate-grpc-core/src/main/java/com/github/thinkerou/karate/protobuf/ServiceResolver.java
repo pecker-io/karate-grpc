@@ -155,8 +155,10 @@ public final class ServiceResolver {
 
         // Finally, construct the actual descriptor.
         Descriptors.FileDescriptor[] empty = new Descriptors.FileDescriptor[0];
-
-        return Descriptors.FileDescriptor.buildFrom(descriptorProto, dependencies.build().toArray(empty));
+        Descriptors.FileDescriptor descriptor = Descriptors.FileDescriptor.buildFrom(descriptorProto, dependencies.build().toArray(empty));
+        descriptorCache.put(descriptorName, descriptor);
+        
+        return descriptor;
     }
 
 }
