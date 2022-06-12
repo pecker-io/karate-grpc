@@ -7,7 +7,7 @@
     <groupId>com.github.thinkerou</groupId>
     <artifactId>karate-grpc-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
 
     <name>${project.artifactId}</name>
     <description>gRPC Testing Made Simple by Karate.</description>
@@ -115,7 +115,7 @@
                                     <goal>jar</goal>
                                 </goals>
                                 <configuration>
-                                    <additionalparam>${javadoc.opts}</additionalparam>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
                                 </configuration>
                             </execution>
                         </executions>
@@ -145,6 +145,7 @@
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                            <stagingProgressTimeoutMinutes>5</stagingProgressTimeoutMinutes>
                         </configuration>
                     </plugin>
 
