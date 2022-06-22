@@ -71,7 +71,7 @@
             <dependency>
                 <groupId>com.thinkerou</groupId>
                 <artifactId>karate-grpc-proto</artifactId>
-                <version>1.0.6</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
