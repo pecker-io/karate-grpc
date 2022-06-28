@@ -202,14 +202,14 @@ Feature: grpc helloworld example by grpc dynamic client
     * def client = Client.create('localhost', 50051)
 
   Scenario: do it
-    * def payload = read('helloworld.json')
+    * string payload = read('helloworld.json')
     * def response = client.call('helloworld.Greeter/SayHello', payload)
     * def response = JSON.parse(response)
     * print response
     * match response[0].message == 'Hello thinkerou'
     * def message = response[0].message
 
-    * def payload = read('again-helloworld.json')
+    * string payload = read('again-helloworld.json')
     * def response = client.call('helloworld.Greeter/AgainSayHello', payload)
     * def response = JSON.parse(response)
     * match response[0].details == 'Details Hello thinkerou in BeiJing'
@@ -264,14 +264,14 @@ Feature: grpc helloworld example by grpc dynamic client
     * def client = client.redis('localhost', 6379)
 
   Scenario: do it
-    * def payload = read('helloworld.json')
+    * string payload = read('helloworld.json')
     * def response = client.call('helloworld.Greeter/SayHello', payload)
     * def response = JSON.parse(response)
     * print response
     * match response[0].message == 'Hello thinkerou'
     * def message = response[0].message
 
-    * def payload = read('again-helloworld.json')
+    * string payload = read('again-helloworld.json')
     * def response = client.call('helloworld.Greeter/AgainSayHello', payload)
     * def response = JSON.parse(response)
     * match response[0].details == 'Details Hello thinkerou in BeiJing'

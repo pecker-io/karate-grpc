@@ -41,7 +41,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.surefire.version>2.10</maven.surefire.version>
-        <karate.version>0.9.3</karate.version>
+        <karate.version>1.2.0</karate.version>
         <cucumber.reporting.version>3.20.0</cucumber.reporting.version>
         <grpc.version>1.21.0</grpc.version>
         <protobuf.version>3.7.1</protobuf.version>
