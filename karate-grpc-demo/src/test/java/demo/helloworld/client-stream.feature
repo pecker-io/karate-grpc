@@ -6,7 +6,7 @@ Feature: grpc helloworld example by grpc dynamic client
     * def client = client.redis('localhost', 6379)
 
   Scenario: do it
-    * def payload = read('clientstream.json')
+    * string payload = read('clientstream.json')
     * def response = client.call('helloworld.Greeter/SayHelloClientStreaming', payload)
     * def response = JSON.parse(response)
     * match response[0].message == 'Hello thinkerou and thinkerou2 and thinkerou3'

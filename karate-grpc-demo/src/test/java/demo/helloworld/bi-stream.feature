@@ -6,7 +6,7 @@ Feature: grpc helloworld example by grpc dynamic client
     * def client = client.redis('localhost', 6379)
 
   Scenario: do it
-    * def payload = read('bistream.json')
+    * string payload = read('bistream.json')
     * def response = client.call('helloworld.Greeter/SayHelloBiStreaming', payload)
     * def response = JSON.parse(response)
     * match response[*].message == ['Hello thinkerou', 'Hello thinkerou2', 'Hello thinkerou3']

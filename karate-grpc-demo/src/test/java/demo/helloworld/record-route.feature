@@ -6,7 +6,7 @@ Feature: grpc helloworld example by grpc dynamic client
     * def client = client.redis('localhost', 6379)
 
   Scenario: do it
-    * def payload = read('record-route.json')
+    * string payload = read('record-route.json')
     * def response = client.call('helloworld.Greeter/RecordRoute', payload)
     * def response = JSON.parse(response)
     * match response == '#[1]'

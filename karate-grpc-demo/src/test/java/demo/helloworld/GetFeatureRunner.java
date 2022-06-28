@@ -1,6 +1,5 @@
 package demo.helloworld;
 
-import cucumber.api.CucumberOptions;
 import demo.TestBase;
 
 /**
@@ -8,6 +7,9 @@ import demo.TestBase;
  *
  * @author thinkerou
  */
-@CucumberOptions(features = "classpath:demo/helloworld/get-feature.feature")
 public class GetFeatureRunner extends TestBase {
+    @Override
+    protected String getFeatures() {
+        return "classpath:demo/helloworld/get-feature.feature";
+    }
 }
