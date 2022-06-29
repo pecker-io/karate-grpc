@@ -1,13 +1,15 @@
 package demo.helloworld;
 
-import cucumber.api.CucumberOptions;
-import demo.TestBase;
+import demo.AbstractTestBase;
 
 /**
  * HelloworldServerStreamRunner
  *
  * @author thinkerou
  */
-@CucumberOptions(features = "classpath:demo/helloworld/server-stream.feature")
-public class HelloworldServerStreamRunner extends TestBase {
+public class HelloworldServerStreamRunner extends AbstractTestBase {
+    @Override
+    protected String getFeatures() {
+         return "classpath:demo/helloworld/server-stream.feature";
+    }
 }

@@ -1,14 +1,15 @@
 package demo;
 
-import cucumber.api.CucumberOptions;
-
 /**
  * DemoTest
  *
  * @author thinkerou
  */
-@CucumberOptions(tags = {"~@ignore"})
-public class DemoTest extends TestBase {
+public class DemoTest extends AbstractTestBase {
+    @Override
+    protected String getFeatures() {
+        return "classpath:";
+    }
 
     /**
      * This class will automatically pick up all *.feature files in src/test/java/demo

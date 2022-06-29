@@ -1,13 +1,10 @@
 package demo.helloworld;
 
-import cucumber.api.CucumberOptions;
-import demo.TestBase;
+import demo.AbstractTestBase;
 
-/**
- * RouteChatRunner
- *
- * @author thinkerou
- */
-@CucumberOptions(features = "classpath:demo/helloworld/route-chat.feature")
-public class RouteChatRunner extends TestBase {
+public class RouteChatRunner extends AbstractTestBase {
+    @Override
+    protected String getFeatures() {
+        return "classpath:demo/helloworld/route-chat.feature";
+    }
 }

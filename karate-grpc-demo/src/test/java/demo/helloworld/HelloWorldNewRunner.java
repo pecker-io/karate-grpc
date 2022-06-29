@@ -1,13 +1,15 @@
 package demo.helloworld;
 
-import cucumber.api.CucumberOptions;
-import demo.TestBase;
+import demo.AbstractTestBase;
 
 /**
  * HelloWorldNewRunner
  *
  * @author thinkerou
  */
-@CucumberOptions(features = "classpath:demo/helloworld/helloworld-new.feature")
-public class HelloWorldNewRunner extends TestBase {
+public class HelloWorldNewRunner extends AbstractTestBase {
+    @Override
+    protected String getFeatures() {
+        return "classpath:demo/helloworld/helloworld-new.feature";
+    }
 }

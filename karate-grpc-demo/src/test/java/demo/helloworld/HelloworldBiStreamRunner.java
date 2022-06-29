@@ -1,13 +1,15 @@
 package demo.helloworld;
 
-import cucumber.api.CucumberOptions;
-import demo.TestBase;
+import demo.AbstractTestBase;
 
 /**
  * HelloworldBiStreamRunner
  *
  * @author thinkerou
  */
-@CucumberOptions(features = "classpath:demo/helloworld/bi-stream.feature")
-public class HelloworldBiStreamRunner extends TestBase {
+public class HelloworldBiStreamRunner extends AbstractTestBase {
+    @Override
+    protected String getFeatures() {
+        return "classpath:demo/helloworld/bi-stream.feature";
+    }
 }
