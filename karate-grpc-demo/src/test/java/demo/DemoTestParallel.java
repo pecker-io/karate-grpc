@@ -1,6 +1,6 @@
 package demo;
 
-public class DemoTestParallel extends TestBase {
+public class DemoTestParallel extends AbstractTestBase {
 
     @Override
     protected String getFeatures() {

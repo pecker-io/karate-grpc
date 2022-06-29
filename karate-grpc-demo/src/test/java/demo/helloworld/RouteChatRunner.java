@@ -1,8 +1,8 @@
 package demo.helloworld;
 
-import demo.TestBase;
+import demo.AbstractTestBase;
 
-public class RouteChatRunner extends TestBase {
+public class RouteChatRunner extends AbstractTestBase {
     @Override
     protected String getFeatures() {
         return "classpath:demo/helloworld/route-chat.feature";
