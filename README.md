@@ -14,7 +14,7 @@ karate-grpc makes it easy to:
 [![karate-grpc-hello-world](assets/karate-grpc-hello-world.png)](assets/karate-grpc-hello-world.png)
 
 ## Testing hello world
-
+Requires maven to be installed
 ```
 $ # compile and test the whole project
 $ mvn clean install
