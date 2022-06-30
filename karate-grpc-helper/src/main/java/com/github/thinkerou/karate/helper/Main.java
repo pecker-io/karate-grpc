@@ -17,9 +17,18 @@ import com.github.thinkerou.karate.utils.RedisHelper;
 public class Main {
 
     public static void main(String[] args) {
-        String path = System.getProperty("user.home") + DescriptorFile.PROTO_PATH.getText();
+        putTestDescriptorSetsToRedis();
+    }
+
+    public static void putTestDescriptorSetsToRedis() {
+        putDescriptorSetsToRedis(DescriptorFile.PROTO_PATH.getText(), DescriptorFile.PROTO_FILE.getText());
+    }
+
+    public static void putDescriptorSetsToRedis(String protoPath, String protoFile) {
+        String path = System.getProperty("user.home") + protoPath;
         new File(path).mkdirs();
-        Path descriptorPath = Paths.get(path + DescriptorFile.PROTO_FILE.getText());
+        Path descriptorPath = Paths.get(path + protoFile);
+
         if (!Files.exists(descriptorPath)) {
             try {
                 new File(descriptorPath.toString()).createNewFile();
@@ -28,8 +37,7 @@ public class Main {
             }
         }
 
-        String host = "localhost";
-        RedisHelper redisHelper = RedisHelper.create(host, 6379);
+        RedisHelper redisHelper = new RedisHelper();
         if (redisHelper.getDescriptorSets() != null) {
             redisHelper.deleteDescriptorSets();
         }

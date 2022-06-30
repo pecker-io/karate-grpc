@@ -3,7 +3,7 @@ Feature: grpc helloworld example by grpc dynamic client
   Background:
     * def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
     * def client = Client.create('localhost', 50051)
-    * def client = client.redis('localhost', 6379)
+    * def client = client.redis()
 
   Scenario: do it
     * string payload = read('get-feature.json')

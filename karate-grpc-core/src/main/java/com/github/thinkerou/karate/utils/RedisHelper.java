@@ -1,12 +1,14 @@
 package com.github.thinkerou.karate.utils;
 
+import com.github.fppt.jedismock.RedisServer;
+import com.github.thinkerou.karate.constants.RedisParams;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import com.github.thinkerou.karate.constants.RedisParams;
-
-import redis.clients.jedis.Jedis;
 
 /**
  * RedisHelper
@@ -15,16 +17,13 @@ import redis.clients.jedis.Jedis;
  */
 public final class RedisHelper {
 
-    private static final int REDIS_TIMEOUT = 3000;
+    private static final int REDIS_TIMEOUT = 10000;
 
-    private static Jedis jedis;
+    private static volatile JedisPool jedisPool;
 
-    public static RedisHelper create(String host, int port) {
-        return new RedisHelper(host, port);
-    }
-
-    RedisHelper(String host, int port) {
-        jedis = new Jedis(host, port, REDIS_TIMEOUT);
+    public static Jedis getJedis() {
+        init();
+        return jedisPool.getResource();
     }
 
     public Boolean putDescriptorSets(Path descriptorPath) {
@@ -36,19 +35,44 @@ public final class RedisHelper {
             return false;
         }
 
-        Long status = jedis.hset(RedisParams.KEY.getText(), RedisParams.FIELD.getText(), data);
-        if (status != 1) {
-            return false;
+        try (Jedis jedis = getJedis()){
+            Long status = jedis.hset(RedisParams.KEY.getText(), RedisParams.FIELD.getText(), data);
+            if (status != 1) {
+                return false;
+            }
+            return true;
         }
-
-        return true;
     }
 
     public byte[] getDescriptorSets() {
-        return jedis.hget(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
+        try ( Jedis jedis = getJedis()) {
+            return jedis.hget(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
+        }
     }
 
     public Long deleteDescriptorSets() {
-        return jedis.hdel(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
+        try (Jedis jedis = getJedis()){
+            return jedis.hdel(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
+        }
+    }
+
+    public static synchronized void closeJedisPool() {
+        if (jedisPool != null && jedisPool.isClosed()) {
+            jedisPool.close();
+        }
+    }
+    private static void init() {
+        if (jedisPool != null) {
+            return;
+        }
+        synchronized (RedisHelper.class) {
+            if (jedisPool != null) {
+                return;
+            }
+            RedisServer redisServer = JedisMock.getRedisServer();
+            JedisPoolConfig poolConfig = new JedisPoolConfig();
+            poolConfig.setMaxTotal(128);
+            jedisPool = new JedisPool(poolConfig, redisServer.getHost(), redisServer.getBindPort(), REDIS_TIMEOUT);
+        }
     }
 }

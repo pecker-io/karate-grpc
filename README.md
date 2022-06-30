@@ -12,27 +12,21 @@ karate-grpc can get all the benefits of [karate](https://github.com/intuit/karat
 
 ## Testing hello world
 
-Prefer to use Maven:
-
 ```
 $ # compile the whole project
-$ mvn clean compile package -Dmaven.test.skip=true
-$
-$ # start redis-server, first need to install it
-$ redis-server
-$
-$ # generate protobuf descriptor sets and put to redis
-$ cd karate-grpc-helper && mvn exec:java -Dexec.mainClass=com.github.thinkerou.karate.helper.Main
-$
-$ # test it
+$ mvn clean install
+
+$ # test the whole project
+$ mvn test
+
+$ # test demo
 $ cd karate-grpc-demo
-$ # run all tests
 $ mvn test
 $ # or run single test
 $ mvn test -Dtest=HelloWorldNewRunner
 ```
 
-Because have started hello world server on `AbstractTestBase.java`, we not need to start it alone.
+Because have started hello world server on `TestBase.java`, we not need to start it alone.
 
 Base on karate generates beautiful test report:
 
@@ -253,7 +247,9 @@ Output JSON string also like:
 
 So, use Redis to save descriptor sets which every generate.
 
-Indicates redis address and ask `karate-karate-core` to use redis, for [example](karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature):
+Uses jedis-mock so you don't even need to install Redis.
+
+ [example](karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature):
 
 ```
 Feature: grpc helloworld example by grpc dynamic client
@@ -261,7 +257,7 @@ Feature: grpc helloworld example by grpc dynamic client
   Background:
     * def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
     * def client = Client.create('localhost', 50051)
-    * def client = client.redis('localhost', 6379)
+    * def client = client.redis()
 
   Scenario: do it
     * string payload = read('helloworld.json')
@@ -277,7 +273,7 @@ Feature: grpc helloworld example by grpc dynamic client
     * match response[0].details == 'Details Hello thinkerou in BeiJing'
 ```
 
-Only use the line `* def client = client.redis('localhost', 6379)` it's OK!
+Only use the line `* def client = client.redis()` it's OK!
 
 **TODO:**
 

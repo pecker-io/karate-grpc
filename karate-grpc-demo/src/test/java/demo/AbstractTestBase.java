@@ -1,15 +1,20 @@
 package demo;
 
+import com.github.thinkerou.karate.helper.Main;
+import com.github.thinkerou.karate.utils.JedisMock;
+import com.github.thinkerou.karate.utils.RedisHelper;
 import com.intuit.karate.Results;
 import com.intuit.karate.Runner;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
 import org.apache.commons.io.FileUtils;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import testing.ServerStart;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,7 +28,7 @@ import static org.junit.Assert.assertTrue;
 // important: do not use @RunWith(Karate.class) !
 public abstract class AbstractTestBase {
 
-    protected static final int THREAD_COUNT = 1;
+    protected static final int THREAD_COUNT = 3;
     protected abstract String getFeatures();
     private static ServerStart server;
 
@@ -33,6 +38,7 @@ public abstract class AbstractTestBase {
             server = new ServerStart();
         }
         server.startServer();
+        Main.putTestDescriptorSetsToRedis();
     }
 
     @Test
@@ -53,6 +59,12 @@ public abstract class AbstractTestBase {
         Configuration config = new Configuration(new File("target"), getFeatures());
         ReportBuilder reportBuilder = new ReportBuilder(jsonPaths, config);
         reportBuilder.generateReports();
+    }
+
+    @AfterClass
+    public static void afterClass() throws IOException {
+        JedisMock.getRedisServer().stop();
+        RedisHelper.closeJedisPool();
     }
 
 }

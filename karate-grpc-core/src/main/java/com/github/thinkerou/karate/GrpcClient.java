@@ -31,9 +31,9 @@ public final class GrpcClient {
         this.listIns = GrpcList.create();
     }
 
-    public GrpcClient redis(String host, int port) {
+    public GrpcClient redis() {
         if (redisHelper == null) {
-            redisHelper = RedisHelper.create(host, port);
+            redisHelper = new RedisHelper();
         }
         return this;
     }
