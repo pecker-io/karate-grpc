@@ -238,11 +238,13 @@ Output JSON string also like:
 
 **That's all!!!**
 
-## Why need Redis?
+## Why use Redis?
 
 Using redis is optional, but caching descriptor sets may save compile time, especially when your project has many protobuf jar package dependencies.
 
 Uses jedis-mock so you don't even need to install Redis.
+
+<i>Note: while the redis test implementation is thread-safe, it uses single-threaded execution so test performance may be degraded for high concurrency.</i>  
 
  [example](karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature):
 
