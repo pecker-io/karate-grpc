@@ -26,6 +26,12 @@ public final class RedisHelper {
         return jedisPool.getResource();
     }
 
+    public static synchronized void closeJedisPool() {
+        if (jedisPool != null && jedisPool.isClosed()) {
+            jedisPool.close();
+        }
+    }
+
     public Boolean putDescriptorSets(Path descriptorPath) {
         byte[] data;
         try {
@@ -35,7 +41,7 @@ public final class RedisHelper {
             return false;
         }
 
-        try (Jedis jedis = getJedis()){
+        try (Jedis jedis = getJedis()) {
             Long status = jedis.hset(RedisParams.KEY.getText(), RedisParams.FIELD.getText(), data);
             if (status != 1) {
                 return false;
@@ -45,22 +51,17 @@ public final class RedisHelper {
     }
 
     public byte[] getDescriptorSets() {
-        try ( Jedis jedis = getJedis()) {
+        try (Jedis jedis = getJedis()) {
             return jedis.hget(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
         }
     }
 
     public Long deleteDescriptorSets() {
-        try (Jedis jedis = getJedis()){
+        try (Jedis jedis = getJedis()) {
             return jedis.hdel(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
         }
     }
 
-    public static synchronized void closeJedisPool() {
-        if (jedisPool != null && jedisPool.isClosed()) {
-            jedisPool.close();
-        }
-    }
     private static void init() {
         if (jedisPool != null) {
             return;
