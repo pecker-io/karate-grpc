@@ -26,7 +26,7 @@ $ # or run single test
 $ mvn test -Dtest=HelloWorldNewRunner
 ```
 
-Because have started hello world server on `TestBase.java`, we not need to start it alone.
+Because have started hello world server on `AbstractTestBase.java`, we not need to start it alone.
 
 Base on karate generates beautiful test report:
 
