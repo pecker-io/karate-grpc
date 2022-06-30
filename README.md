@@ -2,9 +2,12 @@
 
 [![Build Status](https://api.travis-ci.org/thinkerou/karate-grpc.svg)](https://travis-ci.org/thinkerou/karate-grpc)
 
-karate-grpc made gRPC testing simple by [karate](https://github.com/intuit/karate), and its dynamic client built based on [polyglot](https://github.com/grpc-ecosystem/polyglot).
+simple gRPC testing with [karate](https://github.com/intuit/karate) and a dynamic client using [polyglot](https://github.com/grpc-ecosystem/polyglot).
 
-karate-grpc can get all the benefits of [karate](https://github.com/intuit/karate#features), it makes it really easy to build protobuf complex request payloads via json, traverse data within the responses and chain data from responses into the next request.
+karate-grpc makes it easy to:
+* build complex protobuf request payloads via json
+* traverse data within the responses 
+* chain data from responses into the next request.
 
 ## Hello World
 
@@ -23,9 +26,9 @@ $ # or run single test
 $ mvn test -Dtest=HelloWorldNewRunner
 ```
 
-Because have started hello world server on `AbstractTestBase.java`, we not need to start it alone.
+When running tests, the hello world grpc server is started/stopped automatically in `AbstractTestBase.java`.
 
-Base on karate generates beautiful test report:
+Karate also generates beautiful test reports:
 
 [![karate-grpc-hello-world-report](assets/karate-grpc-hello-world-report.png)](assets/karate-grpc-hello-world-report.png)
 
