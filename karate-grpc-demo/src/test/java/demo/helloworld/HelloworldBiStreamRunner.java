@@ -1,13 +1,13 @@
 package demo.helloworld;
 
-import demo.TestBase;
+import demo.AbstractTestBase;
 
 /**
  * HelloworldBiStreamRunner
  *
  * @author thinkerou
  */
-public class HelloworldBiStreamRunner extends TestBase {
+public class HelloworldBiStreamRunner extends AbstractTestBase {
     @Override
     protected String getFeatures() {
         return "classpath:demo/helloworld/bi-stream.feature";

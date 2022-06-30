@@ -5,7 +5,7 @@ package demo;
  *
  * @author thinkerou
  */
-public class DemoTest extends TestBase {
+public class DemoTest extends AbstractTestBase {
     @Override
     protected String getFeatures() {
         return "classpath:";

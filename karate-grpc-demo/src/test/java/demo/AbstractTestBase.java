@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
  * @author ericdriggs
  */
 // important: do not use @RunWith(Karate.class) !
-public abstract class TestBase {
+public abstract class AbstractTestBase {
 
     protected static final int THREAD_COUNT = 1;
     protected abstract String getFeatures();

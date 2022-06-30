@@ -1,13 +1,13 @@
 package demo.helloworld;
 
-import demo.TestBase;
+import demo.AbstractTestBase;
 
 /**
  * HelloworldClientStreamRunner
  *
  * @author thinkerou
  */
-public class HelloworldClientStreamRunner extends TestBase {
+public class HelloworldClientStreamRunner extends AbstractTestBase {
     @Override
     protected String getFeatures() {
         return "classpath:demo/helloworld/client-stream.feature";

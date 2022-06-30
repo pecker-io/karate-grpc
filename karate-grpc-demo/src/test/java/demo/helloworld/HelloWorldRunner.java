@@ -1,13 +1,13 @@
 package demo.helloworld;
 
-import demo.TestBase;
+import demo.AbstractTestBase;
 
 /**
  * HelloWorldRunner
  *
  * @author thinkerou
  */
-public class HelloWorldRunner extends TestBase {
+public class HelloWorldRunner extends AbstractTestBase {
     @Override
     protected String getFeatures() {
         return "classpath:demo/helloworld/helloworld.feature";
