@@ -13,11 +13,8 @@ karate-grpc can get all the benefits of [karate](https://github.com/intuit/karat
 ## Testing hello world
 
 ```
-$ # compile the whole project
+$ # compile and test the whole project
 $ mvn clean install
-
-$ # test the whole project
-$ mvn test
 
 $ # test demo
 $ cd karate-grpc-demo
