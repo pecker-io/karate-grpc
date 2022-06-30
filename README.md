@@ -240,9 +240,7 @@ Output JSON string also like:
 
 ## Why need Redis?
 
-> When your project have many protobuf jar package dependency, every compile will spend more time.
-
-So, use Redis to save descriptor sets which every generate.
+Using redis is optional, but caching descriptor sets may save compile time, especially when your project has many protobuf jar package dependencies.
 
 Uses jedis-mock so you don't even need to install Redis.
 
