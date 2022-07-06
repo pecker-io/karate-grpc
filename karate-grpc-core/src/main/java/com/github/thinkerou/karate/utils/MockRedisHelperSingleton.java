@@ -15,7 +15,7 @@ public enum MockRedisHelperSingleton {
 
     private RedisServer redisServer;
     private RedisHelper redisHelper;
-    private volatile boolean isClosed = false;
+    private volatile boolean isStopped = false;
 
     MockRedisHelperSingleton() {
         redisServer = JedisMock.getRedisServer();
@@ -31,11 +31,11 @@ public enum MockRedisHelperSingleton {
     }
 
     public synchronized void stop() throws IOException {
-        if (isClosed) {
+        if (isStopped) {
             return;
         }
         redisHelper.closeJedisPool();
         redisServer.stop();
-        isClosed = true;
+        isStopped = true;
     }
 }
