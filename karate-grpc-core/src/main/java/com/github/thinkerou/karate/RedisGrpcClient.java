@@ -1,7 +1,5 @@
 package com.github.thinkerou.karate;
 
-import com.github.thinkerou.karate.service.GrpcCall;
-import com.github.thinkerou.karate.service.GrpcList;
 import com.github.thinkerou.karate.utils.RedisHelper;
 
 /**
@@ -11,18 +9,15 @@ import com.github.thinkerou.karate.utils.RedisHelper;
  */
 public class RedisGrpcClient extends GrpcClient {
 
-    private GrpcCall callIns;
-    private GrpcList listIns;
     private RedisHelper redisHelper;
 
-
     public RedisGrpcClient(String host, int port, RedisHelper redisHelper) {
-        this.callIns = GrpcCall.create(host, port);
+        super(host, port);
         this.redisHelper = redisHelper;
     }
 
     public RedisGrpcClient(RedisHelper redisHelper) {
-        this.listIns = GrpcList.create();
+        super();
         this.redisHelper = redisHelper;
     }
 
@@ -32,9 +27,7 @@ public class RedisGrpcClient extends GrpcClient {
     }
 
     public String list(String serviceFilter, String methodFilter, Boolean withMessage) {
-
         return listIns.invokeByRedis(serviceFilter, methodFilter, withMessage, redisHelper);
-
     }
 
     public String list(String name, Boolean withMessage) {

@@ -10,8 +10,8 @@ import com.github.thinkerou.karate.service.GrpcList;
  */
 public class GrpcClient {
 
-    private GrpcCall callIns;
-    private GrpcList listIns;
+    protected GrpcCall callIns;
+    protected GrpcList listIns;
 
     public GrpcClient(String host, int port) {
         this.callIns = GrpcCall.create(host, port);
