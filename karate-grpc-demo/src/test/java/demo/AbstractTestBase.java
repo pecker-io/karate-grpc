@@ -1,8 +1,7 @@
 package demo;
 
 import com.github.thinkerou.karate.helper.Main;
-import com.github.thinkerou.karate.utils.JedisMock;
-import com.github.thinkerou.karate.utils.RedisHelper;
+import com.github.thinkerou.karate.utils.MockRedisSingleton;
 import com.intuit.karate.Results;
 import com.intuit.karate.Runner;
 import net.masterthought.cucumber.Configuration;
@@ -63,8 +62,7 @@ public abstract class AbstractTestBase {
 
     @AfterClass
     public static void afterClass() throws IOException {
-        JedisMock.getRedisServer().stop();
-        RedisHelper.closeJedisPool();
+        MockRedisSingleton.INSTANCE.stop();
     }
 
 }

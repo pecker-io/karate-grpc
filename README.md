@@ -104,19 +104,19 @@ So, use `karate-grpc` need the following steps:
 1. Calls into karate-grpc GrpcClient via Java Interop.
 
 ```
-* def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
+* def GrpcClient = Java.type('com.github.thinkerou.karate.GrpcClient')
 ```
 
 2. Builds one public Grpc client using your grpc ip and port.
 
 ```
-* def client = Client.create('localhost', 50051)
+* def client = new GrpcClient('localhost', 50051)
 ```
 
 If you want to list protobuf by service name or/and message name, you should use:
 
 ```
-* def client = Client.create()
+* def client = new GrpcClient()
 ```
 
 Because not need grpc server ip/port when listing protobuf.
@@ -192,14 +192,12 @@ One whole example likes [this](karate-grpc-demo/src/test/java/demo/helloworld/he
 Feature: grpc helloworld example by grpc dynamic client
 
   Background:
-    * def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
-    * def client = Client.create('localhost', 50051)
+    * def client = Java.type('demo.DemoGrpcClientSingleton').INSTANCE.getGrpcClient();
 
   Scenario: do it
     * string payload = read('helloworld.json')
     * def response = client.call('helloworld.Greeter/SayHello', payload)
     * def response = JSON.parse(response)
-    * print response
     * match response[0].message == 'Hello thinkerou'
     * def message = response[0].message
 
@@ -252,28 +250,22 @@ Uses jedis-mock so you don't even need to install Redis.
  [example](karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature):
 
 ```
-Feature: grpc helloworld example by grpc dynamic client
+public enum DemoGrpcClientSingleton {
+    INSTANCE;
 
-  Background:
-    * def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
-    * def client = Client.create('localhost', 50051)
-    * def client = client.redis()
+    RedisGrpcClient redisGrpcClient;
 
-  Scenario: do it
-    * string payload = read('helloworld.json')
-    * def response = client.call('helloworld.Greeter/SayHello', payload)
-    * def response = JSON.parse(response)
-    * print response
-    * match response[0].message == 'Hello thinkerou'
-    * def message = response[0].message
+    public GrpcClient getGrpcClient() {
+        return redisGrpcClient;
+    }
 
-    * string payload = read('again-helloworld.json')
-    * def response = client.call('helloworld.Greeter/AgainSayHello', payload)
-    * def response = JSON.parse(response)
-    * match response[0].details == 'Details Hello thinkerou in BeiJing'
+    DemoGrpcClientSingleton() {
+        redisGrpcClient = new RedisGrpcClient("localhost", 50051, MockRedisSingleton.INSTANCE.getRedisHelper());
+    }
+}
 ```
 
-Only use the line `* def client = client.redis()` it's OK!
+To use redis, use class `com.github.thinkerou.karate.RedisGrpcClient` instead of `com.github.thinkerou.karate.GrpClient`
 
 **TODO:**
 

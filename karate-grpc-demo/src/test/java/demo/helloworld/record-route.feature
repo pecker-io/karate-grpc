@@ -1,9 +1,7 @@
 Feature: grpc helloworld example by grpc dynamic client
 
   Background:
-    * def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
-    * def client = Client.create('localhost', 50051)
-    * def client = client.redis()
+    * def client = Java.type('demo.DemoGrpcClientSingleton').INSTANCE.getGrpcClient();
 
   Scenario: do it
     * string payload = read('record-route.json')

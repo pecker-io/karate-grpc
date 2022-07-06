@@ -1,6 +1,5 @@
 package com.github.thinkerou.karate.utils;
 
-import com.github.fppt.jedismock.RedisServer;
 import com.github.thinkerou.karate.constants.RedisParams;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -15,19 +14,30 @@ import java.nio.file.Path;
  *
  * @author thinkerou
  */
-public final class RedisHelper {
+public class RedisHelper {
 
-    private static final int REDIS_TIMEOUT = 10000;
 
-    private static volatile JedisPool jedisPool;
+    protected JedisPool jedisPool;
+    protected String host;
+    protected int port;
+    protected int timeout;
 
-    public static Jedis getJedis() {
-        init();
+    public RedisHelper (String host, int port, int timeout, int maxConnections) {
+        this.host = host;
+        this.port = port;
+        this.timeout = timeout;
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
+        poolConfig.setMaxTotal(maxConnections);
+        jedisPool = new JedisPool(poolConfig, host, port, timeout);
+    }
+
+
+    public Jedis getJedis() {
         return jedisPool.getResource();
     }
 
-    public static synchronized void closeJedisPool() {
-        if (jedisPool != null && jedisPool.isClosed()) {
+    public void closeJedisPool() {
+        if (jedisPool != null && !jedisPool.isClosed()) {
             jedisPool.close();
         }
     }
@@ -59,21 +69,6 @@ public final class RedisHelper {
     public Long deleteDescriptorSets() {
         try (Jedis jedis = getJedis()) {
             return jedis.hdel(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
-        }
-    }
-
-    private static void init() {
-        if (jedisPool != null) {
-            return;
-        }
-        synchronized (RedisHelper.class) {
-            if (jedisPool != null) {
-                return;
-            }
-            RedisServer redisServer = JedisMock.getRedisServer();
-            JedisPoolConfig poolConfig = new JedisPoolConfig();
-            poolConfig.setMaxTotal(128);
-            jedisPool = new JedisPool(poolConfig, redisServer.getHost(), redisServer.getBindPort(), REDIS_TIMEOUT);
         }
     }
 }
