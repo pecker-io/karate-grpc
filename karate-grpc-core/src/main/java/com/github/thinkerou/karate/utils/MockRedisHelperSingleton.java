@@ -5,11 +5,11 @@ import com.github.fppt.jedismock.RedisServer;
 import java.io.IOException;
 
 /**
- * RedisHelper
+ * A singleton with a RedisHelper for mock redis (JedisMock)
  *
- * @author thinkerou
+ * @author ericdriggs
  */
-public enum MockRedisSingleton  {
+public enum MockRedisHelperSingleton {
 
     INSTANCE;
 
@@ -17,7 +17,7 @@ public enum MockRedisSingleton  {
     private RedisHelper redisHelper;
     private volatile boolean isClosed = false;
 
-    MockRedisSingleton() {
+    MockRedisHelperSingleton() {
         redisServer = JedisMock.getRedisServer();
         redisHelper = new RedisHelper(redisServer.getHost(), redisServer.getBindPort(), 10000, 128);
     }

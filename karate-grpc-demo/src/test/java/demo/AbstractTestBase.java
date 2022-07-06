@@ -1,7 +1,7 @@
 package demo;
 
 import com.github.thinkerou.karate.helper.Main;
-import com.github.thinkerou.karate.utils.MockRedisSingleton;
+import com.github.thinkerou.karate.utils.MockRedisHelperSingleton;
 import com.intuit.karate.Results;
 import com.intuit.karate.Runner;
 import net.masterthought.cucumber.Configuration;
@@ -62,7 +62,7 @@ public abstract class AbstractTestBase {
 
     @AfterClass
     public static void afterClass() throws IOException {
-        MockRedisSingleton.INSTANCE.stop();
+        MockRedisHelperSingleton.INSTANCE.stop();
     }
 
 }

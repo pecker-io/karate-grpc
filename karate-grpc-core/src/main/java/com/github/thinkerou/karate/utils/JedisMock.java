@@ -4,6 +4,9 @@ import com.github.fppt.jedismock.RedisServer;
 
 import java.io.IOException;
 
+/**
+ * A singleton redis mock using jedis mock
+ */
 public class JedisMock {
 
     private volatile static RedisServer redisServer;

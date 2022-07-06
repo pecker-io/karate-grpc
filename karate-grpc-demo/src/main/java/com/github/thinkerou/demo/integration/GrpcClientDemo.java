@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import com.github.thinkerou.karate.GrpcClient;
 import com.github.thinkerou.karate.RedisGrpcClient;
 import com.github.thinkerou.karate.utils.FileHelper;
-import com.github.thinkerou.karate.utils.MockRedisSingleton;
+import com.github.thinkerou.karate.utils.MockRedisHelperSingleton;
 
 /**
  * GrpcClientDemo
@@ -34,7 +34,7 @@ public class GrpcClientDemo {
         // using the following command:
         //   cd karate-demo
         //   mvn exec:java -Dexec.mainClass=com.github.thinkerou.demo.helloworld.HelloWorldServerMain
-        GrpcClient client2 = new RedisGrpcClient("localhost", 50051, MockRedisSingleton.INSTANCE.getRedisHelper());
+        GrpcClient client2 = new RedisGrpcClient("localhost", 50051, MockRedisHelperSingleton.INSTANCE.getRedisHelper());
         String result2 = client2.call("helloworld.Greeter/SayHello", payloads);
         logger.info(result2);
 

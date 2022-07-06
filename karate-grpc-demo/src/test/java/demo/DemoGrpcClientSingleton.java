@@ -2,7 +2,7 @@ package demo;
 
 import com.github.thinkerou.karate.GrpcClient;
 import com.github.thinkerou.karate.RedisGrpcClient;
-import com.github.thinkerou.karate.utils.MockRedisSingleton;
+import com.github.thinkerou.karate.utils.MockRedisHelperSingleton;
 
 public enum DemoGrpcClientSingleton {
     INSTANCE;
@@ -14,6 +14,6 @@ public enum DemoGrpcClientSingleton {
     }
 
     DemoGrpcClientSingleton() {
-        redisGrpcClient = new RedisGrpcClient("localhost", 50051, MockRedisSingleton.INSTANCE.getRedisHelper());
+        redisGrpcClient = new RedisGrpcClient("localhost", 50051, MockRedisHelperSingleton.INSTANCE.getRedisHelper());
     }
 }

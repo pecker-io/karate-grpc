@@ -248,7 +248,7 @@ Using redis is optional, but caching descriptor sets may save compile time, espe
 
 ### Mock Redis
 You can even use jedis-mock so you don't even need to install Redis.
-see [MockRedisSingleton.java](karate-grpc-core/com/github/thinkerou/karate/utils/MockRedisSingleton.java): 
+see [MockRedisHelperSingleton.java](karate-grpc-core/com/github/thinkerou/karate/utils/MockRedisHelperSingleton.java): 
 
 ### Redis performance
 <i>Note: while the redis test implementation is thread-safe, Redis uses single-threaded execution so test performance may be degraded for high concurrency.</i>  
@@ -268,7 +268,7 @@ public enum DemoGrpcClientSingleton {
     }
 
     DemoGrpcClientSingleton() {
-        redisGrpcClient = new RedisGrpcClient("localhost", 50051, MockRedisSingleton.INSTANCE.getRedisHelper());
+        redisGrpcClient = new RedisGrpcClient("localhost", 50051, MockRedisHelperSingleton.INSTANCE.getRedisHelper());
     }
 }
 ```
