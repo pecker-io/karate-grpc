@@ -3,9 +3,10 @@ package com.github.thinkerou.karate;
 import com.github.thinkerou.karate.utils.RedisHelper;
 
 /**
- * GrpcClient
+ * RedisGrpcClient
+ * A GrpcClient which uses redis to cache protobuf descriptor sets
  *
- * @author thinkerou
+ * @author ericdriggs
  */
 public class RedisGrpcClient extends GrpcClient {
 
@@ -23,7 +24,6 @@ public class RedisGrpcClient extends GrpcClient {
 
     public String call(String name, String payload) {
         return callIns.invokeByRedis(name, payload, redisHelper);
-
     }
 
     public String list(String serviceFilter, String methodFilter, Boolean withMessage) {
