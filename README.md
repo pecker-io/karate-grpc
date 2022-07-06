@@ -119,7 +119,7 @@ If you want to list protobuf by service name or/and message name, you should use
 * def client = new GrpcClient()
 ```
 
-Because not need grpc server ip/port when listing protobuf.
+Because you don't need grpc server ip/port when listing protobuf.
 
 3. Reads JSON data corresponding your protobuf definition.
 
@@ -240,15 +240,22 @@ Output JSON string also like:
 
 **That's all!!!**
 
-## Why use Redis?
+## Redis
+
+### Why use Redis?
 
 Using redis is optional, but caching descriptor sets may save compile time, especially when your project has many protobuf jar package dependencies.
 
-Uses jedis-mock so you don't even need to install Redis.
+### Mock Redis
+You can even use jedis-mock so you don't even need to install Redis.
+see [MockRedisSingleton.java](karate-grpc-core/com/github/thinkerou/karate/utils/MockRedisSingleton.java): 
 
+### Redis performance
 <i>Note: while the redis test implementation is thread-safe, Redis uses single-threaded execution so test performance may be degraded for high concurrency.</i>  
 
- [example](karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature):
+To use redis, use class `com.github.thinkerou.karate.RedisGrpcClient` instead of `com.github.thinkerou.karate.GrpClient`
+
+[example](karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature):
 
 ```
 public enum DemoGrpcClientSingleton {
@@ -265,9 +272,6 @@ public enum DemoGrpcClientSingleton {
     }
 }
 ```
-
-To use redis, use class `com.github.thinkerou.karate.RedisGrpcClient` instead of `com.github.thinkerou.karate.GrpClient`
-
 **TODO:**
 
 - Save `ProtoFullName|InputType|InputMessage|OutputType|OutputMessage|ProtoFileName|RPCAddress` not file content.
