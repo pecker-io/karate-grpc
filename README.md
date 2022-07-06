@@ -198,6 +198,7 @@ Feature: grpc helloworld example by grpc dynamic client
     * string payload = read('helloworld.json')
     * def response = client.call('helloworld.Greeter/SayHello', payload)
     * def response = JSON.parse(response)
+    * print response
     * match response[0].message == 'Hello thinkerou'
     * def message = response[0].message
 
