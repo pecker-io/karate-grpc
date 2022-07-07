@@ -2,39 +2,33 @@
 
 [![Build Status](https://api.travis-ci.org/thinkerou/karate-grpc.svg)](https://travis-ci.org/thinkerou/karate-grpc)
 
-karate-grpc made gRPC testing simple by [karate](https://github.com/intuit/karate), and its dynamic client built based on [polyglot](https://github.com/grpc-ecosystem/polyglot).
+simple gRPC testing with [karate](https://github.com/intuit/karate) and a dynamic client using [polyglot](https://github.com/grpc-ecosystem/polyglot).
 
-karate-grpc can get all the benefits of [karate](https://github.com/intuit/karate#features), it makes it really easy to build protobuf complex request payloads via json, traverse data within the responses and chain data from responses into the next request.
+karate-grpc makes it easy to:
+* build complex protobuf request payloads via json
+* traverse data within the responses 
+* chain data from responses into the next request.
 
 ## Hello World
 
 [![karate-grpc-hello-world](assets/karate-grpc-hello-world.png)](assets/karate-grpc-hello-world.png)
 
 ## Testing hello world
-
-Prefer to use Maven:
-
+Requires maven to be installed
 ```
-$ # compile the whole project
-$ mvn clean compile package -Dmaven.test.skip=true
-$
-$ # start redis-server, first need to install it
-$ redis-server
-$
-$ # generate protobuf descriptor sets and put to redis
-$ cd karate-grpc-helper && mvn exec:java -Dexec.mainClass=com.github.thinkerou.karate.helper.Main
-$
-$ # test it
+$ # compile and test the whole project
+$ mvn clean install
+
+$ # test demo
 $ cd karate-grpc-demo
-$ # run all tests
 $ mvn test
 $ # or run single test
 $ mvn test -Dtest=HelloWorldNewRunner
 ```
 
-Because have started hello world server on `AbstractTestBase.java`, we not need to start it alone.
+When running tests, the hello world grpc server is started/stopped automatically in `AbstractTestBase.java`.
 
-Base on karate generates beautiful test report:
+Karate also generates beautiful test reports:
 
 [![karate-grpc-hello-world-report](assets/karate-grpc-hello-world-report.png)](assets/karate-grpc-hello-world-report.png)
 
@@ -110,22 +104,22 @@ So, use `karate-grpc` need the following steps:
 1. Calls into karate-grpc GrpcClient via Java Interop.
 
 ```
-* def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
+* def GrpcClient = Java.type('com.github.thinkerou.karate.GrpcClient')
 ```
 
 2. Builds one public Grpc client using your grpc ip and port.
 
 ```
-* def client = Client.create('localhost', 50051)
+* def client = new GrpcClient('localhost', 50051)
 ```
 
 If you want to list protobuf by service name or/and message name, you should use:
 
 ```
-* def client = Client.create()
+* def client = new GrpcClient()
 ```
 
-Because not need grpc server ip/port when listing protobuf.
+Because you don't need grpc server ip/port when listing protobuf.
 
 3. Reads JSON data corresponding your protobuf definition.
 
@@ -198,8 +192,7 @@ One whole example likes [this](karate-grpc-demo/src/test/java/demo/helloworld/he
 Feature: grpc helloworld example by grpc dynamic client
 
   Background:
-    * def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
-    * def client = Client.create('localhost', 50051)
+    * def client = Java.type('demo.DemoGrpcClientSingleton').INSTANCE.getGrpcClient();
 
   Scenario: do it
     * string payload = read('helloworld.json')
@@ -247,38 +240,38 @@ Output JSON string also like:
 
 **That's all!!!**
 
-## Why need Redis?
+## Redis
 
-> When your project have many protobuf jar package dependency, every compile will spend more time.
+### Why use Redis?
 
-So, use Redis to save descriptor sets which every generate.
+Using redis is optional, but caching descriptor sets may save compile time, especially when your project has many protobuf jar package dependencies.
 
-Indicates redis address and ask `karate-karate-core` to use redis, for [example](karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature):
+### Mock Redis
+You can even use jedis-mock so you don't even need to install Redis.
+see [MockRedisHelperSingleton.java](karate-grpc-core/com/github/thinkerou/karate/utils/MockRedisHelperSingleton.java): 
+
+### Redis performance
+<i>Note: while the redis test implementation is thread-safe, Redis uses single-threaded execution so test performance may be degraded for high concurrency.</i>  
+
+To use redis, use class `com.github.thinkerou.karate.RedisGrpcClient` instead of `com.github.thinkerou.karate.GrpClient`
+
+[example](karate-grpc-demo/src/test/java/demo/helloworld/helloworld-new.feature):
 
 ```
-Feature: grpc helloworld example by grpc dynamic client
+public enum DemoGrpcClientSingleton {
+    INSTANCE;
 
-  Background:
-    * def Client = Java.type('com.github.thinkerou.karate.GrpcClient')
-    * def client = Client.create('localhost', 50051)
-    * def client = client.redis('localhost', 6379)
+    RedisGrpcClient redisGrpcClient;
 
-  Scenario: do it
-    * string payload = read('helloworld.json')
-    * def response = client.call('helloworld.Greeter/SayHello', payload)
-    * def response = JSON.parse(response)
-    * print response
-    * match response[0].message == 'Hello thinkerou'
-    * def message = response[0].message
+    public GrpcClient getGrpcClient() {
+        return redisGrpcClient;
+    }
 
-    * string payload = read('again-helloworld.json')
-    * def response = client.call('helloworld.Greeter/AgainSayHello', payload)
-    * def response = JSON.parse(response)
-    * match response[0].details == 'Details Hello thinkerou in BeiJing'
+    DemoGrpcClientSingleton() {
+        redisGrpcClient = new RedisGrpcClient("localhost", 50051, MockRedisHelperSingleton.INSTANCE.getRedisHelper());
+    }
+}
 ```
-
-Only use the line `* def client = client.redis('localhost', 6379)` it's OK!
-
 **TODO:**
 
 - Save `ProtoFullName|InputType|InputMessage|OutputType|OutputMessage|ProtoFileName|RPCAddress` not file content.

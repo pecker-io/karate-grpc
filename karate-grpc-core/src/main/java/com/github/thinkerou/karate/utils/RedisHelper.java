@@ -1,30 +1,45 @@
 package com.github.thinkerou.karate.utils;
 
+import com.github.thinkerou.karate.constants.RedisParams;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
-import com.github.thinkerou.karate.constants.RedisParams;
-
-import redis.clients.jedis.Jedis;
 
 /**
  * RedisHelper
  *
  * @author thinkerou
  */
-public final class RedisHelper {
+public class RedisHelper {
 
-    private static final int REDIS_TIMEOUT = 3000;
 
-    private static Jedis jedis;
+    protected JedisPool jedisPool;
+    protected String host;
+    protected int port;
+    protected int timeout;
 
-    public static RedisHelper create(String host, int port) {
-        return new RedisHelper(host, port);
+    public RedisHelper (String host, int port, int timeout, int maxConnections) {
+        this.host = host;
+        this.port = port;
+        this.timeout = timeout;
+        JedisPoolConfig poolConfig = new JedisPoolConfig();
+        poolConfig.setMaxTotal(maxConnections);
+        jedisPool = new JedisPool(poolConfig, host, port, timeout);
     }
 
-    RedisHelper(String host, int port) {
-        jedis = new Jedis(host, port, REDIS_TIMEOUT);
+
+    public Jedis getJedis() {
+        return jedisPool.getResource();
+    }
+
+    public void closeJedisPool() {
+        if (jedisPool != null && !jedisPool.isClosed()) {
+            jedisPool.close();
+        }
     }
 
     public Boolean putDescriptorSets(Path descriptorPath) {
@@ -36,19 +51,24 @@ public final class RedisHelper {
             return false;
         }
 
-        Long status = jedis.hset(RedisParams.KEY.getText(), RedisParams.FIELD.getText(), data);
-        if (status != 1) {
-            return false;
+        try (Jedis jedis = getJedis()) {
+            Long status = jedis.hset(RedisParams.KEY.getText(), RedisParams.FIELD.getText(), data);
+            if (status != 1) {
+                return false;
+            }
+            return true;
         }
-
-        return true;
     }
 
     public byte[] getDescriptorSets() {
-        return jedis.hget(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
+        try (Jedis jedis = getJedis()) {
+            return jedis.hget(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
+        }
     }
 
     public Long deleteDescriptorSets() {
-        return jedis.hdel(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
+        try (Jedis jedis = getJedis()) {
+            return jedis.hdel(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
+        }
     }
 }

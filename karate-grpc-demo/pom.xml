@@ -21,7 +21,12 @@
         <dependency>
             <groupId>com.github.thinkerou</groupId>
             <artifactId>karate-grpc-proto</artifactId>
-            <version>1.0.6</version>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.thinkerou</groupId>
+            <artifactId>karate-grpc-helper</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.intuit.karate</groupId>
