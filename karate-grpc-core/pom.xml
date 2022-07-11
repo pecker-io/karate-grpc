@@ -89,6 +89,11 @@
             <artifactId>jedis-mock</artifactId>
             <version>1.0.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.intuit.karate</groupId>
+            <artifactId>karate-core</artifactId>
+            <version>${karate.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

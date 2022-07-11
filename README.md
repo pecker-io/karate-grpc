@@ -126,10 +126,17 @@ Because you don't need grpc server ip/port when listing protobuf.
 4. Calls your Grpc server using `call` of karate-grpc.
 
 ```
-* def response = client.call('helloworld.Greeter/SayHello', payload)
+* def response = client.call('helloworld.Greeter/SayHello', payload, karate)
 ```
 
-`call` have two params: protobuf full name(`format:<package-name>.<service-name>/<rpc-name>`) and JSON data.
+`call` has two required params, and one optional
+
+1. protobuf full name(`format:<package-name>.<service-name>/<rpc-name>`) 
+2. JSON data.
+3. `karate` (optional, nullable) -- if present, will add `[request]` and `[response]` to html report. `karate` variable is of type ScenarioBridge and is automatically created when running karate tests.
+
+[![request-response-report](assets/request-response-report.png)](assets/request-response-report.png)
+
 
 If you input protobuf full name error, `call` will fail and output protobuf message by `list`, like this:
 

@@ -23,17 +23,17 @@ public class RedisGrpcClient extends GrpcClient {
     }
 
     @Override
-    public String call(String name, String payload) {
+    protected String invokeCall(String name, String payload) {
         return callIns.invokeByRedis(name, payload, redisHelper);
     }
 
     @Override
-    public String list(String serviceFilter, String methodFilter, Boolean withMessage) {
+    protected String invokeList(String serviceFilter, String methodFilter, Boolean withMessage) {
         return listIns.invokeByRedis(serviceFilter, methodFilter, withMessage, redisHelper);
     }
 
     @Override
-    public String list(String name, Boolean withMessage) {
+    protected String invokeList(String name, Boolean withMessage) {
         return listIns.invokeByRedis(name, withMessage, redisHelper);
     }
 

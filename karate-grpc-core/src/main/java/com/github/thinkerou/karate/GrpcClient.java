@@ -2,6 +2,10 @@ package com.github.thinkerou.karate;
 
 import com.github.thinkerou.karate.service.GrpcCall;
 import com.github.thinkerou.karate.service.GrpcList;
+import com.intuit.karate.core.ScenarioBridge;
+import org.graalvm.polyglot.Value;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * GrpcClient
@@ -9,6 +13,8 @@ import com.github.thinkerou.karate.service.GrpcList;
  * @author thinkerou
  */
 public class GrpcClient {
+
+    protected static final Logger log = LoggerFactory.getLogger(GrpcClient.class);
 
     protected GrpcCall callIns;
     protected GrpcList listIns;
@@ -22,15 +28,62 @@ public class GrpcClient {
     }
 
     public String call(String name, String payload) {
+        return call(name, payload, null);
+    }
+
+    public String call(String name, String payload, ScenarioBridge scenarioBridge) {
+        logRequest(payload, scenarioBridge);
+        final String response = invokeCall(name, payload);
+        logResponse(response, scenarioBridge);
+        return response;
+    }
+
+    protected String invokeCall(String name, String payload) {
         return callIns.invoke(name, payload);
     }
 
-    public String list(String serviceFilter, String methodFilter, Boolean withMessage) {
-        return listIns.invoke(serviceFilter, methodFilter, withMessage);
+    public String list(String name, Boolean withMessage) {
+        return list(name, withMessage, null);
     }
 
-    public String list(String name, Boolean withMessage) {
+    public String list(String name, Boolean withMessage , ScenarioBridge scenarioBridge) {
+        logRequest(String.format("name=%s, withMessage=%s", name, withMessage), scenarioBridge);
+        final String response = invokeList(name, withMessage);
+        logResponse(response, scenarioBridge);
+        return response;
+    }
+
+    protected String invokeList(String name, Boolean withMessage) {
         return listIns.invoke(name, withMessage);
     }
 
+    public String list(String serviceFilter, String methodFilter, Boolean withMessage) {
+        return list(serviceFilter, methodFilter, withMessage, null);
+    }
+
+    public String list(String serviceFilter, String methodFilter, Boolean withMessage, ScenarioBridge scenarioBridge) {
+        logRequest(String.format("serviceFilter=%s, methodFilter=%s, withMessage=%s", serviceFilter, methodFilter, withMessage), scenarioBridge);
+        final String response = invokeList(serviceFilter, methodFilter, withMessage);
+        logResponse(response, scenarioBridge);
+        return response;
+    }
+
+    protected String invokeList(String serviceFilter, String methodFilter, Boolean withMessage) {
+        return listIns.invoke(serviceFilter, methodFilter, withMessage);
+    }
+
+    protected static void logRequest( String message, ScenarioBridge scenarioBridge) {
+        log( "[request] " + message, scenarioBridge);
+    }
+
+    protected static void logResponse(String message, ScenarioBridge scenarioBridge) {
+        log( "[response] " + message, scenarioBridge);
+    }
+
+    protected static void log( String message, ScenarioBridge scenarioBridge) {
+        if (scenarioBridge != null) {
+            scenarioBridge.log(Value.asValue(message));
+        }
+        log.info(message);
+    }
 }
