@@ -38,23 +38,15 @@ public class GrpcClient {
         return response;
     }
 
-    protected String invokeCall(String name, String payload) {
-        return callIns.invoke(name, payload);
-    }
-
     public String list(String name, Boolean withMessage) {
         return list(name, withMessage, null);
     }
 
-    public String list(String name, Boolean withMessage , ScenarioBridge scenarioBridge) {
+    public String list(String name, Boolean withMessage, ScenarioBridge scenarioBridge) {
         logRequest(String.format("name=%s, withMessage=%s", name, withMessage), scenarioBridge);
         final String response = invokeList(name, withMessage);
         logResponse(response, scenarioBridge);
         return response;
-    }
-
-    protected String invokeList(String name, Boolean withMessage) {
-        return listIns.invoke(name, withMessage);
     }
 
     public String list(String serviceFilter, String methodFilter, Boolean withMessage) {
@@ -68,22 +60,30 @@ public class GrpcClient {
         return response;
     }
 
-    protected String invokeList(String serviceFilter, String methodFilter, Boolean withMessage) {
-        return listIns.invoke(serviceFilter, methodFilter, withMessage);
-    }
-
-    protected static void logRequest( String message, ScenarioBridge scenarioBridge) {
-        log( "[request] " + message, scenarioBridge);
+    protected static void logRequest(String message, ScenarioBridge scenarioBridge) {
+        log("[request] " + message, scenarioBridge);
     }
 
     protected static void logResponse(String message, ScenarioBridge scenarioBridge) {
-        log( "[response] " + message, scenarioBridge);
+        log("[response] " + message, scenarioBridge);
     }
 
-    protected static void log( String message, ScenarioBridge scenarioBridge) {
+    protected static void log(String message, ScenarioBridge scenarioBridge) {
         if (scenarioBridge != null) {
             scenarioBridge.log(Value.asValue(message));
         }
         log.info(message);
+    }
+
+    protected String invokeCall(String name, String payload) {
+        return callIns.invoke(name, payload);
+    }
+
+    protected String invokeList(String name, Boolean withMessage) {
+        return listIns.invoke(name, withMessage);
+    }
+
+    protected String invokeList(String serviceFilter, String methodFilter, Boolean withMessage) {
+        return listIns.invoke(serviceFilter, methodFilter, withMessage);
     }
 }
