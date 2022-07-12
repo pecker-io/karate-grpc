@@ -5,6 +5,6 @@ Feature: grpc helloworld example by grpc dynamic client
 
   Scenario: do it
     * string payload = read('route-chat.json')
-    * def response = client.call('helloworld.Greeter/RouteChat', payload)
+    * def response = client.call('helloworld.Greeter/RouteChat', payload, karate)
     * def response = JSON.parse(response)
     * print response

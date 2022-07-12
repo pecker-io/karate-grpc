@@ -5,6 +5,6 @@ Feature: grpc helloworld example by grpc dynamic client
 
   Scenario: do it
     * string payload = read('get-feature.json')
-    * def response = client.call('helloworld.Greeter/GetFeature', payload)
+    * def response = client.call('helloworld.Greeter/GetFeature', payload, karate)
     * def response = JSON.parse(response)
     * match response[0].name == '352 South Mountain Road, Wallkill, NY 12589, USA'
