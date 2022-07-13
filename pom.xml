@@ -115,7 +115,7 @@
                                 <phase>package</phase>
                                 <id>attach-javadocs-dokka</id>
                                 <goals>
-                                    <goal>javadoc</goal>
+                                    <goal>javadocJar</goal>
                                 </goals>
                             </execution>
                         </executions>
