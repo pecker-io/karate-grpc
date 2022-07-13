@@ -107,18 +107,20 @@
                     </plugin>
 
                     <plugin>
-                        <groupId>org.jetbrains.dokka</groupId>
-                        <artifactId>dokka-maven-plugin</artifactId>
-                        <version>1.7.0</version>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <id>attach-javadocs-dokka</id>
-                                <goals>
-                                    <goal>javadocJar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.3.2</version>
+<!--                        <executions>-->
+<!--                            <execution>-->
+<!--                                <id>attach-javadocs</id>-->
+<!--                                <goals>-->
+<!--                                    <goal>jar</goal>-->
+<!--                                </goals>-->
+<!--                                <configuration>-->
+<!--                                    <additionalparam>-Xdoclint:none</additionalparam>-->
+<!--                                </configuration>-->
+<!--                            </execution>-->
+<!--                        </executions>-->
                     </plugin>
 
                     <plugin>
@@ -145,7 +147,7 @@
                             <serverId>ossrh</serverId>
                             <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                            <stagingProgressTimeoutMinutes>10</stagingProgressTimeoutMinutes>
+                            <stagingProgressTimeoutMinutes>5</stagingProgressTimeoutMinutes>
                         </configuration>
                     </plugin>
 
