@@ -6,6 +6,8 @@ import java.io.IOException;
 
 /**
  * A singleton redis mock using jedis mock
+ *
+ * @author ericdriggs
  */
 public class JedisMock {
 
