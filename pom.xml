@@ -107,16 +107,18 @@
                     </plugin>
 
                     <plugin>
-                        <groupId>org.jetbrains.dokka</groupId>
-                        <artifactId>dokka-maven-plugin</artifactId>
-                        <version>1.7.0</version>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
                         <executions>
                             <execution>
-                                <phase>package</phase>
-                                <id>attach-javadocs-dokka</id>
+                                <id>attach-javadocs</id>
                                 <goals>
-                                    <goal>javadocJar</goal>
+                                    <goal>jar</goal>
                                 </goals>
+                                <configuration>
+                                    <additionalparam>-Xdoclint:none</additionalparam>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
