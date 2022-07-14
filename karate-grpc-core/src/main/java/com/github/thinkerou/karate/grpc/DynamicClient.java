@@ -33,7 +33,11 @@ public final class DynamicClient {
     private final ManagedChannel channel;
 
     /**
+    /**
      * Creates a client for the supplied method, talking to the supplied endpoint.
+     * @param protoMethod protoMethod
+     * @param channel channel
+     * @return DynamicClient
      */
     public static DynamicClient create(Descriptors.MethodDescriptor protoMethod, ManagedChannel channel) {
         return new DynamicClient(protoMethod, channel);
@@ -48,6 +52,10 @@ public final class DynamicClient {
      * Makes an rpc to the remote endpoint and respects the supplied callback. Returns a
      * future which terminates once the call has ended. For calls which are single-request,
      * this throws IllegalArgumentException if the size of requests is not exactly 1.
+     * @param requests requests
+     * @param responseObsever responseObsever
+     * @param callOptions callOptions
+     * @return ListenableFuture
      */
     public ListenableFuture<Void> call(
             ImmutableList<DynamicMessage> requests,
