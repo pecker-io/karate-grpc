@@ -17,10 +17,16 @@ public enum DescriptorFile {
 
     private final String text;
 
+    /**
+     * @param text text
+     */
     DescriptorFile(final String text) {
         this.text = text;
     }
 
+    /**
+     * @return string
+     */
     public String getText() {
         return text;
     }

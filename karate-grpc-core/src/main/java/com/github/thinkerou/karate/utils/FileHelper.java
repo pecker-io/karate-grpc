@@ -18,6 +18,9 @@ public final class FileHelper {
 
     private static final Logger logger = Logger.getLogger(FileHelper.class.getName());
 
+    /**
+     * @param maybePath maybe path
+     */
     public static void validatePath(Optional<Path> maybePath) {
         if (maybePath.isPresent()) {
             if (!Files.exists(maybePath.get())) {
@@ -26,6 +29,11 @@ public final class FileHelper {
         }
     }
 
+    /**
+     * @param file file
+     * @return string
+     * @throws IOException io exception
+     */
     public static String readFile(String file) throws IOException {
         FileReader fileReader = null;
         try {
@@ -36,15 +44,15 @@ public final class FileHelper {
 
         BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-        String payloads = "";
+        StringBuilder payloads = new StringBuilder();
         String line;
         while ((line = bufferedReader.readLine()) != null) {
-            payloads += line + "\n";
+            payloads.append(line).append("\n");
         }
 
         bufferedReader.close();
 
-        return payloads;
+        return payloads.toString();
     }
 
 }

@@ -19,6 +19,10 @@ public class GrpcClient {
     protected GrpcCall callIns;
     protected GrpcList listIns;
 
+    /**
+     * @param host host
+     * @param port port
+     */
     public GrpcClient(String host, int port) {
         this.callIns = GrpcCall.create(host, port);
     }
@@ -27,10 +31,21 @@ public class GrpcClient {
         this.listIns = GrpcList.create();
     }
 
+    /**
+     * @param name name
+     * @param payload payload
+     * @return string
+     */
     public String call(String name, String payload) {
         return call(name, payload, null);
     }
 
+    /**
+     * @param name name
+     * @param payload payload
+     * @param scenarioBridge scenario bridge
+     * @return string
+     */
     public String call(String name, String payload, ScenarioBridge scenarioBridge) {
         logRequest(payload, scenarioBridge);
         final String response = invokeCall(name, payload);
@@ -38,10 +53,21 @@ public class GrpcClient {
         return response;
     }
 
+    /**
+     * @param name name
+     * @param withMessage with message
+     * @return string
+     */
     public String list(String name, Boolean withMessage) {
         return list(name, withMessage, null);
     }
 
+    /**
+     * @param name name
+     * @param withMessage with message
+     * @param scenarioBridge scenario bridge
+     * @return string
+     */
     public String list(String name, Boolean withMessage, ScenarioBridge scenarioBridge) {
         logRequest(String.format("name=%s, withMessage=%s", name, withMessage), scenarioBridge);
         final String response = invokeList(name, withMessage);
@@ -49,12 +75,27 @@ public class GrpcClient {
         return response;
     }
 
+    /**
+     * @param serviceFilter service filter
+     * @param methodFilter method filter
+     * @param withMessage with message
+     * @return string
+     */
     public String list(String serviceFilter, String methodFilter, Boolean withMessage) {
         return list(serviceFilter, methodFilter, withMessage, null);
     }
 
-    public String list(String serviceFilter, String methodFilter, Boolean withMessage, ScenarioBridge scenarioBridge) {
-        logRequest(String.format("serviceFilter=%s, methodFilter=%s, withMessage=%s", serviceFilter, methodFilter, withMessage), scenarioBridge);
+    /**
+     * @param serviceFilter service filter
+     * @param methodFilter method filter
+     * @param withMessage with message
+     * @param scenarioBridge scenario bridge
+     * @return string
+     */
+    public String list(String serviceFilter, String methodFilter, Boolean withMessage,
+            ScenarioBridge scenarioBridge) {
+        logRequest(String.format("serviceFilter=%s, methodFilter=%s, withMessage=%s", serviceFilter,
+                                 methodFilter, withMessage), scenarioBridge);
         final String response = invokeList(serviceFilter, methodFilter, withMessage);
         logResponse(response, scenarioBridge);
         return response;
@@ -86,4 +127,5 @@ public class GrpcClient {
     protected String invokeList(String serviceFilter, String methodFilter, Boolean withMessage) {
         return listIns.invoke(serviceFilter, methodFilter, withMessage);
     }
+
 }

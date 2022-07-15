@@ -26,6 +26,11 @@ public final class Reader {
     private final Descriptors.Descriptor descriptor;
     private final List<Map<String, Object>> payloadList;
 
+    /**
+     * @param jsonParser json parser
+     * @param descriptor descriptor
+     * @param payloadList payload list
+     */
     Reader(JsonFormat.Parser jsonParser,
            Descriptors.Descriptor descriptor,
            List<Map<String, Object>> payloadList) {
@@ -34,12 +39,20 @@ public final class Reader {
         this.payloadList = payloadList;
     }
 
-    public static Reader create(Descriptors.Descriptor descriptor,
-                                List<Map<String, Object>> payloadList,
-                                JsonFormat.TypeRegistry registry) {
+    /**
+     * @param descriptor descriptor
+     * @param payloadList payload list
+     * @param registry registry
+     * @return Reader
+     */
+    public static Reader create(Descriptors.Descriptor descriptor, List<Map<String, Object>> payloadList,
+            JsonFormat.TypeRegistry registry) {
         return new Reader(JsonFormat.parser().usingTypeRegistry(registry), descriptor, payloadList);
     }
 
+    /**
+     * @return ImmutableList
+     */
     public ImmutableList<DynamicMessage> read() {
         ImmutableList.Builder<DynamicMessage> resultBuilder = ImmutableList.builder();
 

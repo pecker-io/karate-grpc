@@ -29,6 +29,9 @@ import com.google.protobuf.Descriptors;
  */
 public final class GrpcList {
 
+    /**
+     * @return grpc list
+     */
     public static GrpcList create() {
         return new GrpcList();
     }
@@ -47,7 +50,6 @@ public final class GrpcList {
     }
 
     /**
-     *
      * @param service service
      * @param method method
      * @param withMessage withMessage boolean
@@ -58,7 +60,6 @@ public final class GrpcList {
     }
 
     /**
-     *
      * @param name name
      * @param withMessage withMessage boolean
      * @param redisHelper redis helper to use for invocation
@@ -69,7 +70,6 @@ public final class GrpcList {
     }
 
     /**
-     *
      * @param service service
      * @param method method
      * @param withMessage withMessage boolean
@@ -79,6 +79,7 @@ public final class GrpcList {
     public String invokeByRedis(String service, String method, Boolean withMessage, RedisHelper redisHelper) {
         return new Gson().toJson(execute(service, method, withMessage, false, redisHelper));
     }
+
     private List<Map<String, Object>> execute(String name, Boolean withMessage, RedisHelper redisHelper) {
         ProtoName protoName = ProtoFullName.parse(name);
         return execute(protoName.getServiceName(), protoName.getMethodName(), withMessage, false, redisHelper);
@@ -89,12 +90,8 @@ public final class GrpcList {
      *
      * Mainly goal: return value are used web page.
      */
-    private List<Map<String, Object>> execute(
-            String serviceFilter,
-            String methodFilter,
-            Boolean withMessage,
-            Boolean saveOutput,
-            RedisHelper redisHelper) {
+    private List<Map<String, Object>> execute(String serviceFilter, String methodFilter, Boolean withMessage,
+            Boolean saveOutput, RedisHelper redisHelper) {
         byte[] data;
         if (redisHelper != null) {
             data = redisHelper.getDescriptorSets();

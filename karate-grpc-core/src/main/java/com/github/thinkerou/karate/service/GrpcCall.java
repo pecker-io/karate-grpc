@@ -42,29 +42,52 @@ public final class GrpcCall {
 
     private static final Logger logger = Logger.getLogger(GrpcCall.class.getName());
 
-    private ManagedChannel channel;
+    private final ManagedChannel channel;
 
+    /**
+     * @param host host
+     * @param port port
+     * @return GrpcCall
+     */
     public static GrpcCall create(String host, int port) {
         return new GrpcCall(host, port);
     }
 
+    /**
+     *
+     * @param host host
+     * @param port port
+     */
     public GrpcCall(String host, int port) {
         channel = ChannelFactory.create(host, port);
     }
 
+    /**
+     * @param name name
+     * @param payload payload
+     * @return string
+     */
     public String invoke(String name, String payload) {
-        return excute(name, payload, null);
+        return execute(name, payload, null);
     }
 
+    /**
+     * @param name name
+     * @param payload payload
+     * @param redisHelper redis helper
+     * @return string
+     */
     public String invokeByRedis(String name, String payload, RedisHelper redisHelper) {
-        return excute(name, payload, redisHelper);
+        return execute(name, payload, redisHelper);
     }
 
     /**
      * @param name indicates one called grpc service full name, like: package.service/method
      * @param payload indicates one protobuf corresponding json data
+     * @param redisHelper redis helper
+     * @return string
      */
-    private String excute(String name, String payload, RedisHelper redisHelper) {
+    private String execute(String name, String payload, RedisHelper redisHelper) {
         ProtoName protoName = ProtoFullName.parse(name);
         byte[] data;
         if (redisHelper != null) {

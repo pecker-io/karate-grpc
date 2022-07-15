@@ -13,11 +13,18 @@ public class JedisMock {
 
     private volatile static RedisServer redisServer;
 
+    /**
+     * Returns redis server instance
+     * @return redis server
+     */
     public static RedisServer getRedisServer() {
         init();
         return redisServer;
     }
 
+    /**
+     * Inits redis server instance
+     */
     public static void init() {
         if (redisServer != null) {
             return;

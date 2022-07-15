@@ -11,10 +11,11 @@ import java.io.IOException;
  */
 public enum MockRedisHelperSingleton {
 
-    INSTANCE;
+    INSTANCE,
+    ;
 
-    private RedisServer redisServer;
-    private RedisHelper redisHelper;
+    private final RedisServer redisServer;
+    private final RedisHelper redisHelper;
     private volatile boolean isStopped = false;
 
     MockRedisHelperSingleton() {
@@ -22,14 +23,23 @@ public enum MockRedisHelperSingleton {
         redisHelper = new RedisHelper(redisServer.getHost(), redisServer.getBindPort(), 10000, 128);
     }
 
+    /**
+     * @return redis server
+     */
     public RedisServer getRedisServer() {
         return redisServer;
     }
 
+    /**
+     * @return redis helper
+     */
     public RedisHelper getRedisHelper() {
         return redisHelper;
     }
 
+    /**
+     * @throws IOException io exception
+     */
     public synchronized void stop() throws IOException {
         if (isStopped) {
             return;
@@ -38,4 +48,5 @@ public enum MockRedisHelperSingleton {
         redisServer.stop();
         isStopped = true;
     }
+
 }

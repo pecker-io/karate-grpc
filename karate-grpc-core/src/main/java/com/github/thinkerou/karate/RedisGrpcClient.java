@@ -10,13 +10,21 @@ import com.github.thinkerou.karate.utils.RedisHelper;
  */
 public class RedisGrpcClient extends GrpcClient {
 
-    private RedisHelper redisHelper;
+    private final RedisHelper redisHelper;
 
+    /**
+     * @param host host
+     * @param port port
+     * @param redisHelper redis helper
+     */
     public RedisGrpcClient(String host, int port, RedisHelper redisHelper) {
         super(host, port);
         this.redisHelper = redisHelper;
     }
 
+    /**
+     * @param redisHelper redis helper
+     */
     public RedisGrpcClient(RedisHelper redisHelper) {
         super();
         this.redisHelper = redisHelper;

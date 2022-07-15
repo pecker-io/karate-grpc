@@ -35,6 +35,10 @@ public final class Writer<T extends Message> implements StreamObserver<T> {
         return new Writer<>(JsonFormat.printer().usingTypeRegistry(registry), output);
     }
 
+    /**
+     * @param jsonPrinter json printer
+     * @param output output
+     */
     Writer(JsonFormat.Printer jsonPrinter, List<Object> output) {
         this.jsonPrinter = jsonPrinter.preservingProtoFieldNames().includingDefaultValueFields();
         this.output = output;
@@ -45,11 +49,17 @@ public final class Writer<T extends Message> implements StreamObserver<T> {
 
     }
 
+    /**
+     * @param t throwable
+     */
     @Override
     public void onError(Throwable t) {
 
     }
 
+    /**
+     * @param message message
+     */
     @Override
     public void onNext(T message) {
         try {

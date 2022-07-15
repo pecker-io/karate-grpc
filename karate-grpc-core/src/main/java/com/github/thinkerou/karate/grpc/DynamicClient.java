@@ -33,7 +33,6 @@ public final class DynamicClient {
     private final ManagedChannel channel;
 
     /**
-    /**
      * Creates a client for the supplied method, talking to the supplied endpoint.
      * @param protoMethod protoMethod
      * @param channel channel
@@ -43,6 +42,10 @@ public final class DynamicClient {
         return new DynamicClient(protoMethod, channel);
     }
 
+    /**
+     * @param protoMethodDescriptor proto method descriptor
+     * @param channel channel
+     */
     DynamicClient(Descriptors.MethodDescriptor protoMethodDescriptor, ManagedChannel channel) {
         this.protoMethodDescriptor = protoMethodDescriptor;
         this.channel = channel;
@@ -52,14 +55,15 @@ public final class DynamicClient {
      * Makes an rpc to the remote endpoint and respects the supplied callback. Returns a
      * future which terminates once the call has ended. For calls which are single-request,
      * this throws IllegalArgumentException if the size of requests is not exactly 1.
+     *
      * @param requests requests
-     * @param responseObsever responseObsever
+     * @param responseObserver responseObsever
      * @param callOptions callOptions
      * @return ListenableFuture
      */
     public ListenableFuture<Void> call(
             ImmutableList<DynamicMessage> requests,
-            StreamObserver<DynamicMessage> responseObsever,
+            StreamObserver<DynamicMessage> responseObserver,
             CallOptions callOptions) {
         if (requests.isEmpty()) {
             logger.warning("Can't make call without any requests");
@@ -74,17 +78,17 @@ public final class DynamicClient {
                 if (numRequests != 1) {
                     logger.warning("Need exactly 1 request for unary call but got: " + numRequests);
                 }
-                return callUnary(requests.get(0), responseObsever, callOptions);
+                return callUnary(requests.get(0), responseObserver, callOptions);
             case SERVER_STREAMING:
                 if (numRequests != 1) {
                     logger.warning("Need exactly 1 request for server streaming call but got: " + numRequests);
                 }
-                return callServerStreaming(requests.get(0), responseObsever, callOptions);
+                return callServerStreaming(requests.get(0), responseObserver, callOptions);
             case CLIENT_STREAMING:
                 logger.warning("Client stream call");
-                return callClientStreaming(requests, responseObsever, callOptions);
+                return callClientStreaming(requests, responseObserver, callOptions);
             case BIDI_STREAMING:
-                return callBidiStreaming(requests, responseObsever, callOptions);
+                return callBidiStreaming(requests, responseObserver, callOptions);
             case UNKNOWN:
                 return null;
         }

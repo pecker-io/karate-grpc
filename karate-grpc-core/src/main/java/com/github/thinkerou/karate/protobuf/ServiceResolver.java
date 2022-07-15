@@ -43,7 +43,6 @@ public final class ServiceResolver {
                 result.add(descriptorFromProto(descriptorProto, descriptorProtoIndex, descriptorCache));
             } catch (Descriptors.DescriptorValidationException e) {
                 logger.warning(e.getMessage());
-                continue;
             }
         }
 
@@ -52,6 +51,8 @@ public final class ServiceResolver {
 
     /**
      * Lists all of the services found in the file descriptors.
+     *
+     * @return Iterable
      */
     public Iterable<Descriptors.ServiceDescriptor> listServices() {
         ArrayList<Descriptors.ServiceDescriptor> serviceDescriptors = new ArrayList<>();
@@ -62,6 +63,8 @@ public final class ServiceResolver {
 
     /**
      * Lists all the known message types.
+     *
+     * @return ImmutableSet
      */
     public ImmutableSet<Descriptors.Descriptor> listMessageTypes() {
         ImmutableSet.Builder<Descriptors.Descriptor> resultBuilder = ImmutableSet.builder();
@@ -77,6 +80,9 @@ public final class ServiceResolver {
     /**
      * Returns the descriptor of a protobuf method with the supplied grpc method name.
      * If the method can't be found, this throw IllegalArgumentException.
+     *
+     * @param method method
+     * @return MethodDescriptor
      */
     public Descriptors.MethodDescriptor resolveServiceMethod(ProtoName method) {
         return resolveServiceMethod(

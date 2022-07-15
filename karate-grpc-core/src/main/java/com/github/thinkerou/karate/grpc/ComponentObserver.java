@@ -19,6 +19,11 @@ public final class ComponentObserver<T> implements StreamObserver<T> {
 
     private final ImmutableList<StreamObserver<T>> observers;
 
+    /**
+     * @param observers observers
+     * @param <T> T
+     * @return ComponentObserver
+     */
     @SafeVarargs
     public static <T> ComponentObserver<T> of(StreamObserver<T>... observers) {
         return new ComponentObserver<>(ImmutableList.copyOf(observers));
@@ -39,6 +44,9 @@ public final class ComponentObserver<T> implements StreamObserver<T> {
         });
     }
 
+    /**
+     * @param t throwable
+     */
     @Override
     public void onError(Throwable t) {
         observers.forEach(tStreamObserver -> {
@@ -50,6 +58,9 @@ public final class ComponentObserver<T> implements StreamObserver<T> {
         });
     }
 
+    /**
+     * @param value value
+     */
     @Override
     public void onNext(T value) {
         observers.forEach(tStreamObserver -> {

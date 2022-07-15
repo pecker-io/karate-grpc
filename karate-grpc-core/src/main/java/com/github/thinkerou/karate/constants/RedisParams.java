@@ -11,12 +11,18 @@ public enum RedisParams {
     FIELD("file-descriptor-sets".getBytes()),
     ;
 
-    private byte[] text;
+    private final byte[] text;
 
+    /**
+     * @param text text
+     */
     RedisParams(byte[] text) {
         this.text = text;
     }
 
+    /**
+     * @return byte[]
+     */
     public byte[] getText() {
         return text;
     }

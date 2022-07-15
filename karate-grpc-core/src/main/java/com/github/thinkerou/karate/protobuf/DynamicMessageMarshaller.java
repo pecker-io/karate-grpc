@@ -18,10 +18,17 @@ public final class DynamicMessageMarshaller implements MethodDescriptor.Marshall
 
     private final Descriptors.Descriptor messageDescriptor;
 
+    /**
+     * @param messageDescriptor message descriptor
+     */
     public DynamicMessageMarshaller(Descriptors.Descriptor messageDescriptor) {
         this.messageDescriptor = messageDescriptor;
     }
 
+    /**
+     * @param inputStream input stream
+     * @return DynamicMessage
+     */
     @Override
     public DynamicMessage parse(InputStream inputStream) {
         try {
@@ -33,9 +40,13 @@ public final class DynamicMessageMarshaller implements MethodDescriptor.Marshall
         }
     }
 
+    /**
+     * @param dynamicMessage dynamic message
+     * @return InputStream
+     */
     @Override
-    public InputStream stream(DynamicMessage abstractMessage) {
-        return abstractMessage.toByteString().newInput();
+    public InputStream stream(DynamicMessage dynamicMessage) {
+        return dynamicMessage.toByteString().newInput();
     }
 
 }

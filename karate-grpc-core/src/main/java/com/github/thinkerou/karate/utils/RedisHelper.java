@@ -16,13 +16,18 @@ import java.nio.file.Path;
  */
 public class RedisHelper {
 
-
     protected JedisPool jedisPool;
     protected String host;
     protected int port;
     protected int timeout;
 
-    public RedisHelper (String host, int port, int timeout, int maxConnections) {
+    /**
+     * @param host host
+     * @param port port
+     * @param timeout timeout
+     * @param maxConnections max connections
+     */
+    public RedisHelper(String host, int port, int timeout, int maxConnections) {
         this.host = host;
         this.port = port;
         this.timeout = timeout;
@@ -31,7 +36,9 @@ public class RedisHelper {
         jedisPool = new JedisPool(poolConfig, host, port, timeout);
     }
 
-
+    /**
+     * @return jedis
+     */
     public Jedis getJedis() {
         return jedisPool.getResource();
     }
@@ -42,6 +49,10 @@ public class RedisHelper {
         }
     }
 
+    /**
+     * @param descriptorPath description path
+     * @return boolean
+     */
     public Boolean putDescriptorSets(Path descriptorPath) {
         byte[] data;
         try {
@@ -52,20 +63,23 @@ public class RedisHelper {
         }
 
         try (Jedis jedis = getJedis()) {
-            Long status = jedis.hset(RedisParams.KEY.getText(), RedisParams.FIELD.getText(), data);
-            if (status != 1) {
-                return false;
-            }
-            return true;
+            long status = jedis.hset(RedisParams.KEY.getText(), RedisParams.FIELD.getText(), data);
+            return status == 1;
         }
     }
 
+    /**
+     * @return byte[]
+     */
     public byte[] getDescriptorSets() {
         try (Jedis jedis = getJedis()) {
             return jedis.hget(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
         }
     }
 
+    /**
+     * @return long
+     */
     public Long deleteDescriptorSets() {
         try (Jedis jedis = getJedis()) {
             return jedis.hdel(RedisParams.KEY.getText(), RedisParams.FIELD.getText());
