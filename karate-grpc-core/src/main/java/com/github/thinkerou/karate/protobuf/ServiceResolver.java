@@ -27,6 +27,8 @@ public final class ServiceResolver {
 
     /**
      * Creates a resolver which searches the supplied FileDescriptorSet.
+     * @param descriptorSet descriptorSet
+     * @return ServiceResolver
      */
     public static ServiceResolver fromFileDescriptorSet(DescriptorProtos.FileDescriptorSet descriptorSet) {
         ImmutableMap<String, DescriptorProtos.FileDescriptorProto> descriptorProtoIndex =

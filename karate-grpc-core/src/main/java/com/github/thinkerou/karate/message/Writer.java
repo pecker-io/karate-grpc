@@ -26,6 +26,10 @@ public final class Writer<T extends Message> implements StreamObserver<T> {
 
     /**
      * Creates a new Writer which writes the messages it sees to the supplied Output.
+     * @param output output
+     * @param registry registry
+     * @return Writer writer
+     * @param <T> T
      */
     public static <T extends Message> Writer<T> create(List<Object> output, JsonFormat.TypeRegistry registry) {
         return new Writer<>(JsonFormat.printer().usingTypeRegistry(registry), output);

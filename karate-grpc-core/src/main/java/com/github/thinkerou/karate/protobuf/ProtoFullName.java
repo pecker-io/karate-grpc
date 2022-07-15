@@ -12,7 +12,9 @@ import io.grpc.MethodDescriptor;
 public final class ProtoFullName {
 
     /**
-     * format: <package>.<service>/<method>
+     * format: ${package}.${service}/${method}
+     * @param fullName fullName
+     * @return ProtoName
      */
     public static ProtoName parse(String fullName) {
         String fullServiceName = MethodDescriptor.extractFullServiceName(fullName);

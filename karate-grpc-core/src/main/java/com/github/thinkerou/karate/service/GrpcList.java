@@ -38,19 +38,44 @@ public final class GrpcList {
 
     /**
      * Support format: packageName.serviceName/methodName
+     * @param name name
+     * @param withMessage withMessage boolean
+     * @return List the grpc services filtered by params.
      */
     public String invoke(String name, Boolean withMessage) {
         return new Gson().toJson(execute(name, withMessage, null));
     }
 
+    /**
+     *
+     * @param service service
+     * @param method method
+     * @param withMessage withMessage boolean
+     * @return List the grpc services filtered by params.
+     */
     public String invoke(String service, String method, Boolean withMessage) {
         return new Gson().toJson(execute(service, method, withMessage, false, null));
     }
 
+    /**
+     *
+     * @param name name
+     * @param withMessage withMessage boolean
+     * @param redisHelper redis helper to use for invocation
+     * @return List the grpc services filtered by params.
+     */
     public String invokeByRedis(String name, Boolean withMessage, RedisHelper redisHelper) {
         return new Gson().toJson(execute(name, withMessage, redisHelper));
     }
 
+    /**
+     *
+     * @param service service
+     * @param method method
+     * @param withMessage withMessage boolean
+     * @param redisHelper redis helper to use for invocation
+     * @return List the grpc services filtered by params.
+     */
     public String invokeByRedis(String service, String method, Boolean withMessage, RedisHelper redisHelper) {
         return new Gson().toJson(execute(service, method, withMessage, false, redisHelper));
     }
