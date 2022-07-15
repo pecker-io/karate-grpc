@@ -7,7 +7,7 @@
     <groupId>com.github.thinkerou</groupId>
     <artifactId>karate-grpc-parent</artifactId>
     <packaging>pom</packaging>
-    <version>${revision}</version>
+    <version>1.0.6</version>
 
     <name>${project.artifactId}</name>
     <description>gRPC Testing Made Simple by Karate.</description>
@@ -48,7 +48,6 @@
         <protobuf.version>3.21.2</protobuf.version>
         <protoc.version>3.21.1</protoc.version>
         <gson.version>2.8.5</gson.version>
-        <revision>1.0.6</revision>
     </properties>
 
     <modules>
@@ -63,17 +62,17 @@
             <dependency>
                 <groupId>com.thinkerou</groupId>
                 <artifactId>karate-grpc-core</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.thinkerou</groupId>
                 <artifactId>karate-grpc-demo</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.thinkerou</groupId>
                 <artifactId>karate-grpc-proto</artifactId>
-                <version>${revision}</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

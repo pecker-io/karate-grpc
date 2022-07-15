@@ -5,7 +5,7 @@
     <parent>
         <artifactId>karate-grpc-parent</artifactId>
         <groupId>com.github.thinkerou</groupId>
-        <version>${revision}</version>
+        <version>1.0.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,14 +15,14 @@
         <dependency>
             <groupId>com.github.thinkerou</groupId>
             <artifactId>karate-grpc-core</artifactId>
-            <version>${revision}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- proto dependency package -->
         <dependency>
             <groupId>com.github.thinkerou</groupId>
             <artifactId>karate-grpc-proto</artifactId>
-            <version>${revision}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
@@ -74,7 +74,7 @@
                                 <artifactItem>
                                     <groupId>com.github.thinkerou</groupId>
                                     <artifactId>karate-grpc-proto</artifactId>
-                                    <version>${revision}</version>
+                                    <version>${project.version}</version>
                                 </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.basedir}/helper/dependencies</outputDirectory>
