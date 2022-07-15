@@ -17,6 +17,9 @@ import com.github.thinkerou.karate.utils.RedisHelper;
  */
 public class Main {
 
+    /**
+     * @param args args
+     */
     public static void main(String[] args) {
         putTestDescriptorSetsToRedis();
     }
@@ -25,6 +28,11 @@ public class Main {
         putDescriptorSetsToRedis(MockRedisHelperSingleton.INSTANCE.getRedisHelper(), DescriptorFile.PROTO_PATH.getText(), DescriptorFile.PROTO_FILE.getText());
     }
 
+    /**
+     * @param redisHelper redis helper
+     * @param protoPath proto path
+     * @param protoFile proto file
+     */
     public static void putDescriptorSetsToRedis(RedisHelper redisHelper, String protoPath, String protoFile) {
         String path = System.getProperty("user.home") + protoPath;
         new File(path).mkdirs();

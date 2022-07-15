@@ -19,6 +19,11 @@ public class ServerStart {
 
     private MonitorThread monitor;
 
+    /**
+     * @param args args
+     * @throws IOException io exception
+     * @throws InterruptedException interrupted exception
+     */
     public void start(String[] args) throws IOException, InterruptedException {
         HelloWorldServerMain.main(args);
         logger.warn("Started server on port...");

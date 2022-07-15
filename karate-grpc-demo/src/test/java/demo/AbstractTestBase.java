@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -48,9 +49,12 @@ public abstract class AbstractTestBase {
                 .outputJunitXml(true)
                 .parallel(THREAD_COUNT);
         generateReport(results.getReportDir());
-        assertTrue(results.getErrorMessages(), results.getFailCount() == 0);
+        assertEquals(results.getErrorMessages(), 0, results.getFailCount());
     }
 
+    /**
+     * @param karateOutputPath karate output path
+     */
     public void generateReport(String karateOutputPath) {
         Collection<File> jsonFiles = FileUtils.listFiles(new File(karateOutputPath), new String[] {"json"}, true);
         List<String> jsonPaths = new ArrayList<>(jsonFiles.size());
