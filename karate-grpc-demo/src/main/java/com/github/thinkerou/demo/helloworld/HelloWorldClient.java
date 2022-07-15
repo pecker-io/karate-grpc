@@ -30,6 +30,9 @@ public class HelloWorldClient {
 
     /**
      * Construct client connecting to HelloWorld server at host:port.
+     *
+     * @param host grpc server host
+     * @param port grpc server port
      */
     public HelloWorldClient(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port)
@@ -41,6 +44,8 @@ public class HelloWorldClient {
 
     /**
      * Construct client for accessing HelloWorld server using the existing channel.
+     *
+     * @param channel
      */
     HelloWorldClient(ManagedChannel channel) {
         this.channel = channel;
@@ -54,6 +59,9 @@ public class HelloWorldClient {
 
     /**
      * Say hello to server.
+     *
+     * @param payload
+     * @return
      */
     public String greet(String payload) {
         Gson gson = new Gson();
@@ -80,6 +88,10 @@ public class HelloWorldClient {
         return res;
     }
 
+    /**
+     * @param payload
+     * @return
+     */
     public String againGreet(String payload) {
         Gson gson = new Gson();
         List<Map<String, Object>> list = gson.fromJson(payload, List.class);
@@ -108,6 +120,9 @@ public class HelloWorldClient {
     /**
      * Greet server.
      * If provided, the first element of args is the name to use in the greeting.
+     *
+     * @param args
+     * @return
      */
     public static void main(String[] args) throws Exception {
         HelloWorldClient client = new HelloWorldClient("localhost", 50051);

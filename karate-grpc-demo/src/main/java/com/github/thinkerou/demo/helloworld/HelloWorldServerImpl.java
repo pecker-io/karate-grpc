@@ -39,10 +39,17 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
     private final Collection<Feature> features;
     private final ConcurrentMap<Point, List<RouteNote>> routeNotes = new ConcurrentHashMap<Point, List<RouteNote>>();
 
+    /**
+     * @param features
+     */
     HelloWorldServerImpl(Collection<Feature> features) {
         this.features = features;
     }
 
+    /**
+     * @param req
+     * @param responseObserver
+     */
     @Override
     public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
         HelloReply reply = HelloReply.newBuilder().setMessage("Hello " + req.getName()).build();
@@ -50,6 +57,10 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
         responseObserver.onCompleted();
     }
 
+    /**
+     * @param req
+     * @param responseObserver
+     */
     @Override
     public void againSayHello(AgainHelloRequest req, StreamObserver<AgainHelloReply> responseObserver) {
         AgainHelloReply reply = AgainHelloReply.newBuilder()
@@ -59,6 +70,10 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
         responseObserver.onCompleted();
     }
 
+    /**
+     * @param request
+     * @param replyStreamObserver
+     */
     @Override
     public void sayHelloServerStreaming(HelloRequest request, StreamObserver<HelloReply> replyStreamObserver) {
         for (int i = 0; i < STREAM_MESSAGE_NUMBER; i++) {
@@ -76,6 +91,10 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
         replyStreamObserver.onCompleted();
     }
 
+    /**
+     * @param replyStreamObserver
+     * @return
+     */
     @Override
     public StreamObserver<HelloRequest> sayHelloClientStreaming(final StreamObserver<HelloReply> replyStreamObserver) {
         return new StreamObserver<HelloRequest>() {
@@ -106,6 +125,10 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
         };
     }
 
+    /**
+     * @param responseObserver
+     * @return
+     */
     @Override
     public StreamObserver<HelloRequest> sayHelloBiStreaming(final StreamObserver<HelloReply> responseObserver) {
         // Give gRPC a StreamObserver that can observe and process incoming requests.
@@ -154,6 +177,9 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
      *
      * Gets the Feature at the requested Point.
      * If no feature at that location exists, an unnamed feature is returned at the provided location.
+     *
+     * @param request
+     * @param responseObserver
      */
     @Override
     public void getFeature(Point request, StreamObserver<Feature> responseObserver) {
@@ -165,6 +191,9 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
      * listFeaturs: server stream grpc
      *
      * Gets all features contained within the given bounding Rectangle.
+     *
+     * @param request
+     * @param responseObserver
      */
     @Override
     public void listFeatures(Rectangle request, StreamObserver<Feature> responseObserver) {
@@ -193,6 +222,9 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
      *
      * Gets a stream of points, and responds with statistics about the "trip": number of points,
      * number of known features visited, total distance traveled, and total time spent.
+     *
+     * @param responseObserver
+     * @return
      */
     @Override
     public StreamObserver<Point> recordRoute(final StreamObserver<RouteSummary> responseObserver) {
@@ -240,6 +272,9 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
      *
      * Receives a stream of message/location pairs, and responds with a stream of all previous
      * messages at each of those locations.
+     *
+     * @param responseObserver
+     * @return
      */
     @Override
     public StreamObserver<RouteNote> routeChat(final StreamObserver<RouteNote> responseObserver) {
@@ -314,6 +349,8 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
 
     /**
      * Indicates whether the given feature exists.
+     *
+     * @param feature
      */
     public static boolean exists(Feature feature) {
         return feature != null && !feature.getName().isEmpty();
