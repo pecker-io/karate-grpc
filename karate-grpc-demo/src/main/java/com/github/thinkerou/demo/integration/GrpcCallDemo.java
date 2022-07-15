@@ -14,6 +14,10 @@ public class GrpcCallDemo {
 
     private static final Logger logger = Logger.getLogger(GrpcCallDemo.class.getName());
 
+    /**
+     * @param args args
+     * @throws Exception exception
+     */
     public static void main(String[] args) throws Exception {
         GrpcCall client = GrpcCall.create("localhost", 50051);
 

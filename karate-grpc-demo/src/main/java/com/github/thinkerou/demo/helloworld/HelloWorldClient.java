@@ -45,7 +45,7 @@ public class HelloWorldClient {
     /**
      * Construct client for accessing HelloWorld server using the existing channel.
      *
-     * @param channel
+     * @param channel channel
      */
     HelloWorldClient(ManagedChannel channel) {
         this.channel = channel;
@@ -60,8 +60,8 @@ public class HelloWorldClient {
     /**
      * Say hello to server.
      *
-     * @param payload
-     * @return
+     * @param payload payload
+     * @return string
      */
     public String greet(String payload) {
         Gson gson = new Gson();
@@ -89,8 +89,8 @@ public class HelloWorldClient {
     }
 
     /**
-     * @param payload
-     * @return
+     * @param payload payload
+     * @return string
      */
     public String againGreet(String payload) {
         Gson gson = new Gson();
@@ -121,8 +121,7 @@ public class HelloWorldClient {
      * Greet server.
      * If provided, the first element of args is the name to use in the greeting.
      *
-     * @param args
-     * @return
+     * @param args args
      */
     public static void main(String[] args) throws Exception {
         HelloWorldClient client = new HelloWorldClient("localhost", 50051);

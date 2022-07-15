@@ -64,8 +64,8 @@ public class HelloWorldServerMain {
     /**
      * Parses the JSON input file containing the list of features.
      *
-     * @param content
-     * @return
+     * @param content content
+     * @return feature list
      */
     public static List<Feature> parseFeatures(String content) throws IOException {
         FeatureDatabase.Builder database = FeatureDatabase.newBuilder();
@@ -76,13 +76,13 @@ public class HelloWorldServerMain {
     /**
      * Main launches the server from the command line.
      *
-     * @param args
+     * @param args args
      */
     public static void main(String[] args) throws IOException, InterruptedException {
         final HelloWorldServerMain server = new HelloWorldServerMain();
         server.start();
         // For testing
-        if (args.length == 0 || args[0] != "test") {
+        if (args.length == 0 || !args[0].equals("test")) {
             server.blockUntilShutdown();
         }
     }

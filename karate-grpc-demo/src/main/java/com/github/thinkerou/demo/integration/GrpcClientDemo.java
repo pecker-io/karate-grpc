@@ -17,6 +17,10 @@ public class GrpcClientDemo {
 
     private static final Logger logger = Logger.getLogger(GrpcClientDemo.class.getName());
 
+    /**
+     * @param args args
+     * @throws IOException io exception
+     */
     public static void main(String[] args) throws IOException {
         GrpcClient client1 = new GrpcClient();
         String result1 = client1.list("Greeter", "SayHello", true);

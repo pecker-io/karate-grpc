@@ -14,6 +14,10 @@ public class GrpcListDemo {
 
     private static final Logger logger = Logger.getLogger(GrpcListDemo.class.getName());
 
+    /**
+     * @param args args
+     * @throws IOException io exception
+     */
     public static void main(String[] args) throws IOException {
         GrpcList list = new GrpcList();
         String result = list.invoke("Greeter", "SayHello", true);

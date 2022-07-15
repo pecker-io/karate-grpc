@@ -40,15 +40,15 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
     private final ConcurrentMap<Point, List<RouteNote>> routeNotes = new ConcurrentHashMap<Point, List<RouteNote>>();
 
     /**
-     * @param features
+     * @param features features
      */
     HelloWorldServerImpl(Collection<Feature> features) {
         this.features = features;
     }
 
     /**
-     * @param req
-     * @param responseObserver
+     * @param req request
+     * @param responseObserver response observer
      */
     @Override
     public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
@@ -58,8 +58,8 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
     }
 
     /**
-     * @param req
-     * @param responseObserver
+     * @param req request
+     * @param responseObserver response observer
      */
     @Override
     public void againSayHello(AgainHelloRequest req, StreamObserver<AgainHelloReply> responseObserver) {
@@ -71,8 +71,8 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
     }
 
     /**
-     * @param request
-     * @param replyStreamObserver
+     * @param request request
+     * @param replyStreamObserver reply stream observer
      */
     @Override
     public void sayHelloServerStreaming(HelloRequest request, StreamObserver<HelloReply> replyStreamObserver) {
@@ -92,8 +92,8 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
     }
 
     /**
-     * @param replyStreamObserver
-     * @return
+     * @param replyStreamObserver reply stream observer
+     * @return StreamObserver
      */
     @Override
     public StreamObserver<HelloRequest> sayHelloClientStreaming(final StreamObserver<HelloReply> replyStreamObserver) {
@@ -102,7 +102,7 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
 
             @Override
             public void onNext(HelloRequest helloRequest) {
-                if (out == "") {
+                if (out.equals("")) {
                     out = helloRequest.getName();
                 } else {
                     out += " and " + helloRequest.getName();
@@ -126,8 +126,8 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
     }
 
     /**
-     * @param responseObserver
-     * @return
+     * @param responseObserver reponse observer
+     * @return StreamObserver
      */
     @Override
     public StreamObserver<HelloRequest> sayHelloBiStreaming(final StreamObserver<HelloReply> responseObserver) {
@@ -178,8 +178,8 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
      * Gets the Feature at the requested Point.
      * If no feature at that location exists, an unnamed feature is returned at the provided location.
      *
-     * @param request
-     * @param responseObserver
+     * @param request request
+     * @param responseObserver response observer
      */
     @Override
     public void getFeature(Point request, StreamObserver<Feature> responseObserver) {
@@ -192,8 +192,8 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
      *
      * Gets all features contained within the given bounding Rectangle.
      *
-     * @param request
-     * @param responseObserver
+     * @param request request
+     * @param responseObserver response observer
      */
     @Override
     public void listFeatures(Rectangle request, StreamObserver<Feature> responseObserver) {
@@ -223,8 +223,8 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
      * Gets a stream of points, and responds with statistics about the "trip": number of points,
      * number of known features visited, total distance traveled, and total time spent.
      *
-     * @param responseObserver
-     * @return
+     * @param responseObserver response observer
+     * @return StreamObserver
      */
     @Override
     public StreamObserver<Point> recordRoute(final StreamObserver<RouteSummary> responseObserver) {
@@ -273,8 +273,8 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
      * Receives a stream of message/location pairs, and responds with a stream of all previous
      * messages at each of those locations.
      *
-     * @param responseObserver
-     * @return
+     * @param responseObserver response observer
+     * @return StreamObserver
      */
     @Override
     public StreamObserver<RouteNote> routeChat(final StreamObserver<RouteNote> responseObserver) {
@@ -350,7 +350,8 @@ public class HelloWorldServerImpl extends GreeterGrpc.GreeterImplBase {
     /**
      * Indicates whether the given feature exists.
      *
-     * @param feature
+     * @param feature feature
+     * @return boolean
      */
     public static boolean exists(Feature feature) {
         return feature != null && !feature.getName().isEmpty();
