@@ -120,6 +120,7 @@
                         </executions>
                         <configuration>
                             <doclint>none</doclint>
+                            <additionalJOption>-Xdoclint:none</additionalJOption>
                         </configuration>
                     </plugin>
 
