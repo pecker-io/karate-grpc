@@ -1,6 +1,6 @@
 # karate-grpc
 
-[![Build Status](https://api.travis-ci.org/thinkerou/karate-grpc.svg)](https://travis-ci.org/thinkerou/karate-grpc)
+[![Build Status](https://api.travis-ci.org/thinkerou/karate-grpc.svg)](https://travis-ci.org/thinkerou/karate-grpc)[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.thinkerou/karate-grpc-core/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.thinkerou/karate-grpc-core/)
 
 simple gRPC testing with [karate](https://github.com/intuit/karate) and a dynamic client using [polyglot](https://github.com/grpc-ecosystem/polyglot).
 
