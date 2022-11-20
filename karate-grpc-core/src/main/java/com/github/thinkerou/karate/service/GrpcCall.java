@@ -1,37 +1,39 @@
 package com.github.thinkerou.karate.service;
 
-import static com.google.protobuf.DescriptorProtos.FileDescriptorSet;
 import static com.google.protobuf.util.JsonFormat.TypeRegistry;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.logging.Logger;
-
-import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.domain.ProtoName;
 import com.github.thinkerou.karate.grpc.ChannelFactory;
 import com.github.thinkerou.karate.grpc.ComponentObserver;
 import com.github.thinkerou.karate.grpc.DynamicClient;
 import com.github.thinkerou.karate.message.Reader;
+import com.github.thinkerou.karate.message.Writer;
 import com.github.thinkerou.karate.protobuf.ProtoFullName;
 import com.github.thinkerou.karate.protobuf.ServiceResolver;
+import com.github.thinkerou.karate.utils.DataReader;
 import com.github.thinkerou.karate.utils.FileHelper;
 import com.github.thinkerou.karate.utils.RedisHelper;
 import com.google.common.collect.ImmutableList;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.protobuf.Descriptors;
+import com.google.protobuf.Descriptors.MethodDescriptor;
 import com.google.protobuf.DynamicMessage;
-import com.github.thinkerou.karate.message.Writer;
-
 import io.grpc.CallOptions;
 import io.grpc.ManagedChannel;
+import io.grpc.MethodDescriptor.MethodType;
 import io.grpc.stub.StreamObserver;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.logging.Logger;
 
 /**
  * GrpcCall
@@ -89,64 +91,48 @@ public final class GrpcCall {
      */
     private String execute(String name, String payload, RedisHelper redisHelper) {
         ProtoName protoName = ProtoFullName.parse(name);
-        byte[] data;
-        if (redisHelper != null) {
-            data = redisHelper.getDescriptorSets();
-        } else {
-            String path = System.getProperty("user.home") + DescriptorFile.PROTO_PATH.getText();
-            Path descriptorPath = Paths.get(path + DescriptorFile.PROTO_FILE.getText());
-            FileHelper.validatePath(Optional.ofNullable(descriptorPath));
-            try {
-                data = Files.readAllBytes(descriptorPath);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Read descriptor path failed: " + descriptorPath.toString());
-            }
-        }
 
-        // Fetch the appropriate file descriptors for the service.
-        FileDescriptorSet fileDescriptorSet;
-        try {
-            fileDescriptorSet = FileDescriptorSet.parseFrom(data);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("File descriptor set parse fail: " + e.getMessage());
-        }
+        Pair<ServiceResolver, Optional<MethodDescriptor>> found =
+            DataReader.read(redisHelper)
+                .stream()
+                .map(each -> new Pair<>(each, each.resolveServiceMethod(protoName)))
+                .filter(each -> each.right().isPresent())
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Service Resolver Not found"));
+
+        Descriptors.MethodDescriptor methodDescriptor = found.right()
+            .orElseThrow(() -> {
+                // When can't find service or method with name
+                // use service or/and method search once for help user
+                GrpcList list = new GrpcList();
+                String result1 = list.invoke(protoName.getServiceName(), "", false);
+                String result2 = list.invoke("", protoName.getMethodName(), false);
+                if (!result1.equals("[]") || !result2.equals("[{}]")) {
+                    logger.warning(
+                        "Call grpc failed, maybe you should see the follow grpc information.");
+                    if (!result1.equals("[]")) {
+                        logger.info(result1);
+                    }
+                    if (!result2.equals("[{}]")) {
+                        logger.info(result2);
+                    }
+                }
+                String text = "Can't find method " + protoName.getMethodName()
+                    + " in service " + protoName.getServiceName();
+                return new IllegalArgumentException(text);
+            });
 
         // Set up the dynamic client and make the call.
-        ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(fileDescriptorSet);
-        Descriptors.MethodDescriptor methodDescriptor;
-        try {
-            methodDescriptor = serviceResolver.resolveServiceMethod(protoName);
-        } catch (IllegalArgumentException e) {
-            // When can't find service or method with name
-            // use service or/and method search once for help user
-            GrpcList list = new GrpcList();
-            String result1 = list.invoke(protoName.getServiceName(), "", false);
-            String result2 = list.invoke("", protoName.getMethodName(), false);
-            if (!result1.equals("[]") || !result2.equals("[{}]")) {
-                logger.warning("Call grpc failed, maybe you should see the follow grpc information.");
-                if (!result1.equals("[]")) {
-                    logger.info(result1);
-                }
-                if (!result2.equals("[{}]")) {
-                    logger.info(result2);
-                }
-            }
-            throw new IllegalArgumentException(e.getMessage());
-        }
 
         // Create a dynamic grpc client.
         DynamicClient dynamicClient = DynamicClient.create(methodDescriptor, channel);
 
         // This collects all know types into a registry for resolution of potential "Any" types.
-        TypeRegistry registry = TypeRegistry.newBuilder().add(serviceResolver.listMessageTypes()).build();
-
-        // Convert payload string to list.
-        List<Map<String, Object>> payloadList = new Gson().fromJson(payload, List.class);
+        TypeRegistry registry = TypeRegistry.newBuilder().add(found.left().listMessageTypes()).build();
 
         // Need to support stream so it's a list.
-        final ImmutableList<DynamicMessage> requestMessages = Reader.create(
-                methodDescriptor.getInputType(), payloadList, registry
-        ).read();
+        final ImmutableList<DynamicMessage> requestMessages =
+            extractRequestMessages(payload, methodDescriptor, registry);
 
         // Creates one temp file to save call grpc result.
         Path filePath = null;
@@ -156,17 +142,21 @@ public final class GrpcCall {
             logger.warning(e.getMessage());
         }
         FileHelper.validatePath(Optional.ofNullable(filePath));
-
+        StreamObserver<DynamicMessage> streamObserver;
         List<Object> output = new ArrayList<>();
-        StreamObserver<DynamicMessage> streamObserver = ComponentObserver.of(Writer.create(output, registry));
+            streamObserver = ComponentObserver.of(Writer.create(output, registry));
 
         // Calls grpc!
         try {
-            dynamicClient.call(requestMessages, streamObserver, callOptions()).get();
+            Objects.requireNonNull(
+                dynamicClient.call(requestMessages, streamObserver, callOptions())).get();
         } catch (Throwable t) {
             throw new RuntimeException("Caught exception while waiting for rpc", t);
         }
-
+        if (dynamicClient.getMethodType() == MethodType.UNARY ||
+        dynamicClient.getMethodType() == MethodType.CLIENT_STREAMING) {
+            return output.get(0).toString();
+        }
         return output.toString();
     }
 
@@ -174,6 +164,19 @@ public final class GrpcCall {
         CallOptions result = CallOptions.DEFAULT;
         // Adds other options parameter
         return result;
+    }
+
+    private static ImmutableList<DynamicMessage> extractRequestMessages(String raw,
+        Descriptors.MethodDescriptor methodDescriptor, TypeRegistry registry) {
+        Type type = new TypeToken<List<Map<String, Object>>>() {}.getType();
+        try {
+            List<Map<String, Object>> payloads = new Gson().fromJson(raw, type);
+            return Reader.create(methodDescriptor.getInputType(), payloads, registry).read();
+        } catch (JsonSyntaxException ignored) {
+            type = new TypeToken<Map<String, Object>>() {}.getType();
+            Map<String, Object> payload = new Gson().fromJson(raw, type);
+            return Reader.create(methodDescriptor.getInputType(), payload, registry).read();
+        }
     }
 
 }

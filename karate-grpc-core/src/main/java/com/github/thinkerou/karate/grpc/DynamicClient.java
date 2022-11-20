@@ -170,7 +170,7 @@ public final class DynamicClient {
     /**
      * Returns the appropriate method type based on whether the client or server expect streams.
      */
-    private MethodDescriptor.MethodType getMethodType() {
+    public MethodDescriptor.MethodType getMethodType() {
         boolean clientStreaming = protoMethodDescriptor.toProto().getClientStreaming();
         boolean serverStreaming = protoMethodDescriptor.toProto().getServerStreaming();
 

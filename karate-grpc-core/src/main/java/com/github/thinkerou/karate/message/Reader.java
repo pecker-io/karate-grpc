@@ -1,5 +1,6 @@
 package com.github.thinkerou.karate.message;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -13,7 +14,6 @@ import com.google.protobuf.util.JsonFormat;
 
 /**
  * Reader
- *
  * A utility class which knows how to read proto files written using message.Writer.
  *
  * @author thinkerou
@@ -25,6 +25,12 @@ public final class Reader {
     private final JsonFormat.Parser jsonParser;
     private final Descriptors.Descriptor descriptor;
     private final List<Map<String, Object>> payloadList;
+
+    Reader(JsonFormat.Parser jsonParser,
+           Descriptors.Descriptor descriptor,
+        Map<String, Object> payload) {
+        this(jsonParser, descriptor, Collections.singletonList(payload));
+    }
 
     /**
      * @param jsonParser json parser
@@ -45,9 +51,16 @@ public final class Reader {
      * @param registry registry
      * @return Reader
      */
-    public static Reader create(Descriptors.Descriptor descriptor, List<Map<String, Object>> payloadList,
-            JsonFormat.TypeRegistry registry) {
+    public static Reader create(Descriptors.Descriptor descriptor,
+                                List<Map<String, Object>> payloadList,
+                                JsonFormat.TypeRegistry registry) {
         return new Reader(JsonFormat.parser().usingTypeRegistry(registry), descriptor, payloadList);
+    }
+
+    public static Reader create(Descriptors.Descriptor descriptor,
+        Map<String, Object> payload,
+        JsonFormat.TypeRegistry registry) {
+        return new Reader(JsonFormat.parser().usingTypeRegistry(registry), descriptor, payload);
     }
 
     /**
