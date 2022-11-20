@@ -1,0 +1,17 @@
+syntax = "proto3";
+package com.github.thinkerou;
+option java_multiple_files = true;
+
+import "google/protobuf/struct.proto";
+
+message VerifyRequest {
+
+}
+
+message VerifyResponse {
+  google.protobuf.Struct someData = 1;
+}
+
+service LoginService {
+  rpc login(VerifyRequest) returns (VerifyResponse);
+}
