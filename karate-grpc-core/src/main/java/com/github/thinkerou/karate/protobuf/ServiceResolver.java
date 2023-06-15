@@ -1,9 +1,12 @@
 package com.github.thinkerou.karate.protobuf;
 
+import com.google.protobuf.Descriptors.MethodDescriptor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import com.google.common.collect.ImmutableList;
@@ -50,7 +53,7 @@ public final class ServiceResolver {
     }
 
     /**
-     * Lists all of the services found in the file descriptors.
+     * Lists all the services found in the file descriptors.
      *
      * @return Iterable
      */
@@ -84,38 +87,32 @@ public final class ServiceResolver {
      * @param method method
      * @return MethodDescriptor
      */
-    public Descriptors.MethodDescriptor resolveServiceMethod(ProtoName method) {
+    public Optional<MethodDescriptor> resolveServiceMethod(ProtoName method) {
         return resolveServiceMethod(
                 method.getServiceName(),
                 method.getMethodName(),
                 method.getPackageName());
     }
 
-    private Descriptors.MethodDescriptor resolveServiceMethod(
+    private Optional<MethodDescriptor> resolveServiceMethod(
             String serviceName, String methodName, String packageName) {
-        Descriptors.ServiceDescriptor service = findService(serviceName, packageName);
-        Descriptors.MethodDescriptor method = service.findMethodByName(methodName);
-        if (method == null) {
-            throw new IllegalArgumentException(
-                    "Can't find method " + methodName + " in service " + serviceName);
-        }
-
-        return method;
+        return findService(serviceName, packageName)
+            .map(serviceDescriptor -> serviceDescriptor.findMethodByName(methodName));
     }
 
-    private Descriptors.ServiceDescriptor findService(String serviceName, String packageName) {
-        for (Descriptors.FileDescriptor fileDescriptor : fileDescriptors) {
-            if (!fileDescriptor.getPackage().equals(packageName)) {
-                // Package does not match this file, ignore.
-                continue;
-            }
+    private Optional<Descriptors.ServiceDescriptor> findService(String serviceName, String packageName) {
+        return getFileDescriptors().stream()
+            .filter(each -> each.getPackage().equals(packageName))
+            .map(each -> each.findServiceByName(serviceName))
+            .filter(Objects::nonNull)
+            .findFirst();
+    }
 
-            Descriptors.ServiceDescriptor serviceDescriptor = fileDescriptor.findServiceByName(serviceName);
-            if (serviceDescriptor != null) {
-                return serviceDescriptor;
-            }
+    private synchronized  ImmutableList<Descriptors.FileDescriptor> getFileDescriptors() {
+        if (fileDescriptors.isEmpty()) {
+            listServices();
         }
-        throw new IllegalArgumentException("Can't find service with name: " + serviceName);
+        return fileDescriptors;
     }
 
     /**

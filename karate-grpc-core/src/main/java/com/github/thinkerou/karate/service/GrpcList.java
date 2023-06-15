@@ -1,28 +1,19 @@
 package com.github.thinkerou.karate.service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import com.github.thinkerou.karate.domain.ProtoName;
+import com.github.thinkerou.karate.protobuf.ProtoFullName;
+import com.github.thinkerou.karate.utils.DataReader;
+import com.github.thinkerou.karate.utils.RedisHelper;
+import com.google.gson.Gson;
+import com.google.protobuf.Descriptors;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import com.github.thinkerou.karate.constants.DescriptorFile;
-import com.github.thinkerou.karate.domain.ProtoName;
-import com.github.thinkerou.karate.protobuf.ProtoFullName;
-import com.github.thinkerou.karate.protobuf.ServiceResolver;
-import com.github.thinkerou.karate.utils.FileHelper;
-import com.github.thinkerou.karate.utils.RedisHelper;
-import com.google.gson.Gson;
-import com.google.protobuf.DescriptorProtos;
-import com.google.protobuf.Descriptors;
+import java.util.stream.StreamSupport;
 
 /**
  * GrpcList
- *
  * Utility to list the services, methods and message definitions for the known grpc end-points.
  *
  * @author thinkerou
@@ -87,50 +78,33 @@ public final class GrpcList {
 
     /**
      * List the grpc services filtered by service name (contains) or method name (contains).
-     *
      * Mainly goal: return value are used web page.
      */
-    private List<Map<String, Object>> execute(String serviceFilter, String methodFilter, Boolean withMessage,
-            Boolean saveOutput, RedisHelper redisHelper) {
-        byte[] data;
-        if (redisHelper != null) {
-            data = redisHelper.getDescriptorSets();
-        } else {
-            String path = System.getProperty("user.home") + DescriptorFile.PROTO_PATH.getText();
-            Path descriptorPath = Paths.get(path + DescriptorFile.PROTO_FILE.getText());
-            FileHelper.validatePath(Optional.ofNullable(descriptorPath));
-            try {
-                data = Files.readAllBytes(descriptorPath);
-            } catch (IOException e) {
-                throw new IllegalArgumentException("Read descriptor fail: " + descriptorPath.toString());
-            }
-        }
-
-        // Fetch the appropriate file descriptors for the service.
-        DescriptorProtos.FileDescriptorSet fileDescriptorSet;
-        try {
-            fileDescriptorSet = DescriptorProtos.FileDescriptorSet.parseFrom(data);
-        } catch (IOException e) {
-            throw new IllegalArgumentException("Descriptor file parse fail: " + e.getMessage());
-        }
-
-        ServiceResolver serviceResolver = ServiceResolver.fromFileDescriptorSet(fileDescriptorSet);
-
-        Iterable<Descriptors.ServiceDescriptor> serviceDescriptorIterable = serviceResolver.listServices();
+    private List<Map<String, Object>> execute(
+            String serviceFilter,
+            String methodFilter,
+            Boolean withMessage,
+            Boolean saveOutput,
+            RedisHelper redisHelper) {
 
         List<Map<String, Object>> output = new ArrayList<>();
-        serviceDescriptorIterable.forEach(descriptor -> {
-            if (serviceFilter.isEmpty()
-                    || descriptor.getFullName().toLowerCase().contains(serviceFilter.toLowerCase())) {
-                Map<String, Object> result = new HashMap<>();
-                listMethods(result, descriptor, methodFilter, withMessage, saveOutput);
+        DataReader.read(redisHelper)
+            .stream()
+            .flatMap(each -> StreamSupport.stream(each.listServices().spliterator(), false))
+            .forEach(
+                descriptor -> {
+                    if (serviceFilter.isEmpty()
+                        || descriptor.getFullName().toLowerCase()
+                        .contains(serviceFilter.toLowerCase())) {
+                        Map<String, Object> result = new HashMap<>();
+                        listMethods(result, descriptor, methodFilter, withMessage, saveOutput);
 
-                if (!result.isEmpty()) {
-                    output.add(result);
-                }
-            }
-        });
+                        if (!result.isEmpty()) {
+                            output.add(result);
+                        }
+                    }
 
+                });
         return output;
     }
 
@@ -202,5 +176,4 @@ public final class GrpcList {
                 return descriptor.getJavaType();
         }
     }
-
 }

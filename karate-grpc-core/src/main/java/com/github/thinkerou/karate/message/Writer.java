@@ -13,7 +13,7 @@ import io.grpc.stub.StreamObserver;
  * Writer
  *
  * A StreamObserver which writes the contents of the received messages to an Output.
- * The messages are writting in a newline-separated json format.
+ * The messages are written in a newline-separated json format.
  *
  * @author thinkerou
  */
