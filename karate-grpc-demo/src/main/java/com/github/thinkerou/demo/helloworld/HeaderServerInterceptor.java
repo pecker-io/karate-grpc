@@ -29,7 +29,9 @@ public class HeaderServerInterceptor implements ServerInterceptor {
             @Override
             public void sendHeaders(Metadata responseHeaders) {
                 logger.debug("Found special header value: {}", clientSpecialHeaderValue);
-                responseHeaders.put(CUSTOM_HEADER_KEY, clientSpecialHeaderValue);
+                if(responseHeaders != null && clientSpecialHeaderValue != null){
+                    responseHeaders.put(CUSTOM_HEADER_KEY, clientSpecialHeaderValue);
+                }
                 super.sendHeaders(responseHeaders);
             }
         }, requestHeaders);
