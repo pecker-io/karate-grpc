@@ -43,12 +43,12 @@ public class GrpcClient {
     /**
      * @param name name
      * @param payload payload
-     * @param scenarioBridge scenario bridge
+     * @param scenarioBridge Karate ScenarioBridge
      * @return string
      */
     public String call(String name, String payload, ScenarioBridge scenarioBridge) {
         logRequest(payload, scenarioBridge);
-        final String response = invokeCall(name, payload);
+        final String response = invokeCall(name, payload, scenarioBridge);
         logResponse(response, scenarioBridge);
         return response;
     }
@@ -116,8 +116,8 @@ public class GrpcClient {
         log.info(message);
     }
 
-    protected String invokeCall(String name, String payload) {
-        return callIns.invoke(name, payload);
+    protected String invokeCall(String name, String payload, ScenarioBridge scenarioBridge) {
+        return callIns.invoke(name, payload, scenarioBridge);
     }
 
     protected String invokeList(String name, Boolean withMessage) {

@@ -2,6 +2,8 @@ package com.github.thinkerou.demo.helloworld;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import io.grpc.ServerInterceptors;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.logging.Logger;
@@ -30,10 +32,10 @@ public class HelloWorldServerMain {
         String payloads = FileHelper.readFile(file);
 
         server = ServerBuilder.forPort(port)
-                .addService(new HelloWorldServerImpl(parseFeatures(payloads)))
+                .addService(ServerInterceptors.intercept(new HelloWorldServerImpl(parseFeatures(payloads)), new HeaderServerInterceptor()))
                 .build()
                 .start();
-        logger.info("Server started listening on " + port);
+        logger.info(() -> "Server started listening on " + port);
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             @Override
