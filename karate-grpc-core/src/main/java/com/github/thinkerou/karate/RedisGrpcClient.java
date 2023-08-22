@@ -1,6 +1,7 @@
 package com.github.thinkerou.karate;
 
 import com.github.thinkerou.karate.utils.RedisHelper;
+import com.intuit.karate.core.ScenarioBridge;
 
 /**
  * RedisGrpcClient
@@ -32,7 +33,12 @@ public class RedisGrpcClient extends GrpcClient {
 
     @Override
     protected String invokeCall(String name, String payload) {
-        return callIns.invokeByRedis(name, payload, redisHelper);
+        return callIns.invokeByRedis(name, payload, null, redisHelper);
+    }
+
+    @Override
+    protected String invokeCall(String name, String payload, ScenarioBridge scenarioBridge) {
+        return callIns.invokeByRedis(name, payload, scenarioBridge, redisHelper);
     }
 
     @Override

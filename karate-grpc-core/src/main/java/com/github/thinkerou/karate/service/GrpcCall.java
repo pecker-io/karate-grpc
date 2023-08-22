@@ -1,23 +1,23 @@
 package com.github.thinkerou.karate.service;
 
-import static com.google.protobuf.DescriptorProtos.FileDescriptorSet;
-import static com.google.protobuf.util.JsonFormat.TypeRegistry;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.github.thinkerou.karate.constants.DescriptorFile;
 import com.github.thinkerou.karate.domain.ProtoName;
 import com.github.thinkerou.karate.grpc.ChannelFactory;
 import com.github.thinkerou.karate.grpc.ComponentObserver;
 import com.github.thinkerou.karate.grpc.DynamicClient;
+import com.github.thinkerou.karate.grpc.GrpcClientRequestInterceptor;
 import com.github.thinkerou.karate.message.Reader;
 import com.github.thinkerou.karate.protobuf.ProtoFullName;
 import com.github.thinkerou.karate.protobuf.ServiceResolver;
@@ -25,12 +25,19 @@ import com.github.thinkerou.karate.utils.FileHelper;
 import com.github.thinkerou.karate.utils.RedisHelper;
 import com.google.common.collect.ImmutableList;
 import com.google.gson.Gson;
+import com.google.protobuf.DescriptorProtos.FileDescriptorSet;
 import com.google.protobuf.Descriptors;
 import com.google.protobuf.DynamicMessage;
+import com.google.protobuf.util.JsonFormat.TypeRegistry;
+import com.intuit.karate.core.ScenarioBridge;
+import com.intuit.karate.core.ScenarioEngine;
+import com.intuit.karate.core.Variable;
 import com.github.thinkerou.karate.message.Writer;
 
 import io.grpc.CallOptions;
+import io.grpc.ClientInterceptor;
 import io.grpc.ManagedChannel;
+import io.grpc.Metadata;
 import io.grpc.stub.StreamObserver;
 
 /**
@@ -40,9 +47,10 @@ import io.grpc.stub.StreamObserver;
  */
 public final class GrpcCall {
 
-    private static final Logger logger = Logger.getLogger(GrpcCall.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(GrpcCall.class);
 
-    private final ManagedChannel channel;
+    private final String host;
+    private final int port;
 
     /**
      * @param host host
@@ -59,35 +67,48 @@ public final class GrpcCall {
      * @param port port
      */
     public GrpcCall(String host, int port) {
-        channel = ChannelFactory.create(host, port);
+        this.host = host;
+        this.port = port;
     }
 
     /**
-     * @param name name
+     * @param name    name
      * @param payload payload
      * @return string
      */
     public String invoke(String name, String payload) {
-        return execute(name, payload, null);
+        return execute(name, payload, null, null);
     }
 
     /**
-     * @param name name
-     * @param payload payload
-     * @param redisHelper redis helper
+     * @param name           name
+     * @param payload        payload
+     * @param scenarioBridge Karate ScenarioBridge
      * @return string
      */
-    public String invokeByRedis(String name, String payload, RedisHelper redisHelper) {
-        return execute(name, payload, redisHelper);
+    public String invoke(String name, String payload, ScenarioBridge scenarioBridge) {
+        return execute(name, payload, scenarioBridge, null);
     }
 
     /**
-     * @param name indicates one called grpc service full name, like: package.service/method
-     * @param payload indicates one protobuf corresponding json data
+     * @param name        name
+     * @param payload     payload
      * @param redisHelper redis helper
      * @return string
      */
-    private String execute(String name, String payload, RedisHelper redisHelper) {
+    public String invokeByRedis(String name, String payload, ScenarioBridge scenarioBridge, RedisHelper redisHelper) {
+        return execute(name, payload, scenarioBridge, redisHelper);
+    }
+
+    /**
+     * @param name           indicates one called grpc service full name, like:
+     *                       package.service/method
+     * @param payload        indicates one protobuf corresponding json data
+     * @param scenarioBridge the Karate ScenarioBridge
+     * @param redisHelper    redis helper
+     * @return string
+     */
+    private String execute(String name, String payload, ScenarioBridge scenarioBridge, RedisHelper redisHelper) {
         ProtoName protoName = ProtoFullName.parse(name);
         byte[] data;
         if (redisHelper != null) {
@@ -123,7 +144,7 @@ public final class GrpcCall {
             String result1 = list.invoke(protoName.getServiceName(), "", false);
             String result2 = list.invoke("", protoName.getMethodName(), false);
             if (!result1.equals("[]") || !result2.equals("[{}]")) {
-                logger.warning("Call grpc failed, maybe you should see the follow grpc information.");
+                logger.warn("Call grpc failed, maybe you should see the follow grpc information.");
                 if (!result1.equals("[]")) {
                     logger.info(result1);
                 }
@@ -134,10 +155,24 @@ public final class GrpcCall {
             throw new IllegalArgumentException(e.getMessage());
         }
 
+        Metadata metadata = new Metadata();
+        if (scenarioBridge != null) {
+            Variable headers = scenarioBridge.getEngine().getConfig().getHeaders();
+            if (headers != null && headers.isMap()) {
+                Map<String, String> headerMap = headers.getValue();
+                for (Map.Entry<String, String> entry : headerMap.entrySet()) {
+                    metadata.put(Metadata.Key.of(entry.getKey(), Metadata.ASCII_STRING_MARSHALLER), entry.getValue());
+                }
+            }
+        }
+
+        ClientInterceptor interceptor = new GrpcClientRequestInterceptor(metadata);
+        ManagedChannel channel = ChannelFactory.create(host, port, interceptor);
         // Create a dynamic grpc client.
         DynamicClient dynamicClient = DynamicClient.create(methodDescriptor, channel);
 
-        // This collects all know types into a registry for resolution of potential "Any" types.
+        // This collects all know types into a registry for resolution of potential
+        // "Any" types.
         TypeRegistry registry = TypeRegistry.newBuilder().add(serviceResolver.listMessageTypes()).build();
 
         // Convert payload string to list.
@@ -145,15 +180,14 @@ public final class GrpcCall {
 
         // Need to support stream so it's a list.
         final ImmutableList<DynamicMessage> requestMessages = Reader.create(
-                methodDescriptor.getInputType(), payloadList, registry
-        ).read();
+                methodDescriptor.getInputType(), payloadList, registry).read();
 
         // Creates one temp file to save call grpc result.
         Path filePath = null;
         try {
             filePath = Files.createTempFile("karate.grpc.", ".call.result");
         } catch (IOException e) {
-            logger.warning(e.getMessage());
+            logger.warn(e.getMessage());
         }
         FileHelper.validatePath(Optional.ofNullable(filePath));
 
@@ -164,9 +198,19 @@ public final class GrpcCall {
         try {
             dynamicClient.call(requestMessages, streamObserver, callOptions()).get();
         } catch (Throwable t) {
+            logger.error(t.getMessage());
             throw new RuntimeException("Caught exception while waiting for rpc", t);
         }
 
+        // Expose response headers to Karate's ScenarioBridge.
+        if (scenarioBridge != null) {
+            Metadata responseMetadata = ((GrpcClientRequestInterceptor) interceptor).getResponseMetadata();
+            Map<String, List<String>> headers = new HashMap();
+            responseMetadata.keys().forEach(key -> {
+                headers.put(key, ImmutableList.of(responseMetadata.get(Metadata.Key.of(key, Metadata.ASCII_STRING_MARSHALLER))));
+            });
+            scenarioBridge.getEngine().setVariable(ScenarioEngine.RESPONSE_HEADERS, headers);
+        }
         return output.toString();
     }
 
