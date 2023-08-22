@@ -47,7 +47,7 @@ import io.grpc.stub.StreamObserver;
  */
 public final class GrpcCall {
 
-    protected static final Logger logger = LoggerFactory.getLogger(GrpcCall.class);
+    private static final Logger logger = LoggerFactory.getLogger(GrpcCall.class);
 
     private final String host;
     private final int port;

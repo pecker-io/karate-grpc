@@ -32,6 +32,11 @@ public class RedisGrpcClient extends GrpcClient {
     }
 
     @Override
+    protected String invokeCall(String name, String payload) {
+        return callIns.invokeByRedis(name, payload, null, redisHelper);
+    }
+
+    @Override
     protected String invokeCall(String name, String payload, ScenarioBridge scenarioBridge) {
         return callIns.invokeByRedis(name, payload, scenarioBridge, redisHelper);
     }

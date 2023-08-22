@@ -116,6 +116,10 @@ public class GrpcClient {
         log.info(message);
     }
 
+    protected String invokeCall(String name, String payload) {
+        return callIns.invoke(name, payload, null);
+    }
+
     protected String invokeCall(String name, String payload, ScenarioBridge scenarioBridge) {
         return callIns.invoke(name, payload, scenarioBridge);
     }
